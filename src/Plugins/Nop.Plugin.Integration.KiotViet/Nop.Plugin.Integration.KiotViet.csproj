@@ -1,0 +1,38 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+ <PropertyGroup>
+
+   <TargetFramework>netcoreapp2.2</TargetFramework>
+   <OutputPath>..\..\Presentation\Nop.Web\Plugins\Integration.KiotViet</OutputPath>
+   <OutDir>$(OutputPath)</OutDir>
+ </PropertyGroup>  
+
+ <ItemGroup>
+   <None Remove="plugin.json" />
+ </ItemGroup>
+
+ <ItemGroup>
+   <Content Include="plugin.json">
+     <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+   </Content>
+ </ItemGroup>
+
+ <ItemGroup>
+   <PackageReference Include="Newtonsoft.Json" Version="12.0.3" />
+   <PackageReference Include="RestSharp" Version="106.6.10" />
+ </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\Libraries\Nop.Core\Nop.Core.csproj" />
+    <ProjectReference Include="..\..\Libraries\Nop.Services\Nop.Services.csproj" />
+    <ProjectReference Include="..\..\Presentation\Nop.Web.Framework\Nop.Web.Framework.csproj" />
+    <ClearPluginAssemblies Include="$(MSBuildProjectDirectory)\..\..\Build\ClearPluginAssemblies.proj" />
+  </ItemGroup>
+
+  <!-- This target execute after "Build" target -->
+  <Target Name="NopTarget" AfterTargets="Build">
+    <!-- Delete unnecessary libraries from plugins path -->
+    <MSBuild Projects="@(ClearPluginAssemblies)" Properties="PluginPath=$(MSBuildProjectDirectory)\$(OutDir)" Targets="NopClear" />
+  </Target>
+
+</Project>
