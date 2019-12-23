@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using Nop.Core;
@@ -93,6 +93,15 @@ namespace Nop.Services.Catalog
                 var productAttributes = new PagedList<ProductAttribute>(query, pageIndex, pageSize);
                 return productAttributes;
             });
+        }
+
+        public virtual List<ProductAttribute> GetAllProductAttributesNoCache(int pageIndex = 0, int pageSize = int.MaxValue)
+        {
+            var query = from pa in _productAttributeRepository.Table
+                orderby pa.Name
+                select pa;
+            var productAttributes = new PagedList<ProductAttribute>(query, pageIndex, pageSize);
+            return productAttributes;
         }
 
         /// <summary>

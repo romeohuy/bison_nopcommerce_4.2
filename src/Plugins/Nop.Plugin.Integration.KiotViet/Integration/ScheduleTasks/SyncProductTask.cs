@@ -72,7 +72,7 @@ namespace Nop.Plugin.Integration.KiotViet.Integration.ScheduleTasks
                     _productService.InsertProduct(product);
                     if (product.Id <= 0) continue;
 
-                    var parentSeachEngineName = product.ValidateSeName(string.Empty, product.Name, true);
+                    var parentSeachEngineName = _urlRecordService.ValidateSeName(product,string.Empty, product.Name, true);
                     _urlRecordService.SaveSlug(product, parentSeachEngineName, 0);
                     SaveCategoryMappings(product.Id, kiotVietCategory.Id);
 

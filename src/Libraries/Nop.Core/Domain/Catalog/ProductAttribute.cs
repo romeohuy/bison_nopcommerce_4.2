@@ -1,4 +1,4 @@
-using Nop.Core.Domain.Localization;
+﻿using Nop.Core.Domain.Localization;
 
 namespace Nop.Core.Domain.Catalog
 {
@@ -11,6 +11,10 @@ namespace Nop.Core.Domain.Catalog
         /// Gets or sets the name
         /// </summary>
         public string Name { get; set; }
+        
+        public string KiotVietName { get; set; }
+        
+        public bool AdjustPrice { get; set; }
 
         /// <summary>
         /// Gets or sets the description

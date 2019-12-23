@@ -40,7 +40,7 @@ namespace Nop.Plugin.Integration.KiotViet.Integration.KiotViet
                         PageSize = 12
                     };
                     _categoryService.InsertCategory(cateRoot);
-                    string seName = cateRoot.ValidateSeName(string.Empty, cateRoot.Name, true);
+                    var seName = _urlRecordService.ValidateSeName(cateRoot,string.Empty, cateRoot.Name, true);
                     _urlRecordService.SaveSlug(cateRoot, seName, 0);
                 }
                 if (cate.hasChild && cateRoot.Id > 0)
@@ -65,7 +65,7 @@ namespace Nop.Plugin.Integration.KiotViet.Integration.KiotViet
                             };
 
                             _categoryService.InsertCategory(cateChildFirst);
-                            string seName = cateChildFirst.ValidateSeName(string.Empty, cateChildFirst.Name, true);
+                            var seName = _urlRecordService.ValidateSeName(cateChildFirst,string.Empty, cateChildFirst.Name, true);
                             _urlRecordService.SaveSlug(cateChildFirst, seName, 0);
                         }
                         
@@ -90,7 +90,7 @@ namespace Nop.Plugin.Integration.KiotViet.Integration.KiotViet
                                         PageSize = 12
                                     };
                                     _categoryService.InsertCategory(cateChildSecond);
-                                    string seName = cateChildSecond.ValidateSeName(string.Empty, cateChildSecond.Name, true);
+                                    var seName = _urlRecordService.ValidateSeName(cateChildSecond,string.Empty, cateChildSecond.Name, true);
                                     _urlRecordService.SaveSlug(cateChildSecond, seName, 0);
                                 }
                             }

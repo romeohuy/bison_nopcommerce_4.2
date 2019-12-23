@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using Nop.Core.Domain.Discounts;
@@ -549,6 +549,7 @@ namespace Nop.Core.Domain.Catalog
         /// </summary>
         public DateTime CreatedOnUtc { get; set; }
 
+        public string KiotVietId { get; set; }
         /// <summary>
         /// Gets or sets the date and time of product update
         /// </summary>
