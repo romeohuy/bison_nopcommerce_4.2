@@ -52,6 +52,7 @@
     <Content Remove="%2a%2a\%2a.json" />
     <Content Remove="%2a%2a\%2a.razor" />
     <Content Remove="Plugins\%2a%2a" />
+    <Content Include=".config\dotnet-tools.json" />
     <Content Include="appsettings.json" />
     <Content Include="Themes\Venture\theme.json" />
     <Content Include="Themes\Venture\Views\BackInStockSubscription\CustomerSubscriptions.cshtml" />

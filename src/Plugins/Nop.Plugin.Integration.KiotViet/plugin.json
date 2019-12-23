@@ -3,8 +3,8 @@
   "FriendlyName": "Integration KiotViet",
   "SystemName": "Integration.KiotViet",
   "Version": "1.0",
-  "SupportedVersions": [ "4.2" ],
-  "Author": "ngocmyshop",
+  "SupportedVersions": [ "4.20" ],
+  "Author": "Bison Corp",
   "DisplayOrder": 1,
   "FileName": "Nop.Plugin.Integration.KiotViet.dll",
   "Description": "This plugin allows integrating data from KiotViet"
