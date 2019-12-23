@@ -3,7 +3,7 @@
   "FriendlyName": "Integration KiotViet",
   "SystemName": "Integration.KiotViet",
   "Version": "1.0",
-  "SupportedVersions": [ "4.00" ],
+  "SupportedVersions": [ "4.2" ],
   "Author": "ngocmyshop",
   "DisplayOrder": 1,
   "FileName": "Nop.Plugin.Integration.KiotViet.dll",
