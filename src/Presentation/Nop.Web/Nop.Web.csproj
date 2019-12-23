@@ -13,6 +13,7 @@
     <RepositoryType>Git</RepositoryType>
     <!--Set this parameter to true to get the dlls copied from the NuGet cache to the output of your project-->
     <CopyLocalLockFileAssemblies>true</CopyLocalLockFileAssemblies>
+    <EnableDefaultContentItems>false</EnableDefaultContentItems>
   </PropertyGroup>
 
   <ItemGroup>
@@ -31,18 +32,12 @@
 
     <Compile Remove="Plugins\**" />
 
-    <Compile Remove="Themes\Venture\Views\**" />
-
     <Content Remove="%2a%2a\**" />
-
-    <Content Remove="Themes\Venture\Views\**" />
 
     <EmbeddedResource Remove="%2a%2a\**" />
     <EmbeddedResource Remove="Plugins\**" />
-    <EmbeddedResource Remove="Themes\Venture\Views\**" />
     <None Remove="%2a%2a\**" />
     <None Remove="Plugins\**" />
-    <None Remove="Themes\Venture\Views\**" />
 
     <!-- We copy the entire \Plugins and \Themes directories.
 	    But we ignore cshtml and JSON files to avoid "Duplicate 'Content' items were included" error during publishing.
@@ -59,6 +54,77 @@
     <Content Remove="Plugins\%2a%2a" />
     <Content Include="appsettings.json" />
     <Content Include="Themes\Venture\theme.json" />
+    <Content Include="Themes\Venture\Views\BackInStockSubscription\CustomerSubscriptions.cshtml" />
+    <Content Include="Themes\Venture\Views\Blog\BlogPost.cshtml" />
+    <Content Include="Themes\Venture\Views\Blog\Components\BlogMonths\Default.cshtml" />
+    <Content Include="Themes\Venture\Views\Blog\List.cshtml" />
+    <Content Include="Themes\Venture\Views\Boards\CustomerForumSubscriptions.cshtml" />
+    <Content Include="Themes\Venture\Views\Boards\Index.cshtml" />
+    <Content Include="Themes\Venture\Views\Boards\_ForumHeader.cshtml" />
+    <Content Include="Themes\Venture\Views\Catalog\CategoryTemplate.ProductsInGridOrLines.cshtml" />
+    <Content Include="Themes\Venture\Views\Catalog\ManufacturerAll.cshtml" />
+    <Content Include="Themes\Venture\Views\Catalog\Search.cshtml" />
+    <Content Include="Themes\Venture\Views\Catalog\VendorAll.cshtml" />
+    <Content Include="Themes\Venture\Views\Catalog\_CatalogSelectors.cshtml" />
+    <Content Include="Themes\Venture\Views\Checkout\BillingAddress.cshtml" />
+    <Content Include="Themes\Venture\Views\Checkout\Confirm.cshtml" />
+    <Content Include="Themes\Venture\Views\Checkout\OpcBillingAddress.cshtml" />
+    <Content Include="Themes\Venture\Views\Checkout\OpcConfirmOrder.cshtml" />
+    <Content Include="Themes\Venture\Views\Checkout\OpcPaymentMethods.cshtml" />
+    <Content Include="Themes\Venture\Views\Checkout\PaymentMethod.cshtml" />
+    <Content Include="Themes\Venture\Views\Checkout\ShippingAddress.cshtml" />
+    <Content Include="Themes\Venture\Views\Customer\DownloadableProducts.cshtml" />
+    <Content Include="Themes\Venture\Views\Customer\Info.cshtml" />
+    <Content Include="Themes\Venture\Views\Customer\Register.cshtml" />
+    <Content Include="Themes\Venture\Views\Customer\UserAgreement.cshtml" />
+    <Content Include="Themes\Venture\Views\Home\Index.cshtml" />
+    <Content Include="Themes\Venture\Views\News\List.cshtml" />
+    <Content Include="Themes\Venture\Views\News\NewsItem.cshtml" />
+    <Content Include="Themes\Venture\Views\Order\CustomerOrders.cshtml" />
+    <Content Include="Themes\Venture\Views\Order\CustomerRewardPoints.cshtml" />
+    <Content Include="Themes\Venture\Views\Product\CompareProducts.cshtml" />
+    <Content Include="Themes\Venture\Views\Product\ProductReviews.cshtml" />
+    <Content Include="Themes\Venture\Views\Product\ProductTemplate.Grouped.cshtml" />
+    <Content Include="Themes\Venture\Views\Product\ProductTemplate.Simple.cshtml" />
+    <Content Include="Themes\Venture\Views\Product\_AddToCart.cshtml" />
+    <Content Include="Themes\Venture\Views\Product\_DeliveryInfo.cshtml" />
+    <Content Include="Themes\Venture\Views\Product\_ProductPrice.cshtml" />
+    <Content Include="Themes\Venture\Views\Product\_ProductSpecifications.cshtml" />
+    <Content Include="Themes\Venture\Views\Product\_ProductTierPrices.cshtml" />
+    <Content Include="Themes\Venture\Views\Product\_ShareButton.cshtml" />
+    <Content Include="Themes\Venture\Views\Shared\Components\CurrencySelector\Default.cshtml" />
+    <Content Include="Themes\Venture\Views\Shared\Components\FlyoutShoppingCart\Default.cshtml" />
+    <Content Include="Themes\Venture\Views\Shared\Components\Footer\Default.cshtml" />
+    <Content Include="Themes\Venture\Views\Shared\Components\HeaderLinks\Default.cshtml" />
+    <Content Include="Themes\Venture\Views\Shared\Components\HomepageBestSellers\Default.cshtml" />
+    <Content Include="Themes\Venture\Views\Shared\Components\HomepageCategories\Default.cshtml" />
+    <Content Include="Themes\Venture\Views\Shared\Components\HomepageNews\Default.cshtml" />
+    <Content Include="Themes\Venture\Views\Shared\Components\HomepageProducts\Default.cshtml" />
+    <Content Include="Themes\Venture\Views\Shared\Components\LanguageSelector\Default.cshtml" />
+    <Content Include="Themes\Venture\Views\Shared\Components\Logo\Default.cshtml" />
+    <Content Include="Themes\Venture\Views\Shared\Components\OrderSummary\Default.cshtml" />
+    <Content Include="Themes\Venture\Views\Shared\Components\OrderTotals\Default.cshtml" />
+    <Content Include="Themes\Venture\Views\Shared\Components\RecentlyViewedProductsBlock\Default.cshtml" />
+    <Content Include="Themes\Venture\Views\Shared\Components\SearchBox\Default.cshtml" />
+    <Content Include="Themes\Venture\Views\Shared\Components\SelectedCheckoutAttributes\Default.cshtml" />
+    <Content Include="Themes\Venture\Views\Shared\Components\SocialButtons\Default.cshtml" />
+    <Content Include="Themes\Venture\Views\Shared\Components\TaxTypeSelector\Default.cshtml" />
+    <Content Include="Themes\Venture\Views\Shared\Components\TopMenu\Default.cshtml" />
+    <Content Include="Themes\Venture\Views\Shared\Head.cshtml" />
+    <Content Include="Themes\Venture\Views\Shared\_CategoryLine.Navigation.cshtml" />
+    <Content Include="Themes\Venture\Views\Shared\_CategoryLine.TopMenu.cshtml" />
+    <Content Include="Themes\Venture\Views\Shared\_ColumnsTwo.cshtml" />
+    <Content Include="Themes\Venture\Views\Shared\_CurrentPageClass.cshtml" />
+    <Content Include="Themes\Venture\Views\Shared\_DiscountBox.cshtml" />
+    <Content Include="Themes\Venture\Views\Shared\_Header.cshtml" />
+    <Content Include="Themes\Venture\Views\Shared\_OldInternetExplorerWarning.cshtml" />
+    <Content Include="Themes\Venture\Views\Shared\_ProductBox.cshtml" />
+    <Content Include="Themes\Venture\Views\Shared\_Root.cshtml" />
+    <Content Include="Themes\Venture\Views\Shared\_Root.Head.cshtml" />
+    <Content Include="Themes\Venture\Views\ShoppingCart\Wishlist.cshtml" />
+    <Content Include="Themes\Venture\Views\ShoppingCart\_GiftCardBox.cshtml" />
+    <Content Include="Themes\Venture\Views\Vendor\ApplyVendor.cshtml" />
+    <Content Include="Themes\Venture\Views\_ViewImports.cshtml" />
     <Content Include="Views\BackInStockSubscription\CustomerSubscriptions.cshtml" />
     <Content Include="Views\BackInStockSubscription\SubscribePopup.cshtml" />
     <Content Include="Views\Blog\BlogPost.cshtml" />
