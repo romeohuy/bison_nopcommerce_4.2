@@ -62,7 +62,42 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Plugins\" />
+    <Folder Include="Plugins\SevenSpikes.Nop.Plugins.QuickView\Areas\Admin\Views\QuickViewAdmin\" />
+    <Folder Include="Plugins\SevenSpikes.Nop.Plugins.QuickView\Resources\" />
+    <Folder Include="Plugins\SevenSpikes.Nop.Plugins.QuickView\Scripts\" />
+    <Folder Include="Plugins\SevenSpikes.Nop.Plugins.QuickView\Themes\DefaultClean\Content\images\" />
+    <Folder Include="Plugins\SevenSpikes.Nop.Plugins.QuickView\Themes\Venture\Content\images\" />
+    <Folder Include="Plugins\SevenSpikes.Nop.Plugins.QuickView\Themes\Venture\Views\QuickViewCatalog\" />
+    <Folder Include="Plugins\SevenSpikes.Nop.Plugins.QuickView\Views\Components\NopQuickViewProductPictures\" />
+    <Folder Include="Plugins\SevenSpikes.Nop.Plugins.QuickView\Views\Components\NopQuickView\" />
+    <Folder Include="Plugins\SevenSpikes.Nop.Plugins.QuickView\Views\QuickViewCatalog\" />
+    <Folder Include="Plugins\SevenSpikes.Nop.Plugins.QuickView\Views\QuickView\" />
+    <Folder Include="Plugins\SevenSpikes.Nop.Plugins.RichBlog\Areas\Admin\Views\BlogAdmin\" />
+    <Folder Include="Plugins\SevenSpikes.Nop.Plugins.RichBlog\Areas\Admin\Views\Components\RichBlogAdminCategoryPanel\" />
+    <Folder Include="Plugins\SevenSpikes.Nop.Plugins.RichBlog\Areas\Admin\Views\Components\RichBlogAdminPanel\" />
+    <Folder Include="Plugins\SevenSpikes.Nop.Plugins.RichBlog\Areas\Admin\Views\Components\RichBlogAdminPicturePanel\" />
+    <Folder Include="Plugins\SevenSpikes.Nop.Plugins.RichBlog\Areas\Admin\Views\Components\RichBlogAdminRelatedBlogPostsPanel\" />
+    <Folder Include="Plugins\SevenSpikes.Nop.Plugins.RichBlog\Areas\Admin\Views\RichBlogAdmin\" />
+    <Folder Include="Plugins\SevenSpikes.Nop.Plugins.RichBlog\Areas\Admin\Views\RichBlogCategoryAdmin\" />
+    <Folder Include="Plugins\SevenSpikes.Nop.Plugins.RichBlog\Resources\" />
+    <Folder Include="Plugins\SevenSpikes.Nop.Plugins.RichBlog\Themes\DefaultClean\Content\images\" />
+    <Folder Include="Plugins\SevenSpikes.Nop.Plugins.RichBlog\Themes\Venture\Content\images\" />
+    <Folder Include="Plugins\SevenSpikes.Nop.Plugins.RichBlog\Themes\Venture\Views\Components\RichBlogHomePage\" />
+    <Folder Include="Plugins\SevenSpikes.Nop.Plugins.RichBlog\Views\Components\RichBlogCategoryNavigation\" />
+    <Folder Include="Plugins\SevenSpikes.Nop.Plugins.RichBlog\Views\Components\RichBlogHomePage\" />
+    <Folder Include="Plugins\SevenSpikes.Nop.Plugins.RichBlog\Views\Components\RichBlogPostFooter\" />
+    <Folder Include="Plugins\SevenSpikes.Nop.Plugins.RichBlog\Views\Components\RichBlogPostImage\" />
+    <Folder Include="Plugins\SevenSpikes.Nop.Plugins.RichBlog\Views\Components\RichBlogPostMeta\" />
+    <Folder Include="Plugins\SevenSpikes.Nop.Plugins.RichBlog\Views\Components\RichBlogPostPrevNext\" />
+    <Folder Include="Plugins\SevenSpikes.Nop.Plugins.RichBlog\Views\Components\RichBlogSearchForm\" />
+    <Folder Include="Plugins\SevenSpikes.Nop.Plugins.RichBlog\Views\Components\RichBlog\" />
+    <Folder Include="Plugins\SevenSpikes.Nop.Plugins.RichBlog\Views\RichBlogSearch\" />
+    <Folder Include="Plugins\SevenSpikes.Nop.Plugins.SaleOfTheDay\Areas\Admin\Views\SaleOfTheDayAdmin\" />
+    <Folder Include="Plugins\SevenSpikes.Nop.Plugins.SaleOfTheDay\Resources\" />
+    <Folder Include="Plugins\SevenSpikes.Nop.Plugins.SaleOfTheDay\Scripts\" />
+    <Folder Include="Plugins\SevenSpikes.Nop.Plugins.SaleOfTheDay\Styles\" />
+    <Folder Include="Plugins\SevenSpikes.Nop.Plugins.SaleOfTheDay\Themes\DefaultClean\Content\images\" />
+    <Folder Include="Plugins\SevenSpikes.Nop.Plugins.SaleOfTheDay\Themes\Venture\Content\" />
   </ItemGroup>
 
   <!-- This target execute after "Build" target.

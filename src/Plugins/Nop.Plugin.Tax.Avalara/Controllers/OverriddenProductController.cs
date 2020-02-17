@@ -39,6 +39,7 @@ namespace Nop.Plugin.Tax.Avalara.Controllers
         private readonly IProductService _productService;
         private readonly ITaxCategoryService _taxCategoryService;
         private readonly ITaxPluginManager _taxPluginManager;
+        private readonly ICategoryAttributeService _categoryAttributeService;
 
         #endregion
 
@@ -77,7 +78,7 @@ namespace Nop.Plugin.Tax.Avalara.Controllers
             ITaxPluginManager taxPluginManager,
             IUrlRecordService urlRecordService,
             IWorkContext workContext,
-            VendorSettings vendorSettings) : base(aclService,
+            VendorSettings vendorSettings, ICategoryAttributeService categoryAttributeService) : base(aclService,
                 backInStockSubscriptionService,
                 categoryService,
                 copyProductService,
@@ -107,7 +108,8 @@ namespace Nop.Plugin.Tax.Avalara.Controllers
                 specificationAttributeService,
                 urlRecordService,
                 workContext,
-                vendorSettings)
+                vendorSettings,
+                categoryAttributeService)
         {
             _avalaraTaxManager = avalaraTaxManager;
             _localizationService = localizationService;
