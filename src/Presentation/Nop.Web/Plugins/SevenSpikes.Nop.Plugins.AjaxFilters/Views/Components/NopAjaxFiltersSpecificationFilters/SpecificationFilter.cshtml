@@ -54,11 +54,12 @@
         {
             string optionAttributes = GetOptionAttributes(specificationFilterItem.FilterItemState, isUiModeUseCheckboxesOrSpecificationSlider);
             string inputId = $"specification-input-{specificationFilterGroup.Id}-{specificationFilterItem.Id}";
+            string inputGroupId = $"check_spec_data_{specificationFilterGroup.Id}";
             bool hasColorSquare = specificationFilterItem.ColorSquaresRgb != null;
 
             if (isUiModeUseCheckboxesOrSpecificationSlider)
             {
-                result.AppendHtml("<li class=\"checkbox-item\">");
+                result.AppendHtml($"<li class=\"{inputGroupId} checkbox-item\">");
 
                 if (hasColorSquare)
                 {
@@ -70,7 +71,7 @@
                 }
 
                 result.AppendHtml($"<input {optionAttributes} data-option-ids=\"{specificationFilterItem.Id}\" type=\"checkbox\" id=\"{inputId}\" />");
-                result.AppendHtml($"<label class=\"filter-item-name\" for=\"{inputId}\">{specificationFilterItem.Name}</label>");
+                result.AppendHtml($"<label class=\"filter-item-name\" for=\"{inputId}\"><span>{specificationFilterItem.Name}</span></label>");
                 result.AppendHtml("</li>");
             }
             else
@@ -104,6 +105,28 @@
             <a class="@toggleStateClass">@specificationFilterGroup.Name</a>
             <a class="clearFilterOptions">@T("SevenSpikes.NopAjaxFilters.Client.Common.Clear")</a>
         </div>
+         @if (specificationFilterGroup.FilterItems.Count > 4)
+                {
+                    <div id="search_specs">
+                        <input style="border: 1px solid #c0c0c0 !important; height: 30px; width: 100%; margin: 5px 0; " id="search_spec_input_@specificationFilterGroup.Id" class="search_spec_input" placeholder="@T("SearchSpecInput")" type="text" />
+                    </div>
+                    <script type="text/javascript">
+                $(function () {
+                    $("#search_spec_input_@specificationFilterGroup.Id").on("keydown, keyup", function () {
+                        var textSearch = $(this).val().trim();
+                        if (textSearch !== '') {
+                            $(".check_spec_data_@specificationFilterGroup.Id > label > span:not(:contains('" + textSearch + "'))").parent().parent().hide();
+                        } else {
+                            $(".check_spec_data_@specificationFilterGroup.Id").show();
+                        }
+                    });
+                });
+
+            </script>
+
+
+                }
+
         <div class="filtersGroupPanel @filtersPanelClass @colorOptionsClass @specificationAttributeSliderClass" data-optionsgroupid="@specificationFilterGroup.Id" id="@string.Concat("specificationFiltersDropDown", specificationFilterGroup.Id)" style="@toggleStateStyles">
             @if (isUiModeUseCheckboxesOrSpecificationSlider)
             {

@@ -87,7 +87,7 @@
     margin: 0 10px;
 }
 .header-selectors-wrapper select {
-    font: normal 13px 'Fjalla One', sans-serif;
+    font: normal 13px 'Oswald' , sans-serif;
     color: #909090;
     height: 38px;
     background-image: url('../img/header-select-arrow.svg');

@@ -47,7 +47,7 @@ input[type="email"],
 input[type="tel"],
 textarea {
 	border-radius: 0;
-    font: normal 15px 'Fjalla One', sans-serif;
+    font: normal 15px 'Oswald' , sans-serif;
 }
 input[type="button"],
 input[type="submit"],
@@ -196,7 +196,7 @@ body {
     max-width: 100%;
 	background-color: #f0f0f0;
 	overflow-x: hidden; /* responsive navigation & filters scroll bug fix*/
-	font: normal 15px 'Fjalla One', sans-serif;
+	font: normal 15px 'Oswald' , sans-serif;
     color: #2c2c2c;
     letter-spacing: .2px;
     text-transform: uppercase;
@@ -290,7 +290,7 @@ label, label + * {
 	vertical-align: middle;
 }
 button {
-	font: normal 15px 'Fjalla One', sans-serif;
+	font: normal 15px 'Oswald' , sans-serif;
 }
 input[type="button"]:disabled,
 input[type="submit"]:disabled,
@@ -1652,7 +1652,7 @@ body:after {
 }
 .newsletter-email .options label {
     display: block;
-    font-family: 'Fjalla One', sans-serif;
+    font-family: 'Oswald' , sans-serif;
     text-transform: uppercase;
     padding: 5px 25px 5px 0;
     cursor: pointer;
@@ -3524,7 +3524,7 @@ td.ui-datepicker-week-end {
     background: #f5f5f5;
     color: #8c8c8c;
     padding: 8.5px 17px;
-    font: 14px  'Fjalla One', sans-serif;
+    font: 14px  'Oswald' , sans-serif;
     text-transform: uppercase;
 }
 .overview .attributes ~ .availability {
@@ -6189,7 +6189,7 @@ td.ui-datepicker-week-end {
     padding: 3px 0;
 }
 .checkout-page .address-item li.name {
-    font: normal 16px 'Fjalla One', sans-serif;
+    font: normal 16px 'Oswald' , sans-serif;
     color: #2c2c2c;
     text-transform: uppercase;
     margin: 0 0 10px;
@@ -7160,7 +7160,7 @@ td.ui-datepicker-week-end {
 .advanced-search-checkbox .inputs input[type='checkbox'] ~ label {
     display: inline-block;
     width: auto;
-    font: normal 15px 'Fjalla One', sans-serif;
+    font: normal 15px 'Oswald' , sans-serif;
     text-transform: unset; 
 }
 .advanced-search-checkbox .inputs input[type='checkbox'] ~ label:before {
@@ -7808,7 +7808,7 @@ td.ui-datepicker-week-end {
 .forum-search-page .basic-search .inputs.reversed label {
     display: inline-block;
     width: auto;
-    font: normal 15px 'Fjalla One', sans-serif;
+    font: normal 15px 'Oswald' , sans-serif;
     text-transform: unset;
     color: #2c2c2c;
 }
@@ -7827,7 +7827,7 @@ td.ui-datepicker-week-end {
 .forum-search-page .search-results th {
     font-weight: bold;
     text-transform: uppercase;
-    font: normal 14px 'Fjalla One', sans-serif;
+    font: normal 14px 'Oswald' , sans-serif;
     line-height: initial;
 }
 
@@ -8316,7 +8316,7 @@ td.ui-datepicker-week-end {
 	text-align: center;
 	font-size: 15px;
 	line-height: 27px;
-    font-family: 'Fjalla One', sans-serif;
+    font-family: 'Oswald' , sans-serif;
 	color: #909090;
     position: absolute;
     top: 0;

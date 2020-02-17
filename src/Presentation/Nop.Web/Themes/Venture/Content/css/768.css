@@ -197,7 +197,7 @@
 }
 .sub-categories-wrapper .title a {
     color: #2c2c2c;
-    font: normal 14px 'Fjalla One', sans-serif;
+    font: normal 14px 'Oswald' , sans-serif;
     text-transform: uppercase;
     letter-spacing: 2px;
     padding: 12px 22px;
@@ -456,7 +456,7 @@
 .compare-products-table tr td:first-child {
     background: #f5f5f5;
     text-align: right;
-    font: normal 14px 'Fjalla One', sans-serif;
+    font: normal 14px 'Oswald' , sans-serif;
     text-transform: uppercase;
     color: #909090;
 }

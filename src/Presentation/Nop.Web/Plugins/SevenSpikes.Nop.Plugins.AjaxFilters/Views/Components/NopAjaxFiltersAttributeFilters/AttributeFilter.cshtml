@@ -58,12 +58,13 @@
             string productVariantAttributeIds = string.Join(",", attributeFilterItem.ProductVariantAttributeIds);
             string optionAttributes = GetOptionAttributes(attributeFilterItem.FilterItemState);
             string inputId = string.Format("attribute-input-{0}-{1}", attributeFilterGroup.Id, attributeFilterItem.ValueId);
+            string inputGroupId = string.Format("check_attribute_data_{0}", attributeFilterGroup.Id);
             bool hasColorSquare = attributeFilterItem.ColorSquaresRgb != null;
             bool hasImageSquare = attributeFilterItem.ImageSquaresUrl != null;
 
             if (uiMode == FiltersUIMode.UseCheckboxes)
             {
-                result.AppendHtml("<li class=\"checkbox-item\">");
+                result.AppendHtml($"<li class=\"{inputGroupId} checkbox-item\">");
 
                 if (hasColorSquare)
                 {
@@ -83,7 +84,7 @@
                 }
 
                 result.AppendHtml($"<input {optionAttributes} data-option-ids=\"{productVariantAttributeIds}\" data-valueId=\"{attributeFilterItem.ValueId}\" type=\"checkbox\" id=\"{inputId}\" />");
-                result.AppendHtml($"<label class=\"filter-item-name\" for=\"{inputId}\">{attributeFilterItem.Name}</label>");
+                result.AppendHtml($"<label class=\"filter-item-name\" for=\"{inputId}\"><span>{attributeFilterItem.Name}</span></label>");
                 result.AppendHtml("</li>");
             }
             else
@@ -119,6 +120,28 @@
             <a class="@toggleStateClass">@attributeFilterGroup.Name</a>
             <a class="clearFilterOptions">@T("SevenSpikes.NopAjaxFilters.Client.Common.Clear")</a>
         </div>
+        @if (attributeFilterGroup.FilterItems.Count > 4)
+                {
+                    <div id="search_specs">
+                        <input style="border: 1px solid #c0c0c0 !important; height: 30px; width: 100%; margin: 5px 0; "  id="search_attribute_input_@attributeFilterGroup.Id" class="search_attribute_input" placeholder="@T("SearchSpecInput")" type="text" />
+                    </div>
+                    <script type="text/javascript">
+                $(function () {
+                    $("#search_attribute_input_@attributeFilterGroup.Id").on("keydown, keyup", function () {
+                        var textSearch = $(this).val().trim();
+                        if (textSearch !== '') {
+                            $(".check_attribute_data_@attributeFilterGroup.Id > label > span:not(:contains('" + textSearch + "'))").parent().parent().hide();
+                        } else {
+                            $(".check_attribute_data_@attributeFilterGroup.Id").show();
+                        }
+                    });
+                });
+
+            </script>
+
+
+                }
+
         <div class="filtersGroupPanel @filtersPanelClass @colorOptionsClass @imageOptionsClass" data-optionsgroupid="@attributeFilterGroup.Id" id="@string.Concat("attributeFiltersDropDown", attributeFilterGroup.Id)" style="@toggleStateStyles">
             @if (nopAjaxFiltersSettings.FiltersUIMode == FiltersUIMode.UseCheckboxes)
             {

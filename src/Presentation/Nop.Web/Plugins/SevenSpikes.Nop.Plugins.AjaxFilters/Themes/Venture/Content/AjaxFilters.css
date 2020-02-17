@@ -160,10 +160,14 @@
 
 
 .priceRangeFilterPanel7Spikes
-.filtersGroupPanel,
-.specificationFilterPanel7Spikes
 .filtersGroupPanel {
     padding: 50px 0;
+    position: relative;
+}
+
+.specificationFilterPanel7Spikes
+.filtersGroupPanel {
+    padding: 5px 0;
     position: relative;
 }
 .priceRangeMinMaxPanel,
