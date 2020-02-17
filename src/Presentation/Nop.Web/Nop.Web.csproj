@@ -98,6 +98,7 @@
     <Folder Include="Plugins\SevenSpikes.Nop.Plugins.SaleOfTheDay\Styles\" />
     <Folder Include="Plugins\SevenSpikes.Nop.Plugins.SaleOfTheDay\Themes\DefaultClean\Content\images\" />
     <Folder Include="Plugins\SevenSpikes.Nop.Plugins.SaleOfTheDay\Themes\Venture\Content\" />
+    <Folder Include="Properties\PublishProfiles\" />
   </ItemGroup>
 
   <!-- This target execute after "Build" target.
