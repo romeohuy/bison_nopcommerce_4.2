@@ -27,9 +27,15 @@
     <Content Include="App_Data\**" CopyToPublishDirectory="PreserveNewest" Exclude="App_Data\*.json" />
     <Content Update="App_Data\*.json" CopyToPublishDirectory="Never" />
     <Content Update="App_Data\DataProtectionKeys\*.xml" CopyToPublishDirectory="Never" />
+    <Compile Remove="Areas\Admin\Views\**" />
 
     <Compile Remove="Plugins\**" />
+
+    <Content Remove="Areas\Admin\Views\**" />
+
+    <EmbeddedResource Remove="Areas\Admin\Views\**" />
     <EmbeddedResource Remove="Plugins\**" />
+    <None Remove="Areas\Admin\Views\**" />
     <None Remove="Plugins\**" />
 
     <!-- We copy the entire \Plugins and \Themes directories.
@@ -56,120 +62,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Plugins\SevenSpikes.Nop.Plugins.AnywhereSliders\Areas\Admin\Views\AnywhereSlidersAdmin\" />
-    <Folder Include="Plugins\SevenSpikes.Nop.Plugins.AnywhereSliders\Resources\" />
-    <Folder Include="Plugins\SevenSpikes.Nop.Plugins.AnywhereSliders\Scripts\coinSlider\" />
-    <Folder Include="Plugins\SevenSpikes.Nop.Plugins.AnywhereSliders\Scripts\nivo\" />
-    <Folder Include="Plugins\SevenSpikes.Nop.Plugins.AnywhereSliders\Styles\coinSlider\" />
-    <Folder Include="Plugins\SevenSpikes.Nop.Plugins.AnywhereSliders\Styles\nivo\themes\bar\" />
-    <Folder Include="Plugins\SevenSpikes.Nop.Plugins.AnywhereSliders\Styles\nivo\themes\dark\" />
-    <Folder Include="Plugins\SevenSpikes.Nop.Plugins.AnywhereSliders\Styles\nivo\themes\default\" />
-    <Folder Include="Plugins\SevenSpikes.Nop.Plugins.AnywhereSliders\Styles\nivo\themes\light\" />
-    <Folder Include="Plugins\SevenSpikes.Nop.Plugins.AnywhereSliders\Themes\DefaultClean\Content\nivo\" />
-    <Folder Include="Plugins\SevenSpikes.Nop.Plugins.AnywhereSliders\Themes\Venture\Content\nivo\" />
-    <Folder Include="Plugins\SevenSpikes.Nop.Plugins.AnywhereSliders\Views\Components\AnywhereSliders\" />
-    <Folder Include="Plugins\SevenSpikes.Nop.Plugins.AnywhereSliders\Views\Components\CarouselSlider\" />
-    <Folder Include="Plugins\SevenSpikes.Nop.Plugins.AnywhereSliders\Views\Components\NivoSlider\" />
-    <Folder Include="Plugins\SevenSpikes.Nop.Plugins.CloudZoom\Areas\Admin\Views\CloudZoomAdmin\" />
-    <Folder Include="Plugins\SevenSpikes.Nop.Plugins.CloudZoom\Resources\" />
-    <Folder Include="Plugins\SevenSpikes.Nop.Plugins.CloudZoom\Scripts\Carousel\" />
-    <Folder Include="Plugins\SevenSpikes.Nop.Plugins.CloudZoom\Styles\Carousel\" />
-    <Folder Include="Plugins\SevenSpikes.Nop.Plugins.CloudZoom\Themes\DefaultClean\Content\carousel\" />
-    <Folder Include="Plugins\SevenSpikes.Nop.Plugins.CloudZoom\Themes\DefaultClean\Content\cloud-zoom\images\" />
-    <Folder Include="Plugins\SevenSpikes.Nop.Plugins.CloudZoom\Themes\Venture\Content\carousel\" />
-    <Folder Include="Plugins\SevenSpikes.Nop.Plugins.CloudZoom\Themes\Venture\Content\cloud-zoom\" />
-    <Folder Include="Plugins\SevenSpikes.Nop.Plugins.CloudZoom\Views\Components\CloudZoom\" />
-    <Folder Include="Plugins\SevenSpikes.Nop.Plugins.FacebookShop\Areas\Admin\Views\FacebookShopAdmin\" />
-    <Folder Include="Plugins\SevenSpikes.Nop.Plugins.FacebookShop\Resources\" />
-    <Folder Include="Plugins\SevenSpikes.Nop.Plugins.FacebookShop\Themes\DefaultClean\Content\css\" />
-    <Folder Include="Plugins\SevenSpikes.Nop.Plugins.FacebookShop\Themes\DefaultClean\Content\font\" />
-    <Folder Include="Plugins\SevenSpikes.Nop.Plugins.FacebookShop\Views\Components\FacebookFooter\" />
-    <Folder Include="Plugins\SevenSpikes.Nop.Plugins.FacebookShop\Views\Components\FacebookMainBannerImage\" />
-    <Folder Include="Plugins\SevenSpikes.Nop.Plugins.FacebookShop\Views\Components\FacebookMainNavigation\" />
-    <Folder Include="Plugins\SevenSpikes.Nop.Plugins.FacebookShop\Views\Components\FacebookRelatedProducts\" />
-    <Folder Include="Plugins\SevenSpikes.Nop.Plugins.FacebookShop\Views\FacebookShop\" />
-    <Folder Include="Plugins\SevenSpikes.Nop.Plugins.InstantSearch\Areas\Admin\Views\InstantSearchAdmin\" />
-    <Folder Include="Plugins\SevenSpikes.Nop.Plugins.InstantSearch\Images\" />
-    <Folder Include="Plugins\SevenSpikes.Nop.Plugins.InstantSearch\Resources\" />
-    <Folder Include="Plugins\SevenSpikes.Nop.Plugins.InstantSearch\Scripts\" />
-    <Folder Include="Plugins\SevenSpikes.Nop.Plugins.InstantSearch\Themes\DefaultClean\Content\" />
-    <Folder Include="Plugins\SevenSpikes.Nop.Plugins.InstantSearch\Themes\Venture\Content\" />
-    <Folder Include="Plugins\SevenSpikes.Nop.Plugins.InstantSearch\Views\Components\InstantSearch\" />
-    <Folder Include="Plugins\SevenSpikes.Nop.Plugins.InstantSearch\Views\InstantSearch\" />
-    <Folder Include="Plugins\SevenSpikes.Nop.Plugins.JCarousel\Areas\Admin\Views\JCarouselAdmin\" />
-    <Folder Include="Plugins\SevenSpikes.Nop.Plugins.JCarousel\Resources\" />
-    <Folder Include="Plugins\SevenSpikes.Nop.Plugins.JCarousel\Scripts\" />
-    <Folder Include="Plugins\SevenSpikes.Nop.Plugins.JCarousel\Styles\" />
-    <Folder Include="Plugins\SevenSpikes.Nop.Plugins.JCarousel\Themes\DefaultClean\Content\images\" />
-    <Folder Include="Plugins\SevenSpikes.Nop.Plugins.JCarousel\Themes\Venture\Content\" />
-    <Folder Include="Plugins\SevenSpikes.Nop.Plugins.JCarousel\Themes\Venture\Views\Components\JCarouselCategoryBox\" />
-    <Folder Include="Plugins\SevenSpikes.Nop.Plugins.JCarousel\Views\Components\JCarouselCategoryBox\" />
-    <Folder Include="Plugins\SevenSpikes.Nop.Plugins.JCarousel\Views\Components\JCarouselManufacturerBox\" />
-    <Folder Include="Plugins\SevenSpikes.Nop.Plugins.JCarousel\Views\Components\JCarouselVendorBox\" />
-    <Folder Include="Plugins\SevenSpikes.Nop.Plugins.JCarousel\Views\Components\JCarousel\" />
-    <Folder Include="Plugins\SevenSpikes.Nop.Plugins.MegaMenu\Areas\Admin\Content\Scripts\" />
-    <Folder Include="Plugins\SevenSpikes.Nop.Plugins.MegaMenu\Areas\Admin\Content\Styles\" />
-    <Folder Include="Plugins\SevenSpikes.Nop.Plugins.MegaMenu\Areas\Admin\Views\MegaMenuAdmin\" />
-    <Folder Include="Plugins\SevenSpikes.Nop.Plugins.MegaMenu\Areas\Admin\Views\MegaMenuItemAdmin\Templates\" />
-    <Folder Include="Plugins\SevenSpikes.Nop.Plugins.MegaMenu\Resources\" />
-    <Folder Include="Plugins\SevenSpikes.Nop.Plugins.MegaMenu\Scripts\" />
-    <Folder Include="Plugins\SevenSpikes.Nop.Plugins.MegaMenu\Themes\DefaultClean\Content\images\" />
-    <Folder Include="Plugins\SevenSpikes.Nop.Plugins.MegaMenu\Themes\Venture\Content\" />
-    <Folder Include="Plugins\SevenSpikes.Nop.Plugins.MegaMenu\Views\Components\MegaMenuCategory\" />
-    <Folder Include="Plugins\SevenSpikes.Nop.Plugins.MegaMenu\Views\Components\MegaMenuListSubCategories\" />
-    <Folder Include="Plugins\SevenSpikes.Nop.Plugins.MegaMenu\Views\Components\MegaMenuManufacturer\" />
-    <Folder Include="Plugins\SevenSpikes.Nop.Plugins.MegaMenu\Views\Components\MegaMenuMenuItem\" />
-    <Folder Include="Plugins\SevenSpikes.Nop.Plugins.MegaMenu\Views\Components\MegaMenuProductTags\" />
-    <Folder Include="Plugins\SevenSpikes.Nop.Plugins.MegaMenu\Views\Components\MegaMenuTopic\" />
-    <Folder Include="Plugins\SevenSpikes.Nop.Plugins.MegaMenu\Views\Components\MegaMenuVendor\" />
-    <Folder Include="Plugins\SevenSpikes.Nop.Plugins.MegaMenu\Views\Components\MegaMenu\" />
-    <Folder Include="Plugins\SevenSpikes.Nop.Plugins.NopQuickTabs\Areas\Admin\Views\Components\QuickTabsAdminPanel\" />
-    <Folder Include="Plugins\SevenSpikes.Nop.Plugins.NopQuickTabs\Areas\Admin\Views\ProductTabAdmin\" />
-    <Folder Include="Plugins\SevenSpikes.Nop.Plugins.NopQuickTabs\Areas\Admin\Views\TabAdmin\" />
-    <Folder Include="Plugins\SevenSpikes.Nop.Plugins.NopQuickTabs\Resources\" />
-    <Folder Include="Plugins\SevenSpikes.Nop.Plugins.NopQuickTabs\Scripts\" />
-    <Folder Include="Plugins\SevenSpikes.Nop.Plugins.NopQuickTabs\Themes\DefaultClean\Content\" />
-    <Folder Include="Plugins\SevenSpikes.Nop.Plugins.NopQuickTabs\Themes\Venture\Content\" />
-    <Folder Include="Plugins\SevenSpikes.Nop.Plugins.NopQuickTabs\Themes\Venture\Views\Components\ProductReviewsTab\" />
-    <Folder Include="Plugins\SevenSpikes.Nop.Plugins.NopQuickTabs\Views\Components\ProductAttachmentsTab\" />
-    <Folder Include="Plugins\SevenSpikes.Nop.Plugins.NopQuickTabs\Views\Components\ProductContactUsTab\" />
-    <Folder Include="Plugins\SevenSpikes.Nop.Plugins.NopQuickTabs\Views\Components\ProductCustomTab\" />
-    <Folder Include="Plugins\SevenSpikes.Nop.Plugins.NopQuickTabs\Views\Components\ProductDescriptionTab\" />
-    <Folder Include="Plugins\SevenSpikes.Nop.Plugins.NopQuickTabs\Views\Components\ProductDetailsPicturesTab\" />
-    <Folder Include="Plugins\SevenSpikes.Nop.Plugins.NopQuickTabs\Views\Components\ProductReviewHelpfulnessTab\" />
-    <Folder Include="Plugins\SevenSpikes.Nop.Plugins.NopQuickTabs\Views\Components\ProductReviewsTab\" />
-    <Folder Include="Plugins\SevenSpikes.Nop.Plugins.NopQuickTabs\Views\Components\ProductSpecificationsTab\" />
-    <Folder Include="Plugins\SevenSpikes.Nop.Plugins.NopQuickTabs\Views\Components\ProductTabs\" />
-    <Folder Include="Plugins\SevenSpikes.Nop.Plugins.ProductRibbons\Areas\Admin\Content\Scripts\" />
-    <Folder Include="Plugins\SevenSpikes.Nop.Plugins.ProductRibbons\Areas\Admin\Content\Styles\" />
-    <Folder Include="Plugins\SevenSpikes.Nop.Plugins.ProductRibbons\Areas\Admin\Views\ProductRibbonsAdmin\" />
-    <Folder Include="Plugins\SevenSpikes.Nop.Plugins.ProductRibbons\Resources\" />
-    <Folder Include="Plugins\SevenSpikes.Nop.Plugins.ProductRibbons\RibbonPictures\" />
-    <Folder Include="Plugins\SevenSpikes.Nop.Plugins.ProductRibbons\Scripts\" />
-    <Folder Include="Plugins\SevenSpikes.Nop.Plugins.ProductRibbons\Styles\images\" />
-    <Folder Include="Plugins\SevenSpikes.Nop.Plugins.ProductRibbons\Themes\DefaultClean\Content\" />
-    <Folder Include="Plugins\SevenSpikes.Nop.Plugins.ProductRibbons\Themes\Venture\Content\" />
-    <Folder Include="Plugins\SevenSpikes.Nop.Plugins.ProductRibbons\Views\Components\NopProductRibbons\" />
-    <Folder Include="Plugins\SevenSpikes.Nop.Plugins.ProductRibbons\Views\ProductRibbons\" />
-    <Folder Include="Plugins\SevenSpikes.Nop.Plugins.QuickView\Areas\Admin\Views\QuickViewAdmin\" />
-    <Folder Include="Plugins\SevenSpikes.Nop.Plugins.QuickView\Resources\" />
-    <Folder Include="Plugins\SevenSpikes.Nop.Plugins.QuickView\Scripts\" />
-    <Folder Include="Plugins\SevenSpikes.Nop.Plugins.QuickView\Themes\DefaultClean\Content\images\" />
-    <Folder Include="Plugins\SevenSpikes.Nop.Plugins.QuickView\Themes\Venture\Content\images\" />
-    <Folder Include="Plugins\SevenSpikes.Nop.Plugins.QuickView\Themes\Venture\Views\QuickViewCatalog\" />
-    <Folder Include="Plugins\SevenSpikes.Nop.Plugins.QuickView\Views\Components\NopQuickViewProductPictures\" />
-    <Folder Include="Plugins\SevenSpikes.Nop.Plugins.QuickView\Views\Components\NopQuickView\" />
-    <Folder Include="Plugins\SevenSpikes.Nop.Plugins.QuickView\Views\QuickViewCatalog\" />
-    <Folder Include="Plugins\SevenSpikes.Nop.Plugins.QuickView\Views\QuickView\" />
-    <Folder Include="Plugins\SevenSpikes.Nop.Plugins.RichBlog\Areas\Admin\Views\BlogAdmin\" />
-    <Folder Include="Plugins\SevenSpikes.Nop.Plugins.RichBlog\Areas\Admin\Views\Components\RichBlogAdminCategoryPanel\" />
-    <Folder Include="Plugins\SevenSpikes.Nop.Plugins.RichBlog\Areas\Admin\Views\Components\RichBlogAdminPanel\" />
-    <Folder Include="Plugins\SevenSpikes.Nop.Plugins.RichBlog\Areas\Admin\Views\Components\RichBlogAdminPicturePanel\" />
-    <Folder Include="Plugins\SevenSpikes.Nop.Plugins.RichBlog\Areas\Admin\Views\Components\RichBlogAdminRelatedBlogPostsPanel\" />
-    <Folder Include="Plugins\SevenSpikes.Nop.Plugins.RichBlog\Areas\Admin\Views\RichBlogAdmin\" />
-    <Folder Include="Plugins\SevenSpikes.Nop.Plugins.RichBlog\Areas\Admin\Views\RichBlogCategoryAdmin\" />
-    <Folder Include="Plugins\SevenSpikes.Nop.Plugins.RichBlog\Resources\" />
-    <Folder Include="Plugins\SevenSpikes.Nop.Plugins.RichBlog\Themes\DefaultClean\Content\images\" />
+    <Folder Include="Plugins\" />
   </ItemGroup>
 
   <!-- This target execute after "Build" target.

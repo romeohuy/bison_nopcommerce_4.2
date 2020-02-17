@@ -1,12 +1,12 @@
 @model ProductModel
 
-<div class="panel-body">
-    @if (Model.Id > 0)
-    {
-    <div class="sub-panel">
-
-        @await Html.PartialAsync("Table", new DataTablesModel
+    <div class="panel-body">
+        @if (Model.Id > 0)
         {
+        <div class="sub-panel">
+
+            @await Html.PartialAsync("Table", new DataTablesModel
+            {
             Name = "productpictures-grid",
             UrlRead = new DataUrl("ProductPictureList", "Product", new RouteValueDictionary { [nameof(Model.ProductPictureSearchModel.ProductId)] = Model.ProductPictureSearchModel.ProductId }),
             UrlDelete = new DataUrl("ProductPictureDelete", "Product", null),
@@ -15,90 +15,102 @@
             LengthMenu = Model.ProductPictureSearchModel.AvailablePageSizes,
             ColumnCollection = new List<ColumnProperty>
                 {
-                    new ColumnProperty(nameof(ProductPictureModel.PictureUrl))
-                    {
-                        Title = T("Admin.Catalog.Products.Pictures.Fields.Picture").Text,
-                        Render = new RenderCustom("renderPicturesColumnProductPictureUrl")
-                    },
-                    new ColumnProperty(nameof(ProductPictureModel.DisplayOrder))
-                    {
-                        Title = T("Admin.Catalog.Products.Pictures.Fields.DisplayOrder").Text,
-                        Width = "150",
-                        ClassName = NopColumnClassDefaults.CenterAll,
-                        Editable = true,
-                        EditType = EditType.Number
-                    },
-                    new ColumnProperty(nameof(ProductPictureModel.OverrideAltAttribute))
-                    {
-                        Title = T("Admin.Catalog.Products.Pictures.Fields.OverrideAltAttribute").Text,
-                        Width = "200",
-                        Editable = true,
-                        EditType = EditType.String
-                    },
-                    new ColumnProperty(nameof(ProductPictureModel.OverrideTitleAttribute))
-                    {
-                        Title = T("Admin.Catalog.Products.Pictures.Fields.OverrideTitleAttribute").Text,
-                        Width = "200",
-                        Editable = true,
-                        EditType = EditType.String
-                    },
-                    new ColumnProperty(nameof(ProductPictureModel.Id))
-                    {
-                        Title = T("Admin.Common.Edit").Text,
-                        Width = "200",
-                        ClassName =  NopColumnClassDefaults.Button,
-                        Render = new RenderButtonsInlineEdit()
-                    },
-                    new ColumnProperty(nameof(ProductPictureModel.Id))
-                    {
-                        Title = T("Admin.Common.Delete").Text,
-                        Width = "100",
-                        Render = new RenderButtonRemove(T("Admin.Common.Delete").Text),
-                        ClassName = NopColumnClassDefaults.Button
-                    }
+                new ColumnProperty(nameof(ProductPictureModel.PictureUrl))
+                {
+                Title = T("Admin.Catalog.Products.Pictures.Fields.Picture").Text,
+                Render = new RenderCustom("renderPicturesColumnProductPictureUrl")
+                },
+                new ColumnProperty(nameof(ProductPictureModel.DisplayOrder))
+                {
+                Title = T("Admin.Catalog.Products.Pictures.Fields.DisplayOrder").Text,
+                Width = "150",
+                ClassName = NopColumnClassDefaults.CenterAll,
+                Editable = true,
+                EditType = EditType.Number
+                },
+                new ColumnProperty(nameof(ProductPictureModel.OverrideAltAttribute))
+                {
+                Title = T("Admin.Catalog.Products.Pictures.Fields.OverrideAltAttribute").Text,
+                Width = "200",
+                Editable = true,
+                EditType = EditType.String
+                },
+                new ColumnProperty(nameof(ProductPictureModel.OverrideTitleAttribute))
+                {
+                Title = T("Admin.Catalog.Products.Pictures.Fields.OverrideTitleAttribute").Text,
+                Width = "200",
+                Editable = true,
+                EditType = EditType.String
+                },
+                new ColumnProperty(nameof(ProductPictureModel.Id))
+                {
+                Title = T("Admin.Common.Edit").Text,
+                Width = "200",
+                ClassName =  NopColumnClassDefaults.Button,
+                Render = new RenderButtonsInlineEdit()
+                },
+                new ColumnProperty(nameof(ProductPictureModel.Id))
+                {
+                Title = T("Admin.Common.Delete").Text,
+                Width = "100",
+                Render = new RenderButtonRemove(T("Admin.Common.Delete").Text),
+                ClassName = NopColumnClassDefaults.Button
                 }
-        })
-        
-        <script>
-            function renderPicturesColumnProductPictureUrl(data, type, row, meta) {
-                return '<a href="' + row.PictureUrl + '" target="_blank"><img alt="' + row.PictureId + '" src="' + row.PictureUrl + '" width="150" /></a>';
-            }
-        </script>
-    </div>
+                }
+                })
+
+                <script>
+                    function renderPicturesColumnProductPictureUrl(data, type, row, meta) {
+                        return '<a href="' + row.PictureUrl + '" target="_blank"><img alt="' + row.PictureId + '" src="' + row.PictureUrl + '" width="150" /></a>';
+                    }
+                </script>
+        </div>
 
         <div class="panel panel-default">
             <div class="panel-heading">
                 @T("Admin.Catalog.Products.Pictures.AddNew")
             </div>
             <div class="panel-body">
-                <script>
-                    $(document).ready(function() {
-                        $('#addProductPicture').click(function() {
-                            var pictureId = $("#@Html.IdFor(model => model.AddPictureModel.PictureId)").val();
+                <script type="text/javascript">
+
+
+                    $(document).ready(function () {
+                        var pictureIds = [];
+                        var pictureUrls = [];
+                        $('#addProductPicture').click(function () {
+                            pictureUrls.push($("#@Html.IdFor(model => model.AddPictureModel.PictureUrl)").val());
+                            pictureUrls.push($("#PictureUrl1").val());
+                            pictureUrls.push($("#PictureUrl2").val());
+                            pictureUrls.push($("#PictureUrl3").val());
+                            pictureUrls.push($("#PictureUrl4").val());
+
+                            var pictureIdStrs = $("#@Html.IdFor(model => model.AddPictureModel.PictureId)").val();
                             var overrideAltAttribute = $("#@Html.IdFor(model => model.AddPictureModel.OverrideAltAttribute)").val();
                             var overrideTitleAttribute = $("#@Html.IdFor(model => model.AddPictureModel.OverrideTitleAttribute)").val();
                             var displayOrder = $("#@Html.IdFor(model => model.AddPictureModel.DisplayOrder)").val();
-
-                            if (pictureId == 0) {
-                                $("#addProductPictureAlert").click();
-                                return;
-                            }
-
+                            if (pictureIdStrs !== null && pictureIdStrs !== '' && pictureIdStrs != undefined) {
+                                var ids = pictureIdStrs.split(';');
+                                for (var i = 0; i < ids.length; i++) {
+                                    pictureIds.push(ids[i]);
+                                }
+                            };
                             $('#addProductPicture').attr('disabled', true);
 
                             var postData = {
-                                pictureId: pictureId,
+                                pictureIds: pictureIds,
+                                pictureUrls: pictureUrls,
                                 displayOrder: displayOrder,
                                 overrideAltAttribute: overrideAltAttribute,
                                 overrideTitleAttribute: overrideTitleAttribute,
                                 productId: '@Model.Id'
                             };
+
                             addAntiForgeryToken(postData);
 
                             $.ajax({
                                 cache: false,
                                 type: "POST",
-                                url: "@(Url.Action("ProductPictureAdd", "Product"))",
+                                url: '@(Url.Action("ProductPicturesAddMulti", "Product"))',
                                 data: postData,
                                 success: function (data, textStatus, jqXHR) {
                                     if (!data.Result) {
@@ -111,11 +123,29 @@
                                 },
                                 complete: function (jqXHR, textStatus) {
                                     $('#addProductPicture').attr('disabled', false);
+                                    reloadData();
                                 }
                             });
+
                         });
+
+                        function reloadData() {
+                            $("#imageFromUrl0").html("");
+                            $("#@Html.IdFor(model => model.AddPictureModel.PictureUrl)").val("");
+                            $("#imageFromUrl1").html("");
+                            $("#PictureUrl1").val("");
+                            $("#imageFromUrl2").html("");
+                            $("#PictureUrl2").val("");
+                            $("#imageFromUrl3").html("");
+                            $("#PictureUrl3").val("");
+                            $("#imageFromUrl4").html("");
+                            $("#PictureUrl4").val("");
+                            $("#@Html.IdFor(model => model.AddPictureModel.PictureId)").val("0");
+                        };
+
                     });
                 </script>
+
                 <div class="form-group">
                     <div class="col-md-3">
                         <nop-label asp-for="AddPictureModel.PictureId" />
@@ -123,6 +153,73 @@
                     <div class="col-md-9">
                         <nop-editor asp-for="AddPictureModel.PictureId" />
                         <span asp-validation-for="AddPictureModel.PictureId"></span>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="col-md-3">
+                        <div class="label-wrapper">
+                            <label class="control-label">Picture Url 1</label>
+                        </div>
+                    </div>
+                    <div class="col-md-9">
+                        <nop-editor asp-for="AddPictureModel.PictureUrl" />
+                        @*<button type="button" class="btn btn-success" id="btnDownloadImage">@T("Admin.Common.ButtonDownloadImageProduct")</button>*@
+                        <div id="imageFromUrl0">
+
+                        </div>
+                        <span asp-validation-for="AddPictureModel.PictureUrl"></span>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="col-md-3">
+                        <div class="label-wrapper">
+                            <label class="control-label">Picture Url 2</label>
+                        </div>
+                    </div>
+                    <div class="col-md-9">
+                        <input id="PictureUrl1" class="form-control" type="text" />
+                        <div id="imageFromUrl1">
+
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="col-md-3">
+                        <div class="label-wrapper">
+                            <label class="control-label">Picture Url 3</label>
+                        </div>
+                    </div>
+                    <div class="col-md-9">
+                        <input id="PictureUrl2" class="form-control" type="text" />
+                        <div id="imageFromUrl2">
+
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="col-md-3">
+                        <div class="label-wrapper">
+                            <label class="control-label">Picture Url 4</label>
+                        </div>
+                    </div>
+                    <div class="col-md-9">
+                        <input id="PictureUrl3" class="form-control" type="text" />
+                        <div id="imageFromUrl3">
+
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="col-md-3">
+                        <div class="label-wrapper">
+                            <label class="control-label">Picture Url 5</label>
+                        </div>
+                    </div>
+                    <div class="col-md-9">
+                        <input id="PictureUrl4" class="form-control" type="text" />
+                        <div id="imageFromUrl4">
+
+                        </div>
                     </div>
                 </div>
                 <div class="form-group">
@@ -159,15 +256,15 @@
                 </div>
             </div>
         </div>
-    }
-    else
-    {
+        }
+        else
+        {
         <div class="panel panel-default">
             <div class="panel-body">
                 @T("Admin.Catalog.Products.Pictures.SaveBeforeEdit")
             </div>
         </div>
-    }
-</div>
+        }
+    </div>
 <nop-alert asp-alert-id="addProductPictureAlert" asp-alert-message="@T("Admin.Catalog.Products.Pictures.Alert.AddNew")" />
 <nop-alert asp-alert-id="productPictureAddAlert" asp-alert-message="@T("Admin.Catalog.Products.Pictures.Alert.PictureAdd")" />

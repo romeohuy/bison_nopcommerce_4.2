@@ -23,6 +23,17 @@ namespace Nop.Services.Catalog
     /// </summary>
     public partial class CategoryService : ICategoryService
     {
+        /// <summary>
+        /// Key for caching
+        /// </summary>
+        /// <remarks>
+        /// {0} : parent category ID
+        /// {1} : show hidden records?
+        /// {2} : current customer ID
+        /// {3} : store ID
+        /// {4} : include all levels (child)
+        /// </remarks>
+        private const string CATEGORIES_BY_PARENT_CATEGORY_ID_KEY = "Nop.category.byparent-{0}-{1}-{2}-{3}-{4}";
         #region Fields
 
         private readonly CatalogSettings _catalogSettings;
@@ -310,6 +321,67 @@ namespace Nop.Services.Catalog
             }
 
             return categories;
+        }
+        public virtual IList<Category> GetAllCategoriesByParentCategoryId(int parentCategoryId,
+            bool showHidden = false, bool includeAllLevels = false)
+        {
+            var key = string.Format(CATEGORIES_BY_PARENT_CATEGORY_ID_KEY, parentCategoryId, showHidden, _workContext.CurrentCustomer.Id, _storeContext.CurrentStore.Id, includeAllLevels);
+            return _cacheManager.Get(key, () =>
+            {
+                var query = _categoryRepository.Table;
+                if (!showHidden)
+                    query = query.Where(c => c.Published);
+                query = query.Where(c => c.ParentCategoryId == parentCategoryId);
+                query = query.Where(c => !c.Deleted);
+                query = query.OrderBy(c => c.DisplayOrder).ThenBy(c => c.Id);
+
+                if (!showHidden && (!_catalogSettings.IgnoreAcl || !_catalogSettings.IgnoreStoreLimitations))
+                {
+                    if (!_catalogSettings.IgnoreAcl)
+                    {
+                        //ACL (access control list)
+                        var allowedCustomerRolesIds = _workContext.CurrentCustomer.GetCustomerRoleIds();
+                        query = from c in query
+                                join acl in _aclRepository.Table
+                                on new { c1 = c.Id, c2 = "Category" } equals new { c1 = acl.EntityId, c2 = acl.EntityName } into c_acl
+                                from acl in c_acl.DefaultIfEmpty()
+                                where !c.SubjectToAcl || allowedCustomerRolesIds.Contains(acl.CustomerRoleId)
+                                select c;
+                    }
+                    if (!_catalogSettings.IgnoreStoreLimitations)
+                    {
+                        //Store mapping
+                        var currentStoreId = _storeContext.CurrentStore.Id;
+                        query = from c in query
+                                join sm in _storeMappingRepository.Table
+                                on new { c1 = c.Id, c2 = "Category" } equals new { c1 = sm.EntityId, c2 = sm.EntityName } into c_sm
+                                from sm in c_sm.DefaultIfEmpty()
+                                where !c.LimitedToStores || currentStoreId == sm.StoreId
+                                select c;
+                    }
+                    //only distinct categories (group by ID)
+                    query = from c in query
+                            group c by c.Id
+                            into cGroup
+                            orderby cGroup.Key
+                            select cGroup.FirstOrDefault();
+                    query = query.OrderBy(c => c.DisplayOrder).ThenBy(c => c.Id);
+                }
+
+                var categories = query.ToList();
+
+                if (!includeAllLevels)
+                    return categories;
+
+                var childCategories = new List<Category>();
+                //add child levels
+                foreach (var category in categories)
+                {
+                    childCategories.AddRange(GetAllCategoriesByParentCategoryId(category.Id, showHidden, true));
+                }
+                categories.AddRange(childCategories);
+                return categories;
+            });
         }
 
         /// <summary>

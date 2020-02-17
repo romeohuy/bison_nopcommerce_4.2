@@ -8596,7 +8596,12 @@ td.ui-datepicker-week-end {
 	color: #909090;
 }
 
-
+.filter-group-attributes, .filtersGroupPanel {
+  position: relative;
+  max-height: 120px;
+  max-width: 300px;
+  overflow: auto;
+}
 /***** RESPONSIVE GRIDS ******/
 
 @media all and (max-width: 480px) {

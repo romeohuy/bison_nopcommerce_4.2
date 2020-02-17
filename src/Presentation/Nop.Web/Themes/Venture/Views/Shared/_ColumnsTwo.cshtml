@@ -99,11 +99,10 @@
     <div class="side-2">
         @if (IsSectionDefined("left"))
         {
-            @RenderSection("left")
+        @RenderSection("left")
         }
         else
         {
-            @await Component.InvokeAsync("Widget", new { widgetZone = PublicWidgetZones.LeftSideColumnBefore })
             <div class="blocks-wrapper">
                 @await Component.InvokeAsync("CategoryNavigation", new { currentCategoryId = currentCategoryId, currentProductId = currentProductId })
                 @*@await Component.InvokeAsync("Widget", new { widgetZone = PublicWidgetZones.LeftSideColumnAfterCategoryNavigation })*@
@@ -113,7 +112,9 @@
                 @await Component.InvokeAsync("PopularProductTags")
                 @await Component.InvokeAsync("PollBlock", new { systemKeyword = "LeftColumnPoll" })
             </div>
-            @await Component.InvokeAsync("Widget", new { widgetZone = PublicWidgetZones.LeftSideColumnAfter })
+        @await Component.InvokeAsync("Widget", new { widgetZone = PublicWidgetZones.LeftSideColumnBefore })
+
+        @await Component.InvokeAsync("Widget", new { widgetZone = PublicWidgetZones.LeftSideColumnAfter })
         }
     </div>
 }

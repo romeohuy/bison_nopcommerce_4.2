@@ -1,4 +1,4 @@
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using Nop.Core;
 using Nop.Core.Domain.Catalog;
 
@@ -43,6 +43,9 @@ namespace Nop.Services.Catalog
         /// <param name="showHidden">A value indicating whether to show hidden records</param>
         /// <returns>Categories</returns>
         IList<Category> GetAllCategoriesByParentCategoryId(int parentCategoryId, bool showHidden = false);
+
+        IList<Category> GetAllCategoriesByParentCategoryId(int parentCategoryId,
+            bool showHidden, bool includeAllLevels);
 
         /// <summary>
         /// Gets all categories displayed on the home page

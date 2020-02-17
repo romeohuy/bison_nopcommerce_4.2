@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Net;
 using System.Text;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -12,6 +13,7 @@ using Nop.Core.Domain.Discounts;
 using Nop.Core.Domain.Media;
 using Nop.Core.Domain.Orders;
 using Nop.Core.Domain.Vendors;
+using Nop.Core.Extensions;
 using Nop.Core.Infrastructure;
 using Nop.Services.Catalog;
 using Nop.Services.Common;
@@ -71,7 +73,7 @@ namespace Nop.Web.Areas.Admin.Controllers
         private readonly IUrlRecordService _urlRecordService;
         private readonly IWorkContext _workContext;
         private readonly VendorSettings _vendorSettings;
-
+        private readonly ICategoryAttributeService _categoryAttributeService;
         #endregion
 
         #region Ctor
@@ -106,7 +108,7 @@ namespace Nop.Web.Areas.Admin.Controllers
             ISpecificationAttributeService specificationAttributeService,
             IUrlRecordService urlRecordService,
             IWorkContext workContext,
-            VendorSettings vendorSettings)
+            VendorSettings vendorSettings, ICategoryAttributeService categoryAttributeService)
         {
             _aclService = aclService;
             _backInStockSubscriptionService = backInStockSubscriptionService;
@@ -139,6 +141,7 @@ namespace Nop.Web.Areas.Admin.Controllers
             _urlRecordService = urlRecordService;
             _workContext = workContext;
             _vendorSettings = vendorSettings;
+            _categoryAttributeService = categoryAttributeService;
         }
 
         #endregion
@@ -1089,6 +1092,110 @@ namespace Nop.Web.Areas.Admin.Controllers
             return Json(new { Result = true });
         }
 
+         [HttpPost]
+        public virtual IActionResult AddProductToCategoriesSelected(ICollection<int> selectedIdsProducToAdd, ICollection<int> SelectedCategoryIds)
+        {
+            if (!_permissionService.Authorize(StandardPermissionProvider.ManageProducts))
+                return AccessDeniedView();
+
+            if (selectedIdsProducToAdd == null || SelectedCategoryIds == null) return Json(new { Result = true });
+            foreach (var categoryId in SelectedCategoryIds)
+            {
+                foreach (var productId in selectedIdsProducToAdd)
+                {
+                    var existingProductCategories = _categoryService.GetProductCategoriesByProductId(productId, true);
+
+                    //delete categories
+                    foreach (var existingProductCategory in existingProductCategories)
+                        if (!SelectedCategoryIds.Contains(existingProductCategory.CategoryId))
+                            _categoryService.DeleteProductCategory(existingProductCategory);
+                    //find next display order
+                    var displayOrder = 1;
+                    var existingCategoryMapping = _categoryService.GetProductCategoriesByCategoryId(categoryId, showHidden: true);
+                    if (existingCategoryMapping.Any())
+                        displayOrder = existingCategoryMapping.Max(x => x.DisplayOrder) + 1;
+                    _categoryService.InsertProductCategory(new ProductCategory
+                    {
+                        ProductId = productId,
+                        CategoryId = categoryId,
+                        DisplayOrder = displayOrder
+                    });
+                }
+            }
+            OverwriteProductsAttr(selectedIdsProducToAdd.ToList());
+            return Json(new { Result = true });
+        }
+        private void OverwriteProductsAttr(List<int> productIds)
+        {
+            foreach (var productId in productIds)
+            {
+                // Collect all product category attribute mappings
+                var categories = _categoryService.GetProductCategoriesByProductId(productId, true);
+                var categoryAttributeMappings = categories.SelectMany(category => _categoryAttributeService.GetByCatId(category.CategoryId))
+                    .DistinctBy(_ => _.ProductAttributeId).ToList();
+
+                var oldMappings = _productAttributeService.GetProductAttributeMappingsByProductId(productId);
+                //foreach (var attributeMapping in oldMappings)
+                //{
+                //    _productAttributeService.DeleteProductAttributeMapping(attributeMapping);
+                //}
+
+                var newMappings = new List<ProductAttributeMapping>();
+                foreach (var mapping in categoryAttributeMappings.Where(_ => _.ProductAttributeId.IsNotIn(oldMappings.Select(o => o.ProductAttributeId))))
+                //foreach (var mapping in categoryAttributeMappings)
+                {
+                    var productAttributeMapping = new ProductAttributeMapping
+                    {
+                        ProductId = productId,
+                        ProductAttributeId = mapping.ProductAttributeId,
+                        TextPrompt = mapping.TextPrompt,
+                        IsRequired = mapping.IsRequired,
+                        AttributeControlTypeId = mapping.AttributeControlTypeId,
+                        DisplayOrder = mapping.DisplayOrder,
+                        ValidationMinLength = mapping.ValidationMinLength,
+                        ValidationMaxLength = mapping.ValidationMaxLength,
+                        ValidationFileAllowedExtensions = mapping.ValidationFileAllowedExtensions,
+                        ValidationFileMaximumSize = mapping.ValidationFileMaximumSize,
+                        DefaultValue = mapping.DefaultValue
+                    };
+                    newMappings.Add(productAttributeMapping);
+                }
+
+                foreach (var productAttributeMapping in newMappings)
+                {
+                    _productAttributeService.InsertProductAttributeMapping(productAttributeMapping);
+
+                }
+            }
+        }
+        [HttpPost]
+        public virtual IActionResult AddProductToManufacturesSelected(ICollection<int> selectedIdsProducToAdd, ICollection<int> SelectedManufactureIds)
+        {
+            if (!_permissionService.Authorize(StandardPermissionProvider.ManageProducts))
+                return AccessDeniedView();
+
+            if (selectedIdsProducToAdd == null || SelectedManufactureIds == null) return Json(new { Result = true });
+            foreach (var manufactureId in SelectedManufactureIds)
+            {
+                foreach (var productId in selectedIdsProducToAdd)
+                {
+                    var displayOrder = 1;
+                    var existingManufactureMapping = _manufacturerService.GetProductManufacturersByProductId(productId, showHidden: true);
+                    if (existingManufactureMapping.Any())
+                        displayOrder = existingManufactureMapping.Max(x => x.DisplayOrder) + 1;
+                    _manufacturerService.InsertProductManufacturer(new ProductManufacturer
+                    {
+                        ProductId = productId,
+                        ManufacturerId = manufactureId,
+                        DisplayOrder = displayOrder
+                    });
+                }
+            }
+            return Json(new { Result = true });
+        }
+
+
+
         [HttpPost]
         public virtual IActionResult CopyProduct(ProductModel model)
         {
@@ -1617,6 +1724,119 @@ namespace Nop.Web.Areas.Admin.Controllers
             });
 
             return Json(new { Result = true });
+        }
+
+        public virtual IActionResult ProductPicturesAddMulti(int[] pictureIds, string[] pictureUrls, int displayOrder,
+            string overrideAltAttribute, string overrideTitleAttribute,
+            int productId)
+        {
+
+            if (!_permissionService.Authorize(StandardPermissionProvider.ManageProducts))
+                return AccessDeniedView();
+            var listPicids = InsertMultipleImageUrls(pictureUrls);
+            listPicids.AddRange(pictureIds);
+            if (pictureIds.Length == 0)
+                throw new ArgumentException();
+
+            var product = _productService.GetProductById(productId);
+            if (product == null)
+                throw new ArgumentException("No product found with the specified id");
+
+            //a vendor should have access only to his products
+            if (_workContext.CurrentVendor != null && product.VendorId != _workContext.CurrentVendor.Id)
+                return RedirectToAction("List");
+
+            foreach (var pictureId in listPicids)
+            {
+                var picture = _pictureService.GetPictureById(pictureId);
+                if (picture == null)
+                    continue;
+
+                _pictureService.UpdatePicture(picture.Id,
+                    _pictureService.LoadPictureBinary(picture),
+                    picture.MimeType,
+                    picture.SeoFilename,
+                    overrideAltAttribute,
+                    overrideTitleAttribute);
+
+                _pictureService.SetSeoFilename(pictureId, _pictureService.GetPictureSeName(product.Name));
+
+                _productService.InsertProductPicture(new ProductPicture
+                {
+                    PictureId = pictureId,
+                    ProductId = productId,
+                    DisplayOrder = displayOrder,
+                });
+
+            }
+            return Json(new { Result = true });
+        }
+
+        private List<int> InsertMultipleImageUrls(string[] urls)
+        {
+
+            List<int> pictureIds = new List<int>();
+            if (urls != null)
+            {
+                foreach (var url in urls.Where(u => u.IsNotNullOrEmpty()).Distinct())
+                {
+                    var contentType = string.Empty;
+                    var fileBinary = GetFileViaHttp(url);
+                    var fileExtension = Path.GetExtension(url);
+                    if (!string.IsNullOrEmpty(fileExtension))
+                        fileExtension = fileExtension.ToLowerInvariant();
+
+                    //contentType is not always available 
+                    //that's why we manually update it here
+                    //http://www.sfsu.edu/training/mimetype.htm
+                    if (string.IsNullOrEmpty(contentType))
+                    {
+                        switch (fileExtension)
+                        {
+                            case ".bmp":
+                                contentType = MimeTypes.ImageBmp;
+                                break;
+                            case ".gif":
+                                contentType = MimeTypes.ImageGif;
+                                break;
+                            case ".jpeg":
+                            case ".jpg":
+                            case ".jpe":
+                            case ".jfif":
+                            case ".pjpeg":
+                            case ".pjp":
+                                contentType = MimeTypes.ImageJpeg;
+                                break;
+                            case ".png":
+                                contentType = MimeTypes.ImagePng;
+                                break;
+                            case ".tiff":
+                            case ".tif":
+                                contentType = MimeTypes.ImageTiff;
+                                break;
+                            default:
+                                break;
+                        }
+                    }
+
+                    if (contentType.IsNullOrEmpty())
+                    {
+                        continue;
+                    }
+                    var picture = _pictureService.InsertPicture(fileBinary, contentType, null);
+                    pictureIds.Add(picture.Id);
+                }
+            }
+            return pictureIds;
+        }
+
+        private byte[] GetFileViaHttp(string url)
+        {
+            using (WebClient client = new WebClient())
+            {
+                byte[] body = client.DownloadData(url);
+                return body;
+            }
         }
 
         [HttpPost]

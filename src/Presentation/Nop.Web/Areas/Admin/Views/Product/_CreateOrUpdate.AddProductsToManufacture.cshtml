@@ -1,0 +1,104 @@
+﻿@model ProductListModel
+@*Add selecte product ids to Manufactures*@
+<div id="add-producttomanufacture-window" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="add-producttomanufacture-title">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title" id="add-producttomanufacture-window-title">@T("Admin.Common.AddManufacturersToProducts.Title")</h4>
+            </div>
+            <form asp-controller="Product" asp-action="AddProductToManufacturesSelected" method="post" id="add-producttomanufacture-selected-form">
+                <div class="form-horizontal">
+                    <div class="modal-body">
+                        <input type="hidden" id="selectedIdsProducToAdd" name="selectedIdsProducToAdd" value="" />
+                        <div class="form-group">
+                            <div class="col-md-3">
+                                <nop-label asp-for="SelectedManufactureIds" />
+                            </div>
+                            <div class="col-md-9">
+                                @{
+                                    Model.AvailableManufacturers.RemoveAt(0);
+                                }
+                                <nop-select asp-for="SelectedManufactureIds" asp-items="Model.AvailableManufacturers" asp-multiple="true" />
+                                <script type="text/javascript">
+                                    $(document).ready(function() {
+                                        var manufactureIdsInput =
+                                            $('#@Html.IdFor(model => model.SelectedManufactureIds)')
+                                                .data("kendoMultiSelect");
+                                        manufactureIdsInput.setOptions({
+                                            autoClose: false,
+                                            filter: "contains"
+                                        });
+
+                                        @if (Model.AvailableManufacturers.Count == 0)
+                                        {
+                                            <text>
+                                                manufactureIdsInput.setOptions({
+                                                    enable: false,
+                                                    placeholder:
+                                                        '@T("Admin.Catalog.Products.Fields.Manufactures.NoManufacturesAvailable")'
+                                                });
+                                                manufactureIdsInput._placeholder();
+                                                manufactureIdsInput._enable();
+                                            </text>
+                                        }
+                                    });
+                                </script>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" id="btn-add-products-to-manufactures" class="btn btn-primary">
+                            @T("Admin.Common.Save")
+                        </button>
+                    </div>
+                </div>
+
+            </form>
+        </div>
+    </div>
+</div>
+<script type="text/javascript">
+    $(document).ready(function () {
+        $('#btn-add-products-to-manufactures').click(function (e) {
+            e.preventDefault();
+            var ids = selectedIds.join(",");
+            $('#add-producttocate-selected-form #selectedIdsProducToAdd').val(ids);
+            var manufacturesSelected = $('#SelectedManufactureIds').val();
+            if (selectedIds.length === 0) {
+                $('#add-producttomanufacture-window').modal('toggle');
+                $('#alertModal').modal("show");
+                $('#alert-dialog-error').html('@T("Admin.AddProductToCategories.ChoosesProductAlert")');
+                return;
+            }
+            if (manufacturesSelected == null || manufacturesSelected === "" || manufacturesSelected.length === 0) {
+                $('#alertModal').modal("show");
+                $('#alert-dialog-error').html('@T("Admin.AddProductToCategories.ChoosesCategoriesAlert")');
+                return;
+            }
+            var postData = { selectedIdsProducToAdd: selectedIds, SelectedManufactureIds: manufacturesSelected };
+            addAntiForgeryToken(postData);
+            $.ajax({
+                cache: false,
+                type: "POST",
+                url: "@(Url.Action("AddProductToManufacturesSelected", "Product"))",
+                data: postData,
+                complete: function(data) {
+                    //alert('@T("Admin.AddProductToCategoriesSuccess")');
+                    selectedIds = [];
+                    manufacturesSelected = [];
+                    $('#SelectedCategoryIds').val();
+                    $('#add-producttomanufacture-window').modal('toggle');
+                    //reload grid
+                    var grid = $('#products-grid').data('kendoGrid');
+                    grid.dataSource.read();
+                },
+                error: function(xhr, ajaxOptions, thrownError) {
+                    alert(thrownError);
+                },
+                traditional: true
+            });
+
+        });
+    });
+</script>
