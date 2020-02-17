@@ -1,0 +1,72 @@
+﻿{
+  "InstalledPluginNames": [
+    "SevenSpikes.Core",
+    "DiscountRequirement.HasOneProduct",
+    "DiscountRequirement.MustBeAssignedToCustomerRole",
+    "CurrencyExchange.ECB",
+    "ExternalAuth.Facebook",
+    "Payments.CheckMoneyOrder",
+    "Payments.Manual",
+    "Payments.PayPalDirect",
+    "Payments.PayPalExpressCheckout",
+    "Payments.PayPalStandard",
+    "Payments.PurchaseOrder",
+    "Pickup.PickupInStore",
+    "PromotionFeed.Froogle",
+    "Shipping.AustraliaPost",
+    "Shipping.CanadaPost",
+    "Shipping.FedEx",
+    "Shipping.FixedOrByWeight",
+    "Shipping.UPS",
+    "Shipping.USPS",
+    "Nop.Plugin.Storakle",
+    "Tax.FixedOrByCountryStateZip",
+    "Widgets.GoogleAnalytics",
+    "Widgets.NivoSlider",
+    "SevenSpikes.Nop.Plugins.AjaxCart",
+    "SevenSpikes.Nop.Plugins.AnywhereSliders",
+    "SevenSpikes.Nop.Plugins.MegaMenu",
+    "SevenSpikes.Nop.Plugins.SmartProductCollections",
+    "SevenSpikes.Nop.Plugins.AjaxFilters",
+    "SevenSpikes.Nop.Plugins.CloudZoom",
+    "SevenSpikes.Nop.Plugins.FacebookShop",
+    "SevenSpikes.Nop.Plugins.InstantSearch",
+    "SevenSpikes.Nop.Plugins.JCarousel",
+    "SevenSpikes.Nop.Plugins.NopQuickTabs",
+    "SevenSpikes.Nop.Plugins.ProductRibbons",
+    "SevenSpikes.Nop.Plugins.QuickView",
+    "SevenSpikes.Nop.Plugins.RichBlog",
+    "SevenSpikes.Nop.Plugins.SaleOfTheDay",
+    "SevenSpikes.Nop.Plugins.AjaxFilters.Pro",
+    "SevenSpikes.Theme.Venture",
+    "Integration.KiotViet"
+  ],
+  "PluginNamesToUninstall": [],
+  "PluginNamesToDelete": [],
+  "PluginNamesToInstall": [
+    {
+      "Item1": "SevenSpikes.Nop.Plugins.AjaxCart",
+      "Item2": "3ccf079f-e3ea-41c3-b564-641279515b99"
+    },
+    {
+      "Item1": "SevenSpikes.Nop.Plugins.MegaMenu",
+      "Item2": "3ccf079f-e3ea-41c3-b564-641279515b99"
+    },
+    {
+      "Item1": "SevenSpikes.Nop.Plugins.AnywhereSliders",
+      "Item2": "3ccf079f-e3ea-41c3-b564-641279515b99"
+    },
+    {
+      "Item1": "SevenSpikes.Nop.Plugins.SmartProductCollections",
+      "Item2": "3ccf079f-e3ea-41c3-b564-641279515b99"
+    },
+    {
+      "Item1": "SevenSpikes.Theme.Venture",
+      "Item2": "3ccf079f-e3ea-41c3-b564-641279515b99"
+    },
+    {
+      "Item1": "Integration.KiotViet",
+      "Item2": "3ccf079f-e3ea-41c3-b564-641279515b99"
+    }
+  ]
+}
