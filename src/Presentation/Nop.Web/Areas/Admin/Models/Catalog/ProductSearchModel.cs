@@ -63,6 +63,9 @@ namespace Nop.Web.Areas.Admin.Models.Catalog
 
         public bool HideStoresList { get; set; }
 
+        public List<int> SelectedCategoryIds { get; set; }
+        public List<int> SelectedManufactureIds { get; set; }
+
         public IList<SelectListItem> AvailableCategories { get; set; }
 
         public IList<SelectListItem> AvailableManufacturers { get; set; }
