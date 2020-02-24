@@ -702,13 +702,7 @@ namespace Nop.Web.Areas.Admin.Controllers
                 })
                 .ToList();
 
-            var gridModel = new DataSourceResult
-            {
-                Data = attributesModel,
-                Total = attributesModel.Count
-            };
-
-            return Json(gridModel);
+            return Json(attributesModel);
         }
         protected virtual void PrepareCategoryProductAttributeMappingModel(CategoryProductAttributeMappingModel model,
             CategoryProductAttributeMapping pam, Category category, bool excludeProperties)
@@ -1111,7 +1105,7 @@ namespace Nop.Web.Areas.Admin.Controllers
 
 
         [HttpPost]
-        public virtual IActionResult CategorySpecAttrList(DataSourceRequest command, int categoryId)
+        public virtual IActionResult CategorySpecAttrList(int categoryId)
         {
             if (!_permissionService.Authorize(StandardPermissionProvider.ManageProducts))
                 return AccessDeniedDataTablesJson();
@@ -1156,13 +1150,8 @@ namespace Nop.Web.Areas.Admin.Controllers
                 })
                 .ToList();
 
-            var gridModel = new DataSourceResult
-            {
-                Data = productrSpecsModel,
-                Total = productrSpecsModel.Count
-            };
-
-            return Json(gridModel);
+            
+            return Json(productrSpecsModel);
         }
 
         [HttpPost]

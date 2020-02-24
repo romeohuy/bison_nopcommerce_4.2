@@ -1,5 +1,5 @@
 {
   "DataProvider": "sqlserver",
-  "DataConnectionString": "Data Source=DESKTOP-RSBLH9N;Initial Catalog=movetek_uat_new;Integrated Security=False;Persist Security Info=False;User ID=sa;Password=P@$$w0rdAdmin",
+  "DataConnectionString": "Data Source=103.252.253.189;Initial Catalog=movetek_dev_42;Integrated Security=False;Persist Security Info=False;User ID=sa;Password=P@$$w0rdAdmin",
   "RawDataSettings": {}
 }
