@@ -27,6 +27,7 @@ using Nop.Web.Areas.Admin.Infrastructure.Cache;
 using Nop.Web.Areas.Admin.Infrastructure.Mapper.Extensions;
 using Nop.Web.Areas.Admin.Models.Catalog;
 using Nop.Web.Framework.Controllers;
+using Nop.Web.Framework.Models.Extensions;
 using Nop.Web.Framework.Mvc;
 using Nop.Web.Framework.Mvc.Filters;
 
@@ -373,7 +374,8 @@ namespace Nop.Web.Areas.Admin.Controllers
 
             //prepare model
             var model = _categoryModelFactory.PrepareCategoryModel(null, category);
-
+            PrepareCategoryModel(model);
+            model.CategoryProductAttributesExist = _productAttributeService.GetAllProductAttributes().Any();
             return View(model);
         }
 
@@ -1105,12 +1107,12 @@ namespace Nop.Web.Areas.Admin.Controllers
 
 
         [HttpPost]
-        public virtual IActionResult CategorySpecAttrList(int categoryId)
+        public virtual IActionResult CategorySpecAttrList(CategorySpecificationSearchModel searchModel)
         {
             if (!_permissionService.Authorize(StandardPermissionProvider.ManageProducts))
                 return AccessDeniedDataTablesJson();
 
-            var productrSpecs = _specificationAttributeService.GetCategorySpecificationAttributes(categoryId);
+            var productrSpecs = _specificationAttributeService.GetCategorySpecificationAttributes(searchModel.CategoryId);
 
             var productrSpecsModel = productrSpecs
                 .Select(x =>
@@ -1149,9 +1151,10 @@ namespace Nop.Web.Areas.Admin.Controllers
                     return psaModel;
                 })
                 .ToList();
+            //prepare grid model
+            var model = new CategorySpecificationAttributeListModel().PrepareToGrid(searchModel, new PagedList<CategorySpecificationAttribute>(productrSpecs, searchModel.Page - 1, searchModel.PageSize), () => productrSpecsModel);
 
-            
-            return Json(productrSpecsModel);
+            return Json(model);
         }
 
         [HttpPost]

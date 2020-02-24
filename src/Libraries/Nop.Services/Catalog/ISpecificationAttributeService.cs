@@ -167,6 +167,8 @@ namespace Nop.Services.Catalog
 
         IList<CategorySpecificationAttribute> GetCategorySpecificationAttributes(int categoryId = 0,
             int specificationAttributeOptionId = 0, bool? allowFiltering = null, bool? showOnProductPage = null);
+        IPagedList<CategorySpecificationAttribute> GetCategorySpecificationAttributesPagedList(int categoryId = 0,
+            int specificationAttributeOptionId = 0, bool? allowFiltering = null, bool? showOnProductPage = null, int pageIndex = 0,int pageSize = 10);
 
 
         CategorySpecificationAttribute GetCategorySpecificationAttributeById(int categorySpecificationAttributeId);

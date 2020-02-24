@@ -439,6 +439,30 @@ namespace Nop.Services.Catalog
             });
         }
 
+        public virtual IPagedList<CategorySpecificationAttribute> GetCategorySpecificationAttributesPagedList(int categoryId = 0,
+            int specificationAttributeOptionId = 0, bool? allowFiltering = null, bool? showOnProductPage = null,int pageIndex = 0, int pageSize = 10)
+        {
+            var key = string.Format(NopCatalogDefaults.CategoryspecificationattributeAllbyproductidKey, categoryId);
+
+            var data = _cacheManager.Get(key, () =>
+            {
+                var query = _categorySpecificationAttributeRepository.Table;
+                if (categoryId > 0)
+                    query = query.Where(psa => psa.CategoryId == categoryId);
+                if (specificationAttributeOptionId > 0)
+                    query = query.Where(psa => psa.SpecificationAttributeOptionId == specificationAttributeOptionId);
+                if (allowFiltering.HasValue)
+                    query = query.Where(psa => psa.AllowFiltering == allowFiltering.Value);
+                if (showOnProductPage.HasValue)
+                    query = query.Where(psa => psa.ShowOnProductPage == showOnProductPage.Value);
+                query = query.OrderBy(psa => psa.DisplayOrder).ThenBy(psa => psa.Id);
+
+                var productSpecificationAttributes = query.ToList();
+                return productSpecificationAttributes;
+            });
+            return new PagedList<CategorySpecificationAttribute>(data, pageIndex, pageSize);
+        }
+
         public virtual CategorySpecificationAttribute GetCategorySpecificationAttributeById(int categorySpecificationAttributeId)
         {
             if (categorySpecificationAttributeId == 0)

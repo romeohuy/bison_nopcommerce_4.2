@@ -34,6 +34,7 @@ namespace Nop.Web.Areas.Admin.Models.Catalog
             AvailableStores = new List<SelectListItem>();
 
             CategoryProductSearchModel = new CategoryProductSearchModel();
+            AddSpecificationAttributeModel = new AddCategorySpecificationAttributeModel();
         }
 
         #endregion
@@ -177,4 +178,39 @@ namespace Nop.Web.Areas.Admin.Models.Catalog
         [NopResourceDisplayName("Admin.Catalog.Categories.Fields.SeName")]
         public string SeName { get; set; }
     }
+    public partial class AddCategoryProductModel : BaseNopModel
+        {
+            public AddCategoryProductModel()
+            {
+                AvailableCategories = new List<SelectListItem>();
+                AvailableManufacturers = new List<SelectListItem>();
+                AvailableStores = new List<SelectListItem>();
+                AvailableVendors = new List<SelectListItem>();
+                AvailableProductTypes = new List<SelectListItem>();
+            }
+
+            [NopResourceDisplayName("Admin.Catalog.Products.List.SearchProductName")]
+            public string SearchProductName { get; set; }
+            [NopResourceDisplayName("Admin.Catalog.Products.List.SearchCategory")]
+            public int SearchCategoryId { get; set; }
+            [NopResourceDisplayName("Admin.Catalog.Products.List.SearchManufacturer")]
+            public int SearchManufacturerId { get; set; }
+            [NopResourceDisplayName("Admin.Catalog.Products.List.SearchStore")]
+            public int SearchStoreId { get; set; }
+            [NopResourceDisplayName("Admin.Catalog.Products.List.SearchVendor")]
+            public int SearchVendorId { get; set; }
+            [NopResourceDisplayName("Admin.Catalog.Products.List.SearchProductType")]
+            public int SearchProductTypeId { get; set; }
+
+            public IList<SelectListItem> AvailableCategories { get; set; }
+            public IList<SelectListItem> AvailableManufacturers { get; set; }
+            public IList<SelectListItem> AvailableStores { get; set; }
+            public IList<SelectListItem> AvailableVendors { get; set; }
+            public IList<SelectListItem> AvailableProductTypes { get; set; }
+
+            public int CategoryId { get; set; }
+
+            public int[] SelectedProductIds { get; set; }
+        }
+
 }

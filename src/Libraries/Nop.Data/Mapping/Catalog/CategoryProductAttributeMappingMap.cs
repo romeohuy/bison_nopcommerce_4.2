@@ -24,6 +24,8 @@ namespace Nop.Data.Mapping.Catalog
             builder.HasOne(pam => pam.ProductAttribute)
                 .WithMany()
                 .HasForeignKey(pam => pam.ProductAttributeId);
+
+            base.Configure(builder);
         }
     }
 }

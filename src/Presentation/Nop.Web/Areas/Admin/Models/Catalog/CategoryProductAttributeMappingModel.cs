@@ -2,7 +2,7 @@
 
 namespace Nop.Web.Areas.Admin.Models.Catalog
 {
-    public partial class CategoryProductAttributeMappingModel : ProductAttributeMappingModel
+    public partial class CategoryProductAttributeMappingModel : ProductModel.ProductAttributeMappingModel
     {
         public int CategoryId { get; set; }
         public CategoryModel CategoryModel { get; set; }

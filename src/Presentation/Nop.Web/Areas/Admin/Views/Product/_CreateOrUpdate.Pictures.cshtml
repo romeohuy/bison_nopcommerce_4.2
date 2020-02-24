@@ -115,8 +115,9 @@
                                 success: function (data, textStatus, jqXHR) {
                                     if (!data.Result) {
                                         return;
-                                    }                                        
-                                    updateTable('#productpictures-grid');
+                                    }
+                                    //updateTable('#productpictures-grid');
+                                    $('#productpictures-grid').DataTable().ajax.reload();
                                 },
                                 error: function (jqXHR, textStatus, errorThrown) {
                                     $("#productPictureAddAlert").click();
