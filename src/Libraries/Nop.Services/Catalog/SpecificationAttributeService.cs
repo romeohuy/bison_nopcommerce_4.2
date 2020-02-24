@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using Nop.Core;
@@ -15,13 +15,13 @@ namespace Nop.Services.Catalog
     public partial class SpecificationAttributeService : ISpecificationAttributeService
     {
         #region Fields
-
         private readonly ICacheManager _cacheManager;
         private readonly IEventPublisher _eventPublisher;
         private readonly IRepository<ProductSpecificationAttribute> _productSpecificationAttributeRepository;
         private readonly IRepository<SpecificationAttribute> _specificationAttributeRepository;
         private readonly IRepository<SpecificationAttributeOption> _specificationAttributeOptionRepository;
-
+        private readonly IRepository<CategorySpecificationAttribute> _categorySpecificationAttributeRepository;
+        private readonly ICategoryService _categoryService;
         #endregion
 
         #region Ctor
@@ -30,13 +30,15 @@ namespace Nop.Services.Catalog
             IEventPublisher eventPublisher,
             IRepository<ProductSpecificationAttribute> productSpecificationAttributeRepository,
             IRepository<SpecificationAttribute> specificationAttributeRepository,
-            IRepository<SpecificationAttributeOption> specificationAttributeOptionRepository)
+            IRepository<SpecificationAttributeOption> specificationAttributeOptionRepository, IRepository<CategorySpecificationAttribute> categorySpecificationAttributeRepository, ICategoryService categoryService)
         {
             _cacheManager = cacheManager;
             _eventPublisher = eventPublisher;
             _productSpecificationAttributeRepository = productSpecificationAttributeRepository;
             _specificationAttributeRepository = specificationAttributeRepository;
             _specificationAttributeOptionRepository = specificationAttributeOptionRepository;
+            _categorySpecificationAttributeRepository = categorySpecificationAttributeRepository;
+            _categoryService = categoryService;
         }
 
         #endregion
@@ -394,6 +396,118 @@ namespace Nop.Services.Catalog
                 .Select(psa => psa.Product).Distinct().OrderBy(p => p.Name);
 
             return new PagedList<Product>(products, pageIndex, pageSize);
+        }
+        
+        #endregion
+          #region Product specification attribute
+
+
+        public virtual void DeleteCategorySpecificationAttribute(CategorySpecificationAttribute categorySpecificationAttribute)
+        {
+            if (categorySpecificationAttribute == null)
+                throw new ArgumentNullException(nameof(categorySpecificationAttribute));
+
+            _categorySpecificationAttributeRepository.Delete(categorySpecificationAttribute);
+
+            _cacheManager.RemoveByPrefix(NopCatalogDefaults.CategoryspecificationattributePatternKey);
+
+            //event notification
+            _eventPublisher.EntityDeleted(categorySpecificationAttribute);
+        }
+        
+        
+        public virtual IList<CategorySpecificationAttribute> GetCategorySpecificationAttributes(int categoryId = 0,
+            int specificationAttributeOptionId = 0, bool? allowFiltering = null, bool? showOnProductPage = null)
+        {
+            var key = string.Format(NopCatalogDefaults.CategoryspecificationattributeAllbyproductidKey, categoryId);
+
+            return _cacheManager.Get(key, () =>
+            {
+                var query = _categorySpecificationAttributeRepository.Table;
+                if (categoryId > 0)
+                    query = query.Where(psa => psa.CategoryId == categoryId);
+                if (specificationAttributeOptionId > 0)
+                    query = query.Where(psa => psa.SpecificationAttributeOptionId == specificationAttributeOptionId);
+                if (allowFiltering.HasValue)
+                    query = query.Where(psa => psa.AllowFiltering == allowFiltering.Value);
+                if (showOnProductPage.HasValue)
+                    query = query.Where(psa => psa.ShowOnProductPage == showOnProductPage.Value);
+                query = query.OrderBy(psa => psa.DisplayOrder).ThenBy(psa => psa.Id);
+
+                var productSpecificationAttributes = query.ToList();
+                return productSpecificationAttributes;
+            });
+        }
+
+        public virtual CategorySpecificationAttribute GetCategorySpecificationAttributeById(int categorySpecificationAttributeId)
+        {
+            if (categorySpecificationAttributeId == 0)
+                return null;
+
+            return _categorySpecificationAttributeRepository.GetById(categorySpecificationAttributeId);
+        }
+
+        public IList<CategorySpecificationAttribute> GetByCatId(int categoryId)
+        {
+            var query = from pa in _categorySpecificationAttributeRepository.Table
+                        where pa.CategoryId == categoryId
+                        orderby pa.DisplayOrder
+                        select pa;
+            return query.ToList();
+        }
+        public virtual void InsertCategorySpecificationAttribute(CategorySpecificationAttribute categorySpecificationAttribute)
+        {
+            if (categorySpecificationAttribute == null)
+                throw new ArgumentNullException(nameof(categorySpecificationAttribute));
+
+            _categorySpecificationAttributeRepository.Insert(categorySpecificationAttribute);
+
+            _cacheManager.RemoveByPrefix(NopCatalogDefaults.CategoryspecificationattributePatternKey);
+
+            //event notification
+            _eventPublisher.EntityInserted(categorySpecificationAttribute);
+        }
+        public virtual List<int> Insert(CategorySpecificationAttribute mapping, bool cascadeToChildren)
+        {
+            if (mapping == null)
+                throw new ArgumentNullException(nameof(mapping));
+            var listCategories = new List<int>();
+            if (GetByCatId(mapping.CategoryId).All(x => x.SpecificationAttributeOptionId != mapping.SpecificationAttributeOptionId))
+            {
+                listCategories.Add(mapping.CategoryId);
+                InsertCategorySpecificationAttribute(mapping);
+                foreach (var category in _categoryService.GetAllCategoriesByParentCategoryId(mapping.CategoryId, true, true))
+                {
+                    mapping.CategoryId = category.Id;
+                    listCategories.Add(category.Id);
+                    InsertCategorySpecificationAttribute(mapping);
+                }
+            }
+            return listCategories;
+        }
+
+        public virtual void UpdateCategorySpecificationAttribute(CategorySpecificationAttribute categorySpecificationAttribute)
+        {
+            if (categorySpecificationAttribute == null)
+                throw new ArgumentNullException(nameof(categorySpecificationAttribute));
+
+            _categorySpecificationAttributeRepository.Update(categorySpecificationAttribute);
+
+            _cacheManager.RemoveByPrefix(NopCatalogDefaults.CategoryspecificationattributePatternKey);
+
+            //event notification
+            _eventPublisher.EntityUpdated(categorySpecificationAttribute);
+        }
+
+        public virtual int GetCategorySpecificationAttributeCount(int categoryId = 0, int specificationAttributeOptionId = 0)
+        {
+            var query = _categorySpecificationAttributeRepository.Table;
+            if (categoryId > 0)
+                query = query.Where(psa => psa.CategoryId == categoryId);
+            if (specificationAttributeOptionId > 0)
+                query = query.Where(psa => psa.SpecificationAttributeOptionId == specificationAttributeOptionId);
+
+            return query.Count();
         }
 
         #endregion

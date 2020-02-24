@@ -88,7 +88,7 @@ namespace Nop.Plugin.Integration.KiotViet.Integration.KiotViet
                 xmlReader = new XmlTextReader(strReader);
                 obj = (AttributesXml)serializer.Deserialize(xmlReader);
             }
-            catch (Exception exp)
+            catch (Exception)
             {
                 //Handle Exception Code
             }

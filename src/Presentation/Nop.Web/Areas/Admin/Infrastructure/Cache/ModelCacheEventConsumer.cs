@@ -36,7 +36,7 @@ namespace Nop.Web.Areas.Admin.Infrastructure.Cache
         #region Fields
 
         private readonly IStaticCacheManager _cacheManager;
-
+        
         #endregion
 
         #region Ctor

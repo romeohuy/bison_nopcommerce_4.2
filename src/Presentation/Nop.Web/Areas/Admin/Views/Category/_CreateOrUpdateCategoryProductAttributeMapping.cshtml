@@ -1,0 +1,23 @@
+﻿@model CategoryProductAttributeMappingModel
+@inject IEventPublisher eventPublisher
+
+<div asp-validation-summary="All"></div>
+<input asp-for="Id" type="hidden" />
+
+<div class="content">
+    <div class="form-horizontal">
+        <nop-tabs id="product-attribute-mapping-edit">
+            <nop-tab asp-name="tab-info" asp-title="@T("Admin.Catalog.Products.ProductAttributes.Attributes.Info")" asp-default="true">@await Html.PartialAsync("_CreateOrUpdateCategoryProductAttributeMapping.Info", Model)</nop-tab>
+        </nop-tabs>
+    </div>
+</div>
+
+@{
+    //custom tabs
+    var eventMessage = new AdminTabStripCreated(this.Html, "product-attribute-mapping-edit");
+    eventPublisher.Publish(eventMessage);
+    foreach (var eventBlock in eventMessage.BlocksToRender)
+    {
+        @eventBlock
+    }
+}

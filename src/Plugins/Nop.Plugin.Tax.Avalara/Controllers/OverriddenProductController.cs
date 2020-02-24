@@ -119,6 +119,7 @@ namespace Nop.Plugin.Tax.Avalara.Controllers
             _productService = productService;
             _taxCategoryService = taxCategoryService;
             _taxPluginManager = taxPluginManager;
+            _categoryAttributeService = categoryAttributeService;
         }
 
         #endregion

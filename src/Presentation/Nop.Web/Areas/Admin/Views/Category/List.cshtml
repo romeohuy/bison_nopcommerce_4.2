@@ -49,6 +49,15 @@
             <i class="fa fa-upload"></i>
             @T("Admin.Common.Import")
         </button>
+
+        <button type="button" id="btn-over-write-attribute" class="btn bg-red">
+            <i class="fa fa-recycle"></i>
+            @T("Admin.Common.OverwriteAttribute")
+        </button>
+        <button type="button" id="btn-over-write-spec-attribute" class="btn" style="background: #d2691e !important; color:white">
+            <i class="fa fa-recycle"></i>
+            @T("Admin.Common.OverwriteSpecAttribute")
+        </button>
         @await Component.InvokeAsync("AdminWidget", new { widgetZone = AdminWidgetZones.CategoryListButtons })
     </div>
 </div>
@@ -110,6 +119,13 @@
                         },
                         ColumnCollection = new List<ColumnProperty>
                         {
+                            new ColumnProperty(nameof(ProductModel.Id))
+                            {
+                                IsMasterCheckBox = true,
+                                Render = new RenderCheckBox("checkbox_products"),
+                                ClassName =  NopColumnClassDefaults.CenterAll,
+                                Width = "50",
+                            },
                             new ColumnProperty(nameof(CategoryModel.Breadcrumb))
                             {
                                 Title = T("Admin.Catalog.Categories.Fields.Name").Text
@@ -184,3 +200,46 @@
         </div>
     </div>
 </div>
+
+
+<form asp-controller="Category" asp-action="OverWriteAllProductAttributes" method="post" id="over-write-all-attribute">
+    <input type="hidden" id="selectedIds" name="selectedIds" value="" />
+</form>
+@await Html.PartialAsync("_AlertDialog")
+<script type="text/javascript">
+    $(document).ready(function () {
+        $('#btn-over-write-attribute').click(function (e) {
+            e.preventDefault();
+            if (selectedIds.length > 0) {
+                var ids = selectedIds.join(",");
+                $('#over-write-all-attribute #selectedIds').val(ids);
+                $('#over-write-all-attribute').submit();
+            } else {
+                $("#alert-dialog-error").html("@T("Admin.CategoriesEmpty.Alert")");
+                $('#alertModal').modal('show');
+                return false;
+            }
+        });
+    });
+</script>
+
+<form asp-controller="Category" asp-action="OverWriteAllProductSpecAttributes" method="post" id="over-write-all-spec-attribute">
+    <input type="hidden" id="selectedIds" name="selectedIds" value="" />
+</form>
+@await Html.PartialAsync("_AlertDialog")
+<script type="text/javascript">
+    $(document).ready(function () {
+        $('#btn-over-write-spec-attribute').click(function (e) {
+            e.preventDefault();
+            if (selectedIds.length > 0) {
+                var ids = selectedIds.join(",");
+                $('#over-write-all-spec-attribute #selectedIds').val(ids);
+                $('#over-write-all-spec-attribute').submit();
+            } else {
+                $("#alert-dialog-error").html("@T("Admin.CategoriesEmpty.Alert")");
+                $('#alertModal').modal('show');
+                return false;
+            }
+        });
+    });
+</script>

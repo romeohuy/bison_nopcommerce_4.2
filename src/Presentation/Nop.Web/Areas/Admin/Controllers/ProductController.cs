@@ -1092,6 +1092,55 @@ namespace Nop.Web.Areas.Admin.Controllers
             return Json(new { Result = true });
         }
 
+        [HttpPost]
+        public virtual IActionResult ShowOrHidePriceSelected(ICollection<int> productIds, bool isShow)
+        {
+            if (!_permissionService.Authorize(StandardPermissionProvider.ManageProducts))
+                return AccessDeniedView();
+
+            if (productIds != null)
+            {
+                _productService.ShowOrHidePrice(productIds.ToArray(), isShow);
+            }
+
+            return Json(new { Result = true });
+        }
+
+        [HttpPost]
+        public virtual IActionResult ResetShowPriceAll()
+        {
+            if (!_permissionService.Authorize(StandardPermissionProvider.ManageProducts))
+                return AccessDeniedView();
+
+            _productService.ResetShowPrice();
+            return Json(new { Result = true });
+        }
+
+        [HttpPost]
+        public virtual IActionResult ShowOrHideStockSelected(ICollection<int> productIds, bool isShow)
+        {
+            if (!_permissionService.Authorize(StandardPermissionProvider.ManageProducts))
+                return AccessDeniedView();
+
+            if (productIds != null)
+            {
+                _productService.ShowOrHideStock(productIds.ToArray(), isShow);
+            }
+
+            return Json(new { Result = true });
+        }
+
+        [HttpPost]
+        public virtual IActionResult ResetShowStockAll()
+        {
+            if (!_permissionService.Authorize(StandardPermissionProvider.ManageProducts))
+                return AccessDeniedView();
+
+            _productService.ResetShowStock();
+            return Json(new { Result = true });
+        }
+
+
          [HttpPost]
         public virtual IActionResult AddProductToCategoriesSelected(ICollection<int> selectedIdsProducToAdd, ICollection<int> SelectedCategoryIds)
         {
@@ -2684,7 +2733,26 @@ namespace Nop.Web.Areas.Admin.Controllers
         #endregion
 
         #region Product attributes
+        [HttpPost]
+        public virtual IActionResult OverWriteAllProductAttributes(int categoryId = 0, string selectedIds = null)
+        {
+            if (selectedIds != null)
+            {
+                var ids = selectedIds
+                    .Split(new[] { ',' }, StringSplitOptions.RemoveEmptyEntries)
+                    .Select(x => Convert.ToInt32(x))
+                    .ToArray();
+                OverwriteProductsAttr(ids.ToList());
+            }
+            else
+            {
+                var productIds = categoryId == 0 ? _productService.GetAllProductIds() : _productService.GetAllProductIdsByCategoryId(categoryId);
+                OverwriteProductsAttr(productIds);
+            }
 
+
+            return RedirectToAction("Index");
+        }
         [HttpPost]
         public virtual IActionResult ProductAttributeMappingList(ProductAttributeMappingSearchModel searchModel)
         {

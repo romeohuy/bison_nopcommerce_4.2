@@ -1,0 +1,34 @@
+﻿@model CategoryModel
+
+<div class="panel-group">
+    <p>
+        @T("Admin.Catalog.Categories.CategoryProductAttributes.Hint")
+    </p>
+    @await Component.InvokeAsync("AdminWidget", new { widgetZone = "admin_product_details_product_attributes_top", additionalData = Model.Id })
+    @if (Model.Id > 0)
+    {
+        if (Model.CategoryProductAttributesExist)
+        {
+            <nop-tabs id="productattribute-edit" asp-tab-name-to-select="tab-attributes" asp-render-selected-tab-input="false">
+                <nop-tab asp-name="tab-attributes" asp-title="@T("Admin.Catalog.Categories.CategoryProductAttributes.Attributes")" asp-default="true">@await Html.PartialAsync("_CreateOrUpdate.CategoryProductAttributes.Info", Model)</nop-tab>
+            </nop-tabs>
+        }
+        else
+        {
+            <div class="panel panel-default">
+                <div class="panel-body">
+                    @T("Admin.Catalog.Categories.CategoryProductAttributes.NoAttributesAvailable")
+                </div>
+            </div>
+        }
+    }
+    else
+    {
+        <div class="panel panel-default">
+            <div class="panel-body">
+                @T("Admin.Catalog.Categories.CategoryProductAttributes.SaveBeforeEdit")
+            </div>
+        </div>
+    }
+    @await Component.InvokeAsync("AdminWidget", new { widgetZone = "admin_product_details_product_attributes_bottom", additionalData = Model.Id })
+</div>

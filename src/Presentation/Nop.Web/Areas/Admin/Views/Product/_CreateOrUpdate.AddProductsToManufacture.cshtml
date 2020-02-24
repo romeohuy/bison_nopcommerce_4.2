@@ -90,8 +90,7 @@
                     $('#SelectedCategoryIds').val();
                     $('#add-producttomanufacture-window').modal('toggle');
                     //reload grid
-                    var grid = $('#products-grid').data('kendoGrid');
-                    grid.dataSource.read();
+                    $('#products-grid').DataTable().ajax.reload();
                 },
                 error: function(xhr, ajaxOptions, thrownError) {
                     alert(thrownError);

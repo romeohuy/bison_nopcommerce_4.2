@@ -278,6 +278,18 @@ namespace Nop.Services.Catalog
 
         #region Products
 
+        public List<int> GetAllProductIds()
+        {
+            return _dbContext.EntityFromSql<Product>("SELECT Id FROM dbo.Product WITH(NOLOCK)").Select(_=>_.Id).ToList();
+        }
+
+        public List<int> GetAllProductIdsByCategoryId(int categoryId)
+        {
+            return _dbContext.EntityFromSql<Product>("SELECT ProductId FROM dbo.Product_Category_Mapping WITH(NOLOCK) pcm JOIN dbo.Category WITH(NOLOCK) c ON c.Id = pcm.CategoryId " +
+                                            $"WHERE c.Id = {categoryId} GROUP BY pcm.ProductId").Select(_=>_.Id).ToList();
+        }
+
+
         /// <summary>
         /// Delete a product
         /// </summary>
@@ -2288,6 +2300,32 @@ namespace Nop.Services.Catalog
             return new PagedList<StockQuantityHistory>(query, pageIndex, pageSize);
         }
 
+        #endregion
+
+        #region  New Function
+        public void ShowOrHideStock(int[] productIds, bool isShow)
+        {
+            var commaSeparatedProductIds = productIds == null ? "" : string.Join(",", productIds);
+            var pProductIds = _dataProvider.GetStringParameter("ProductIds", commaSeparatedProductIds);
+            var pIsShow = _dataProvider.GetBooleanParameter("IsShow", isShow);
+            _dbContext.ExecuteSqlCommand("EXEC [spShowOrHideStock] @ProductIds, @IsShow", false, 600, pProductIds,  pIsShow);
+        }
+
+        public void ShowOrHidePrice(int[] productIds, bool isShow)
+        {
+            var commaSeparatedProductIds = productIds == null ? "" : string.Join(",", productIds);
+            var pProductIds = _dataProvider.GetStringParameter("ProductIds", commaSeparatedProductIds);
+            var pIsShow = _dataProvider.GetBooleanParameter("IsShow", isShow);
+            _dbContext.ExecuteSqlCommand("EXEC [spShowOrHidePrice] @ProductIds, @IsShow", false, 600, pProductIds, pIsShow);
+        }
+        public void ResetShowPrice()
+        {
+            _dbContext.ExecuteSqlCommand("UPDATE Product SET CallForPrice = 0");
+        }
+        public void ResetShowStock()
+        {
+            _dbContext.ExecuteSqlCommand("UPDATE Product SET DisplayStockQuantity = 1");
+        }
         #endregion
 
         #endregion

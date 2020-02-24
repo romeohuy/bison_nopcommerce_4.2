@@ -367,6 +367,14 @@
         /// </summary>
         public static string ProductSpecificationAttributePrefixCacheKey => "Nop.productspecificationattribute.";
 
+        
+        //Const
+        public static string CategoryspecificationattributeAllbyproductidKey => "Nop.categoryspecificationattribute.allbycategoryid-{0}";
+
+        public static string CategoryspecificationattributePatternKey => "Nop.categoryspecificationattribute.";
+
+
+
         #endregion
     }
 }

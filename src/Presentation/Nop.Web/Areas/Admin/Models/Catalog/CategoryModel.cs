@@ -118,10 +118,43 @@ namespace Nop.Web.Areas.Admin.Models.Catalog
         public IList<SelectListItem> AvailableDiscounts { get; set; }
 
         public CategoryProductSearchModel CategoryProductSearchModel { get; set; }
-
+        public bool CategoryProductAttributesExist { get; set; }
+        //add specification attribute model
+        public AddCategorySpecificationAttributeModel AddSpecificationAttributeModel { get; set; }
         #endregion
     }
+    public partial class AddCategorySpecificationAttributeModel : BaseNopModel
+    {
+        public AddCategorySpecificationAttributeModel()
+        {
+            AvailableAttributes = new List<SelectListItem>();
+            AvailableOptions = new List<SelectListItem>();
+        }
+        
+        [NopResourceDisplayName("Admin.Catalog.Products.SpecificationAttributes.Fields.SpecificationAttribute")]
+        public int SpecificationAttributeId { get; set; }
 
+        [NopResourceDisplayName("Admin.Catalog.Products.SpecificationAttributes.Fields.AttributeType")]
+        public int AttributeTypeId { get; set; }
+
+        [NopResourceDisplayName("Admin.Catalog.Products.SpecificationAttributes.Fields.SpecificationAttributeOption")]
+        public int SpecificationAttributeOptionId { get; set; }
+
+        [NopResourceDisplayName("Admin.Catalog.Products.SpecificationAttributes.Fields.CustomValue")]
+        public string CustomValue { get; set; }
+
+        [NopResourceDisplayName("Admin.Catalog.Products.SpecificationAttributes.Fields.AllowFiltering")]
+        public bool AllowFiltering { get; set; }
+
+        [NopResourceDisplayName("Admin.Catalog.Products.SpecificationAttributes.Fields.ShowOnProductPage")]
+        public bool ShowOnProductPage { get; set; }
+
+        [NopResourceDisplayName("Admin.Catalog.Products.SpecificationAttributes.Fields.DisplayOrder")]
+        public int DisplayOrder { get; set; }
+
+        public IList<SelectListItem> AvailableAttributes { get; set; }
+        public IList<SelectListItem> AvailableOptions { get; set; }
+    }
     public partial class CategoryLocalizedModel : ILocalizedLocaleModel
     {
         public int LanguageId { get; set; }

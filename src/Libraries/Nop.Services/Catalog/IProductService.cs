@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 using Nop.Core;
 using Nop.Core.Domain.Catalog;
@@ -14,7 +14,8 @@ namespace Nop.Services.Catalog
     public partial interface IProductService
     {
         #region Products
-
+        List<int> GetAllProductIds();
+        List<int> GetAllProductIdsByCategoryId(int categoryId);
         /// <summary>
         /// Delete a product
         /// </summary>
@@ -702,6 +703,13 @@ namespace Nop.Services.Catalog
         IPagedList<StockQuantityHistory> GetStockQuantityHistory(Product product, int warehouseId = 0, int combinationId = 0,
             int pageIndex = 0, int pageSize = int.MaxValue);
 
+        #endregion
+
+        #region  New Function
+        void ShowOrHideStock(int[] productIds, bool isShow);
+        void ShowOrHidePrice(int[] productIds, bool isShow);
+        void ResetShowPrice();
+        void ResetShowStock();
         #endregion
     }
 }

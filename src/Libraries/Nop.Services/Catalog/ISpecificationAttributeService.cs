@@ -1,4 +1,4 @@
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using Nop.Core;
 using Nop.Core.Domain.Catalog;
 
@@ -156,6 +156,29 @@ namespace Nop.Services.Catalog
         /// <param name="pageSize">Page size</param>
         /// <returns>Products</returns>
         IPagedList<Product> GetProductsBySpecificationAttributeId(int specificationAttributeId, int pageIndex, int pageSize);
+
+        #endregion
+
+        #region Category specification attribute
+
+
+        void DeleteCategorySpecificationAttribute(CategorySpecificationAttribute categorySpecificationAttribute);
+
+
+        IList<CategorySpecificationAttribute> GetCategorySpecificationAttributes(int categoryId = 0,
+            int specificationAttributeOptionId = 0, bool? allowFiltering = null, bool? showOnProductPage = null);
+
+
+        CategorySpecificationAttribute GetCategorySpecificationAttributeById(int categorySpecificationAttributeId);
+
+
+        void InsertCategorySpecificationAttribute(CategorySpecificationAttribute categorySpecificationAttribute);
+
+        List<int> Insert(CategorySpecificationAttribute mapping, bool cascadeToChildren);
+        void UpdateCategorySpecificationAttribute(CategorySpecificationAttribute categorySpecificationAttribute);
+
+
+        int GetCategorySpecificationAttributeCount(int categoryId = 0, int specificationAttributeOptionId = 0);
 
         #endregion
     }
