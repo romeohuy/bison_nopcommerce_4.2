@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using Nop.Core;
 
 namespace Nop.Web.Framework.Models.Extensions
@@ -45,6 +46,22 @@ namespace Nop.Web.Framework.Models.Extensions
             listModel.RecordsTotal = objectList?.TotalCount ?? 0;
             listModel.RecordsFiltered = objectList?.TotalCount ?? 0;
 
+            return listModel;
+        }
+
+        public static TListModel PrepareToGridNoPaging<TListModel, TModel>(this TListModel listModel,
+            BaseSearchModel searchModel, IList<TModel> models) 
+            where TListModel : BaseListModel<TModel>
+            where TModel : BaseNopModel
+        {
+            if (listModel == null)
+                throw new ArgumentNullException(nameof(listModel));
+
+            listModel.Data = models;
+            listModel.Draw = searchModel?.Draw;
+            listModel.RecordsTotal = models?.Count ?? 0;
+            listModel.RecordsFiltered = models?.Count ?? 0;
+            listModel.Total = models?.Count ?? 0;
             return listModel;
         }
     }

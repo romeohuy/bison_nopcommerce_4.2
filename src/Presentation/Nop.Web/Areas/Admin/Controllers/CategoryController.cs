@@ -686,15 +686,15 @@ namespace Nop.Web.Areas.Admin.Controllers
             return RedirectToAction("Index");
         }
         [HttpPost]
-        public virtual IActionResult CategoryProductAttributeMappingList(int categoryId)
+        public virtual IActionResult CategoryProductAttributeMappingList(CategoryProductAttributeMappingSearchModel searchModel)
         {
             if (!_permissionService.Authorize(StandardPermissionProvider.ManageProducts))
                 return AccessDeniedDataTablesJson();
 
-            var category = _categoryService.GetCategoryById(categoryId);
+            var category = _categoryService.GetCategoryById(searchModel.CategoryId);
             if (category == null)
                 throw new ArgumentException("No category found with the specified id");
-            var attributes = _categoryAttributeService.GetByCatId(categoryId);
+            var attributes = _categoryAttributeService.GetByCatId(searchModel.CategoryId);
             var attributesModel = attributes
                 .Select(x =>
                 {
@@ -703,8 +703,9 @@ namespace Nop.Web.Areas.Admin.Controllers
                     return attributeModel;
                 })
                 .ToList();
+            var model = new CategoryProductAttributeMappingListModel().PrepareToGridNoPaging(searchModel, attributesModel);
 
-            return Json(attributesModel);
+            return Json(model);
         }
         protected virtual void PrepareCategoryProductAttributeMappingModel(CategoryProductAttributeMappingModel model,
             CategoryProductAttributeMapping pam, Category category, bool excludeProperties)
@@ -1152,7 +1153,7 @@ namespace Nop.Web.Areas.Admin.Controllers
                 })
                 .ToList();
             //prepare grid model
-            var model = new CategorySpecificationAttributeListModel().PrepareToGrid(searchModel, new PagedList<CategorySpecificationAttribute>(productrSpecs, searchModel.Page - 1, searchModel.PageSize), () => productrSpecsModel);
+            var model = new CategorySpecificationAttributeListModel().PrepareToGridNoPaging(searchModel, productrSpecsModel);
 
             return Json(model);
         }

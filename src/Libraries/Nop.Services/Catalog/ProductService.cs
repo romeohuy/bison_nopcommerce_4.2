@@ -280,13 +280,13 @@ namespace Nop.Services.Catalog
 
         public List<int> GetAllProductIds()
         {
-            return _dbContext.EntityFromSql<Product>("SELECT Id FROM dbo.Product WITH(NOLOCK)").Select(_=>_.Id).ToList();
+            return _productRepository.Table.Select(_=>_.Id).ToList();
         }
 
         public List<int> GetAllProductIdsByCategoryId(int categoryId)
         {
-            return _dbContext.EntityFromSql<Product>("SELECT ProductId FROM dbo.Product_Category_Mapping WITH(NOLOCK) pcm JOIN dbo.Category WITH(NOLOCK) c ON c.Id = pcm.CategoryId " +
-                                            $"WHERE c.Id = {categoryId} GROUP BY pcm.ProductId").Select(_=>_.Id).ToList();
+            var query = _productRepository.Table.Where(_ => _.ProductCategories.Select(c => c.CategoryId).Contains(categoryId)).Select(p => p.Id);
+            return query.ToList();
         }
 
 

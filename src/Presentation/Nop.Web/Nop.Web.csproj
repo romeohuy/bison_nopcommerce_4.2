@@ -49,13 +49,6 @@
     <Content Remove="%2a%2a\%2a.config" />
     <Content Remove="%2a%2a\%2a.cshtml" />
     <Content Remove="%2a%2a\%2a.json" />
-    <Content Include="Areas\Admin\Views\Category\CategoryProductAttributeMappingCreate.cshtml" />
-    <Content Include="Areas\Admin\Views\Category\CategoryProductAttributeMappingEdit.cshtml" />
-    <Content Include="Areas\Admin\Views\Category\_CreateOrUpdate.CategoryProductAttributes.cshtml" />
-    <Content Include="Areas\Admin\Views\Category\_CreateOrUpdate.CategoryProductAttributes.Info.cshtml" />
-    <Content Include="Areas\Admin\Views\Category\_CreateOrUpdate.CategorySpecificationAttributes.cshtml" />
-    <Content Include="Areas\Admin\Views\Category\_CreateOrUpdateCategoryProductAttributeMapping.cshtml" />
-    <Content Include="Areas\Admin\Views\Category\_CreateOrUpdateCategoryProductAttributeMapping.Info.cshtml" />
 
     <None Update="Areas\Admin\sitemap.config">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>

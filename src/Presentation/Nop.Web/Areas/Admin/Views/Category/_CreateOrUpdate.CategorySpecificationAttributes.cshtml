@@ -18,9 +18,12 @@
                {
                    Name = "specificationattributes-grid",
                    UrlRead = new DataUrl("CategorySpecAttrList", "Category", new RouteValueDictionary() { { "categoryId", Model.Id } }),
+                   UrlUpdate = new DataUrl("CategorySpecAttrUpdate", "Category", null),
+                   UrlDelete = new DataUrl("CategorySpecAttrDelete", "Category", null),
                    SearchButtonId = "search-categories-attribute",
-                   Length = Model.PageSize,
+                   //Length = Model.PageSize,
                    //LengthMenu = Model.AvailablePageSizes,
+                   Paging = false,
                    Filters = new List<FilterParameter>
                         {
                             new FilterParameter(nameof(CategorySpecificationSearchModel.CategoryId))
@@ -61,7 +64,7 @@
                                 Title = T("Admin.Catalog.Products.SpecificationAttributes.Fields.ShowOnProductPage").Text,
                                 Width = "150",
                                 ClassName =  NopColumnClassDefaults.CenterAll,
-                                //Render = new RenderCustom("setShowOnProductPage")
+                                Render = new RenderCustom("setShowOnProductPage")
                             },
                             new ColumnProperty(nameof(CategorySpecificationAttributeModel.DisplayOrder))
                             {
@@ -74,7 +77,14 @@
                                 Title = T("Admin.Common.Edit").Text,
                                 Width = "100",
                                 ClassName =  NopColumnClassDefaults.Button,
-                                Render = new RenderButtonEdit(new DataUrl("Edit"))
+                                Render = new RenderButtonsInlineEdit()
+                            },
+                            new ColumnProperty(nameof(CategorySpecificationAttributeModel.Id))
+                            {
+                                Title = T("Admin.Common.Delete").Text,
+                                Width = "100",
+                                ClassName =  NopColumnClassDefaults.Button,
+                                Render = new RenderButtonRemove(T("Admin.Common.Delete").Text)
                             }
                         }
                })
@@ -290,8 +300,9 @@
                             url: "@(Url.Action("CategorySpecAttrDelete", "Category"))",
                             data: postData,
                             success: function(data) {
-                                var grid = $("#specificationattributes-grid");
-                                grid.data('kendoGrid').dataSource.read();
+                                //var grid = $("#specificationattributes-grid");
+                                //grid.data('kendoGrid').dataSource.read();
+                                $('#specificationattributes-grid').DataTable().ajax.reload();
                             },
                             error: function(xhr, ajaxOptions, thrownError) {
 
@@ -368,8 +379,7 @@
                                         url: "@(Url.Action("CategorySpecificationAttributeAdd", "Category"))",
                                         data: postData,
                                         success: function(data) {
-                                            var grid = $("#specificationattributes-grid").data('kendoGrid');
-                                            grid.dataSource.read();
+                                            $('#specificationattributes-grid').DataTable().ajax.reload();
                                             $('#addProductSpec').attr('disabled', false);
                                         },
                                         error: function(xhr, ajaxOptions, thrownError) {

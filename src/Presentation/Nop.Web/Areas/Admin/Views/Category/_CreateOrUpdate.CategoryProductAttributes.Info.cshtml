@@ -1,103 +1,192 @@
-﻿@model CategoryModel
+﻿@using Nop.Core.Domain.Catalog
+@model CategoryModel
 
 <div class="panel panel-default">
     <div class="panel-body">
-        <div id="productattributemappings-grid"></div>
-        @*<script type="text/javascript">
-            $(document).ready(function() {
-                $("#productattributemappings-grid").kendoGrid({
-                    dataSource: {
-                        type: "json",
-                        transport: {
-                            read: {
-                                url: "@Html.Raw(Url.Action("CategoryProductAttributeMappingList", "Category", new { categoryId = Model.Id }))",
-                                type: "POST",
-                                dataType: "json",
-                                data: addAntiForgeryToken
-                            }
-                        },
-                        schema: {
-                            data: "Data",
-                            total: "Total",
-                            errors: "Errors"
-                        },
-                        error: function(e) {
-                            display_kendoui_grid_error(e);
-                            // Cancel the changes
-                            this.cancelChanges();
-                        },
-                        serverPaging: true,
-                        serverFiltering: true,
-                        serverSorting: true
-                    },
-                    pageable: {
-                        refresh: true,
-                        numeric: false,
-                        previousNext: false,
-                        info: false,
-                        @await Html.PartialAsync("_GridPagerMessages")
-                    },
-                    editable: {
-                        confirmation: "@T("Admin.Common.DeleteConfirmation")",
-                        mode: "inline"
-                    },
-                    scrollable: false,
-                    columns: [
-                        {
-                            field: "ProductAttribute",
-                            title: "@T("Admin.Catalog.Products.ProductAttributes.Attributes.Fields.Attribute")",
-                            width: 200
-                        }, {
-                            field: "TextPrompt",
-                            title: "@T("Admin.Catalog.Products.ProductAttributes.Attributes.Fields.TextPrompt")",
-                            width: 150
-                        }, {
-                            field: "IsRequired",
-                            title: "@T("Admin.Catalog.Products.ProductAttributes.Attributes.Fields.IsRequired")",
-                            width: 100,
-                            headerAttributes: { style: "text-align:center" },
-                            attributes: { style: "text-align:center" },
-                            template: '# if(IsRequired) {# <i class="fa fa-check true-icon"></i> #} else {# <i class="fa fa-close false-icon"></i> #} #'
-                        },
-                        {
-                            field: "AttributeControlType",
-                            title: "@T("Admin.Catalog.Products.ProductAttributes.Attributes.Fields.AttributeControlType")",
-                            width: 250
-                        },
-                        {
-                            field: "DisplayOrder",
-                            title: "@T("Admin.Catalog.Products.ProductAttributes.Attributes.Fields.DisplayOrder")",
-                            width: 150
-                        },
-                        {
-                            field: "ValidationRulesString",
-                            title: "@T("Admin.Catalog.Products.ProductAttributes.Attributes.ValidationRules")",
-                            width: 150,
-                            headerAttributes: { style: "text-align:center" },
-                            attributes: { style: "text-align:center" },
-                            encoded: false
-                        },
-                        {
-                            field: "ConditionString",
-                            title: "@T("Admin.Catalog.Products.ProductAttributes.Attributes.Condition")",
-                            width: 150,
-                            headerAttributes: { style: "text-align:center" },
-                            attributes: { style: "text-align:center" },
-                            encoded: false
-                        },
-                        {
-                            field: "Id",
-                            title: "@T("Admin.Common.Edit")",
-                            width: 100,
-                            headerAttributes: { style: "text-align:center" },
-                            attributes: { style: "text-align:center" },
-                            template: '<a class="btn btn-default" href="@Url.Content("~/Admin/Category/CategoryProductAttributeMappingEdit/")#=Id#"><i class="fa fa-pencil"></i>@T("Admin.Common.Edit")</a>'
+        @await Html.PartialAsync("Table", new DataTablesModel
+   {
+       Name = "productattributemappings-grid",
+       UrlRead = new DataUrl("CategoryProductAttributeMappingList", "Category", new RouteValueDictionary() { { "categoryId", Model.Id } }),
+       UrlUpdate = new DataUrl("CategoryProductAttributeMappingEdit", "Category", null),
+       UrlDelete = new DataUrl("CategoryProductAttributeMappingDelete", "Category", null),
+       SearchButtonId = "search-categories-attribute",
+       //Length = Model.PageSize,
+       //LengthMenu = Model.AvailablePageSizes,
+       Paging = false,
+       Filters = new List<FilterParameter>
+            {
+                new FilterParameter(nameof(CategoryProductAttributeMappingModel.CategoryId))
+            },
+       ColumnCollection = new List<ColumnProperty>
+            {
+                new ColumnProperty(nameof(CategoryProductAttributeMappingModel.Id))
+                {
+                    IsMasterCheckBox = true,
+                    Render = new RenderCheckBox("checkbox_products"),
+                    ClassName =  NopColumnClassDefaults.CenterAll,
+                    Width = "50",
+                },
+                new ColumnProperty(nameof(CategoryProductAttributeMappingModel.ProductAttribute))
+                {
+                    Title = T("Admin.Catalog.Products.ProductAttributes.Attributes.Fields.Attribute").Text
+                },
+                new ColumnProperty(nameof(CategoryProductAttributeMappingModel.TextPrompt))
+                {
+                    Title = T("Admin.Catalog.Products.ProductAttributes.Attributes.Fields.TextPrompt").Text,
+                },
+                new ColumnProperty(nameof(CategoryProductAttributeMappingModel.IsRequired))
+                {
+                    Title = T("Admin.Catalog.Products.ProductAttributes.Attributes.Fields.IsRequired").Text,
+                    Width = "100",
+                    ClassName = NopColumnClassDefaults.CenterAll,
+                    Render = new RenderCustom("setIsRequired")
+                },
+                new ColumnProperty(nameof(CategoryProductAttributeMappingModel.AttributeControlType))
+                {
+                    Title = T("Admin.Catalog.Products.ProductAttributes.Attributes.Fields.AttributeControlType").Text,
+                    Width = "150",
+                    ClassName =  NopColumnClassDefaults.CenterAll,
+                    Editable = true
+                },
+                new ColumnProperty(nameof(CategoryProductAttributeMappingModel.DisplayOrder))
+                {
+                    Title = T("Admin.Catalog.Products.ProductAttributes.Attributes.Fields.DisplayOrder").Text,
+                    Width = "150",
+                    ClassName =  NopColumnClassDefaults.CenterAll,
+                },
+                new ColumnProperty(nameof(CategoryProductAttributeMappingModel.ValidationRulesString))
+                {
+                    Title = T("Admin.Catalog.Products.ProductAttributes.Attributes.ValidationRules").Text,
+                    Width = "150",
+                    ClassName =  NopColumnClassDefaults.CenterAll
+                },
+                new ColumnProperty(nameof(CategoryProductAttributeMappingModel.ConditionString))
+                {
+                    Title = T("Admin.Catalog.Products.ProductAttributes.Attributes.Condition").Text,
+                    Width = "150",
+                    ClassName =  NopColumnClassDefaults.CenterAll
+                },
+                new ColumnProperty(nameof(CategoryProductAttributeMappingModel.Id))
+                {
+                    Title = T("Admin.Common.Edit").Text,
+                    Width = "100",
+                    ClassName =  NopColumnClassDefaults.Button,
+                    Render = new RenderButtonsInlineEdit()
+                },
+                new ColumnProperty(nameof(CategoryProductAttributeMappingModel.Id))
+                {
+                    Title = T("Admin.Common.Delete").Text,
+                    Width = "100",
+                    ClassName =  NopColumnClassDefaults.Button,
+                    Render = new RenderButtonRemove(T("Admin.Common.Delete").Text)
+                }
+            }
+   })
+        <script>
+                    function setIsRequired(data, type, row, meta) {
+                        if (row.IsRequired) {
+                            return '<i class="fa fa-check true-icon"></i>';
+                        } else {
+                            return '<i class="fa fa-close false-icon"></i>';
                         }
-                    ]
-                });
-            });
+                    }
 
-        </script>*@
+                </script>
+        @*<script type="text/javascript">
+                $(document).ready(function() {
+                    $("#productattributemappings-grid").kendoGrid({
+                        dataSource: {
+                            type: "json",
+                            transport: {
+                                read: {
+                                    url: "@Html.Raw(Url.Action("CategoryProductAttributeMappingModelList", "Category", new { categoryId = Model.Id }))",
+                                    type: "POST",
+                                    dataType: "json",
+                                    data: addAntiForgeryToken
+                                }
+                            },
+                            schema: {
+                                data: "Data",
+                                total: "Total",
+                                errors: "Errors"
+                            },
+                            error: function(e) {
+                                display_kendoui_grid_error(e);
+                                // Cancel the changes
+                                this.cancelChanges();
+                            },
+                            serverPaging: true,
+                            serverFiltering: true,
+                            serverSorting: true
+                        },
+                        pageable: {
+                            refresh: true,
+                            numeric: false,
+                            previousNext: false,
+                            info: false,
+                            @await Html.PartialAsync("_GridPagerMessages")
+                        },
+                        editable: {
+                            confirmation: "@T("Admin.Common.DeleteConfirmation")",
+                            mode: "inline"
+                        },
+                        scrollable: false,
+                        columns: [
+                            {
+                                field: "ProductAttribute",
+                                title: "@T("Admin.Catalog.Products.ProductAttributes.Attributes.Fields.Attribute")",
+                                width: 200
+                            }, {
+                                field: "TextPrompt",
+                                title: "@T("Admin.Catalog.Products.ProductAttributes.Attributes.Fields.TextPrompt")",
+                                width: 150
+                            }, {
+                                field: "IsRequired",
+                                title: "@T("Admin.Catalog.Products.ProductAttributes.Attributes.Fields.IsRequired")",
+                                width: 100,
+                                headerAttributes: { style: "text-align:center" },
+                                attributes: { style: "text-align:center" },
+                                template: '# if(IsRequired) {# <i class="fa fa-check true-icon"></i> #} else {# <i class="fa fa-close false-icon"></i> #} #'
+                            },
+                            {
+                                field: "AttributeControlType",
+                                title: "@T("Admin.Catalog.Products.ProductAttributes.Attributes.Fields.AttributeControlType")",
+                                width: 250
+                            },
+                            {
+                                field: "DisplayOrder",
+                                title: "@T("Admin.Catalog.Products.ProductAttributes.Attributes.Fields.DisplayOrder")",
+                                width: 150
+                            },
+                            {
+                                field: "ValidationRulesString",
+                                title: "@T("Admin.Catalog.Products.ProductAttributes.Attributes.ValidationRules")",
+                                width: 150,
+                                headerAttributes: { style: "text-align:center" },
+                                attributes: { style: "text-align:center" },
+                                encoded: false
+                            },
+                            {
+                                field: "ConditionString",
+                                title: "@T("Admin.Catalog.Products.ProductAttributes.Attributes.Condition")",
+                                width: 150,
+                                headerAttributes: { style: "text-align:center" },
+                                attributes: { style: "text-align:center" },
+                                encoded: false
+                            },
+                            {
+                                field: "Id",
+                                title: "@T("Admin.Common.Edit")",
+                                width: 100,
+                                headerAttributes: { style: "text-align:center" },
+                                attributes: { style: "text-align:center" },
+                                template: '<a class="btn btn-default" href="@Url.Content("~/Admin/Category/CategoryProductAttributeMappingModelEdit/")#=Id#"><i class="fa fa-pencil"></i>@T("Admin.Common.Edit")</a>'
+                            }
+                        ]
+                    });
+                });
+
+            </script>*@
     </div>
 
     <div class="panel-footer">

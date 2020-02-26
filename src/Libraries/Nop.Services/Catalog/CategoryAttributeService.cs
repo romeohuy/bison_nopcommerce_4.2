@@ -97,9 +97,25 @@ namespace Nop.Services.Catalog
                 Insert(mapping);
                 foreach (var category in _categoryService.GetAllCategoriesByParentCategoryId(mapping.CategoryId, true, true))
                 {
-                    mapping.CategoryId = category.Id;
-                    listCategories.Add(category.Id);
-                    Insert(mapping);
+                    if (GetByCatId(category.Id).All(x => x.ProductAttributeId != mapping.ProductAttributeId))
+                    {
+                        var categoryProductAttributeMapping = new CategoryProductAttributeMapping
+                        {
+                            CategoryId = category.Id,
+                            ProductAttributeId = mapping.ProductAttributeId,
+                            TextPrompt = mapping.TextPrompt,
+                            IsRequired = mapping.IsRequired,
+                            AttributeControlTypeId = mapping.AttributeControlTypeId,
+                            DisplayOrder = mapping.DisplayOrder,
+                            ValidationMinLength = mapping.ValidationMinLength,
+                            ValidationMaxLength = mapping.ValidationMaxLength,
+                            ValidationFileAllowedExtensions = mapping.ValidationFileAllowedExtensions,
+                            ValidationFileMaximumSize = mapping.ValidationFileMaximumSize,
+                            DefaultValue = mapping.DefaultValue
+                        };
+                        listCategories.Add(category.Id);
+                        Insert(categoryProductAttributeMapping);
+                    }
                 }
             }
             return listCategories;

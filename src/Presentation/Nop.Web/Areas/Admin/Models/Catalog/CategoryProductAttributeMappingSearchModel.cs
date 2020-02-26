@@ -6,7 +6,8 @@ using Nop.Web.Framework.Models;
 
 namespace Nop.Web.Areas.Admin.Models.Catalog
 {
-    public class CategorySpecificationAttributeListModel : BaseListModel<CategorySpecificationAttributeModel>
+    public class CategoryProductAttributeMappingSearchModel : BaseSearchModel
     {
+        public int CategoryId { get; set; }
     }
 }
