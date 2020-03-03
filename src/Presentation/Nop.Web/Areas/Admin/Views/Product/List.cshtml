@@ -503,7 +503,7 @@
 
 <script>
     $(document).ready(function() {
-         //delete selected
+         @*//delete selected
             $('#delete-selected').click(function(e) {
                 e.preventDefault();
 
@@ -527,7 +527,7 @@
                     traditional: true
                 });
                 return false;
-            });
+            });*@
 
 
             //show or hide stock
@@ -575,7 +575,7 @@
                     data: postData,
                     complete: function(data) {
                         //reload grid
-                        $('#products-grid').DataTable().ajax.reload();
+                        updateTable('#products-grid');
                     },
                     error: function(xhr, ajaxOptions, thrownError) {
                         alert(thrownError);
@@ -602,7 +602,7 @@
                     data: postData,
                     complete: function(data) {
                         //reload grid
-                        $('#products-grid').DataTable().ajax.reload();
+                        updateTable('#products-grid');
                     },
                     error: function(xhr, ajaxOptions, thrownError) {
                         alert(thrownError);
@@ -630,7 +630,7 @@
                     data: postData,
                     complete: function(data) {
                         //reload grid
-                        $('#products-grid').DataTable().ajax.reload();
+                        updateTable('#products-grid');
                     },
                     error: function(xhr, ajaxOptions, thrownError) {
                         alert(thrownError);
@@ -654,7 +654,7 @@
                     data: postData,
                     complete: function(data) {
                         //reload grid
-                        $('#products-grid').DataTable().ajax.reload();
+                        updateTable('#products-grid');
                     },
                     error: function(xhr, ajaxOptions, thrownError) {
                         alert(thrownError);
@@ -679,7 +679,7 @@
                     data: postData,
                     complete: function(data) {
                         //reload grid
-                        $('#products-grid').DataTable().ajax.reload();
+                        updateTable('#products-grid');
                     },
                     error: function(xhr, ajaxOptions, thrownError) {
                         alert(thrownError);

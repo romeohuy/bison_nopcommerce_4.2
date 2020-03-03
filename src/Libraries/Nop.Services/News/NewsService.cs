@@ -1,12 +1,12 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using Nop.Core;
+﻿using Nop.Core;
 using Nop.Core.Data;
 using Nop.Core.Domain.Catalog;
 using Nop.Core.Domain.News;
 using Nop.Core.Domain.Stores;
 using Nop.Services.Events;
+using System;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace Nop.Services.News
 {
@@ -17,27 +17,35 @@ namespace Nop.Services.News
     {
         #region Fields
 
+        private readonly IRepository<NewsItem> _newsItemRepository;
+        private readonly IRepository<NewsComment> _newsCommentRepository;
+        private readonly IRepository<StoreMapping> _storeMappingRepository;
         private readonly CatalogSettings _catalogSettings;
         private readonly IEventPublisher _eventPublisher;
-        private readonly IRepository<NewsComment> _newsCommentRepository;
-        private readonly IRepository<NewsItem> _newsItemRepository;
-        private readonly IRepository<StoreMapping> _storeMappingRepository;
 
         #endregion
 
         #region Ctor
 
-        public NewsService(CatalogSettings catalogSettings,
-            IEventPublisher eventPublisher,
+        /// <summary>
+        /// Ctor
+        /// </summary>
+        /// <param name="newsItemRepository">News item repository</param>
+        /// <param name="newsCommentRepository">News comment repository</param>
+        /// <param name="storeMappingRepository">Store mapping repository</param>
+        /// <param name="catalogSettings">Catalog settings</param>
+        /// <param name="eventPublisher">Event publisher</param>
+        public NewsService(IRepository<NewsItem> newsItemRepository,
             IRepository<NewsComment> newsCommentRepository,
-            IRepository<NewsItem> newsItemRepository,
-            IRepository<StoreMapping> storeMappingRepository)
+            IRepository<StoreMapping> storeMappingRepository,
+            CatalogSettings catalogSettings,
+            IEventPublisher eventPublisher)
         {
-            _catalogSettings = catalogSettings;
-            _eventPublisher = eventPublisher;
-            _newsCommentRepository = newsCommentRepository;
-            _newsItemRepository = newsItemRepository;
-            _storeMappingRepository = storeMappingRepository;
+            this._newsItemRepository = newsItemRepository;
+            this._newsCommentRepository = newsCommentRepository;
+            this._storeMappingRepository = storeMappingRepository;
+            this._catalogSettings = catalogSettings;
+            this._eventPublisher = eventPublisher;
         }
 
         #endregion
@@ -93,11 +101,16 @@ namespace Nop.Services.News
         /// <param name="pageIndex">Page index</param>
         /// <param name="pageSize">Page size</param>
         /// <param name="showHidden">A value indicating whether to show hidden records</param>
+        /// <param name="categoryNewsId"></param>
         /// <returns>News items</returns>
         public virtual IPagedList<NewsItem> GetAllNews(int languageId = 0, int storeId = 0,
-            int pageIndex = 0, int pageSize = int.MaxValue, bool showHidden = false)
+            int pageIndex = 0, int pageSize = int.MaxValue, bool showHidden = false, int categoryNewsId = 0)
         {
             var query = _newsItemRepository.Table;
+            if (categoryNewsId > 0)
+            {
+                query = query.Where(n => n.CategoryNewsId == categoryNewsId);
+            }
             if (languageId > 0)
                 query = query.Where(n => languageId == n.LanguageId);
             if (!showHidden)
@@ -115,7 +128,7 @@ namespace Nop.Services.News
             {
                 query = from n in query
                         join sm in _storeMappingRepository.Table
-                        on new { c1 = n.Id, c2 = nameof(NewsItem) } equals new { c1 = sm.EntityId, c2 = sm.EntityName } into n_sm
+                            on new { c1 = n.Id, c2 = nameof(NewsItem) } equals new { c1 = sm.EntityId, c2 = sm.EntityName } into n_sm
                         from sm in n_sm.DefaultIfEmpty()
                         where !n.LimitedToStores || storeId == sm.StoreId
                         select n;
@@ -125,6 +138,42 @@ namespace Nop.Services.News
 
             var news = new PagedList<NewsItem>(query, pageIndex, pageSize);
             return news;
+        }
+
+        public IList<NewsItem> GetRecentNews(int languageId = 0, int storeId = 0, int numberNews = 5, bool showHidden = false)
+        {
+            var query = _newsItemRepository.Table;
+            if (languageId > 0)
+                query = query.Where(n => languageId == n.LanguageId);
+            if (!showHidden)
+            {
+                var utcNow = DateTime.UtcNow;
+                query = query.Where(n => n.Published);
+                query = query.Where(n => !n.StartDateUtc.HasValue || n.StartDateUtc <= utcNow);
+                query = query.Where(n => !n.EndDateUtc.HasValue || n.EndDateUtc >= utcNow);
+            }
+            query = query.OrderByDescending(n => n.StartDateUtc ?? n.CreatedOnUtc).Take(numberNews);
+
+            //Store mapping
+            if (storeId > 0 && !_catalogSettings.IgnoreStoreLimitations)
+            {
+                query = from n in query
+                        join sm in _storeMappingRepository.Table
+                            on new { c1 = n.Id, c2 = "NewsItem" } equals new { c1 = sm.EntityId, c2 = sm.EntityName } into n_sm
+                        from sm in n_sm.DefaultIfEmpty()
+                        where !n.LimitedToStores || storeId == sm.StoreId
+                        select n;
+
+                //only distinct items (group by ID)
+                query = from n in query
+                        group n by n.Id
+                    into nGroup
+                        orderby nGroup.Key
+                        select nGroup.FirstOrDefault();
+                query = query.OrderByDescending(n => n.StartDateUtc ?? n.CreatedOnUtc);
+            }
+
+            return query.ToList();
         }
 
         /// <summary>
@@ -257,7 +306,7 @@ namespace Nop.Services.News
                 if (comment != null)
                     sortedComments.Add(comment);
             }
-
+            
             return sortedComments;
         }
 

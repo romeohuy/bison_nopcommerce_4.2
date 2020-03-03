@@ -7,11 +7,11 @@
    {
        Name = "productattributemappings-grid",
        UrlRead = new DataUrl("CategoryProductAttributeMappingList", "Category", new RouteValueDictionary() { { "categoryId", Model.Id } }),
-       UrlUpdate = new DataUrl("CategoryProductAttributeMappingEdit", "Category", null),
-       UrlDelete = new DataUrl("CategoryProductAttributeMappingDelete", "Category", null),
+       UrlDelete = new DataUrl(Url.Action("CategoryProductAttributeMappingDelete", "Category")),
        SearchButtonId = "search-categories-attribute",
        //Length = Model.PageSize,
        //LengthMenu = Model.AvailablePageSizes,
+       Info = false,
        Paging = false,
        Filters = new List<FilterParameter>
             {
@@ -45,8 +45,7 @@
                 {
                     Title = T("Admin.Catalog.Products.ProductAttributes.Attributes.Fields.AttributeControlType").Text,
                     Width = "150",
-                    ClassName =  NopColumnClassDefaults.CenterAll,
-                    Editable = true
+                    ClassName =  NopColumnClassDefaults.CenterAll
                 },
                 new ColumnProperty(nameof(CategoryProductAttributeMappingModel.DisplayOrder))
                 {
@@ -71,7 +70,7 @@
                     Title = T("Admin.Common.Edit").Text,
                     Width = "100",
                     ClassName =  NopColumnClassDefaults.Button,
-                    Render = new RenderButtonsInlineEdit()
+                    Render = new RenderButtonEdit(new DataUrl(Url.Action("CategoryProductAttributeMappingEdit", "Category")))
                 },
                 new ColumnProperty(nameof(CategoryProductAttributeMappingModel.Id))
                 {

@@ -17,15 +17,17 @@ namespace Nop.Web.Areas.Admin.Models.News
         public NewsItemModel()
         {
             AvailableLanguages = new List<SelectListItem>();
-
             SelectedStoreIds = new List<int>();
             AvailableStores = new List<SelectListItem>();
+            AvailableCategories = new List<SelectListItem>();
         }
 
         #endregion
 
         #region Properties
-
+        [NopResourceDisplayName("Admin.ContentManagement.News.NewsItems.Fields.Category")]
+        public IList<SelectListItem> AvailableCategories { get; set; }
+        public int CategoryNewsId { get; set; }
         [NopResourceDisplayName("Admin.ContentManagement.News.NewsItems.Fields.Language")]
         public int LanguageId { get; set; }
 
@@ -42,6 +44,10 @@ namespace Nop.Web.Areas.Admin.Models.News
 
         [NopResourceDisplayName("Admin.ContentManagement.News.NewsItems.Fields.Title")]
         public string Title { get; set; }
+        
+        [UIHint("Picture")]
+        [NopResourceDisplayName("Admin.ContentManagement.News.NewsItems.Fields.Picture")]
+        public int PictureId { get; set; }
 
         [NopResourceDisplayName("Admin.ContentManagement.News.NewsItems.Fields.Short")]
         public string Short { get; set; }

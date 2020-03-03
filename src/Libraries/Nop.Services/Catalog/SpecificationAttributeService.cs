@@ -502,9 +502,19 @@ namespace Nop.Services.Catalog
                 InsertCategorySpecificationAttribute(mapping);
                 foreach (var category in _categoryService.GetAllCategoriesByParentCategoryId(mapping.CategoryId, true, true))
                 {
-                    mapping.CategoryId = category.Id;
+                    var psa = new CategorySpecificationAttribute
+                    {
+                        AttributeTypeId = mapping.AttributeTypeId,
+                        SpecificationAttributeOptionId = mapping.SpecificationAttributeOptionId,
+                        SpecificationAttributeOption = mapping.SpecificationAttributeOption,
+                        CategoryId = category.Id,
+                        CustomValue = mapping.CustomValue,
+                        AllowFiltering = mapping.AllowFiltering,
+                        ShowOnProductPage = mapping.ShowOnProductPage,
+                        DisplayOrder = mapping.DisplayOrder,
+                    };
                     listCategories.Add(category.Id);
-                    InsertCategorySpecificationAttribute(mapping);
+                    InsertCategorySpecificationAttribute(psa);
                 }
             }
             return listCategories;

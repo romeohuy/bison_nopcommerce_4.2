@@ -103,44 +103,44 @@
     <text>
     <script>
         function table_deletedata_@(model_name)(dataId) {
-            if (confirm('@T("Admin.Common.DeleteConfirmation")')) {
-                var postData = {
-                @if (!string.IsNullOrEmpty(Model.BindColumnNameActionDelete))
+            bootbox.confirm("@T("Admin.Common.DeleteConfirmation")", function(result) {
+                // delete code here
+                if (result) {
+                    var postData = {
+                        @if (!string.IsNullOrEmpty(Model.BindColumnNameActionDelete))
                 {
                     <text>
-                    @Model.BindColumnNameActionDelete: dataId
+                        @Model.BindColumnNameActionDelete: dataId
                     </text>
                 }
                 else
                 {
                     <text>
-                    id: dataId
+                        id: dataId
                     </text>
                 }
-                };
-                addAntiForgeryToken(postData);
+                    };
+                    addAntiForgeryToken(postData);
 
-                $.ajax({
-                    url: "@Html.Raw(GetUrl((Model.ChildTable?.UrlDelete != null) ? Model.ChildTable?.UrlDelete : Model.UrlDelete))",
-                    type: "@WebRequestMethods.Http.Post",
-                    dataType: "json",
-                    data: postData,
-                    success: function (data, textStatus, jqXHR) {
-                        //display error if returned
-                        if (data) {
-                            display_nop_error(data);
+                    $.ajax({
+                        url: "@Html.Raw(GetUrl((Model.ChildTable?.UrlDelete != null) ? Model.ChildTable?.UrlDelete : Model.UrlDelete))",
+                        type: "@WebRequestMethods.Http.Post",
+                        dataType: "json",
+                        data: postData,
+                        success: function (data, textStatus, jqXHR) {
+                            //display error if returned
+                            if (data) {
+                                display_nop_error(data);
+                            }
+                            //refresh grid
+                            $('#@Model.Name').DataTable().draw(false);
+                        },
+                        error: function (jqXHR, textStatus, errorThrown) {
+                            alert(errorThrown);
                         }
-                        //refresh grid
-                        $('#@Model.Name').DataTable().draw(false);
-                    },
-                    error: function (jqXHR, textStatus, errorThrown) {
-                        alert(errorThrown);
-                    }
-                });
-            }
-            else {
-                return false;
-            }
+                    });
+                }
+            });
         }
     </script>
     </text>

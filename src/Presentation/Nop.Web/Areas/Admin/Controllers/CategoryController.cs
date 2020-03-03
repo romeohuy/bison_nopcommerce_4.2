@@ -1064,8 +1064,8 @@ namespace Nop.Web.Areas.Admin.Controllers
             _categoryAttributeService.Delete(categoryProductAttributeMapping);
 
             _notificationService.SuccessNotification(_localizationService.GetResource("Admin.Catalog.Categories.CategoryProductAttributes.Attributes.Deleted"));
-            SaveSelectedTabName("tab-product-attributes");
-            return RedirectToAction("Edit", new { id = categoryId });
+
+            return new NullJsonResult();
         }
         
         [HttpPost]
@@ -1099,11 +1099,11 @@ namespace Nop.Web.Areas.Admin.Controllers
                 ShowOnProductPage = showOnProductPage,
                 DisplayOrder = displayOrder,
             };
-            var listCateIds = _specificationAttributeService.Insert(psa, true);
+            _specificationAttributeService.Insert(psa, true);
             var productIds = _productService.GetAllProductIdsByCategoryId(categoryId);
             OverwriteProductSpecsAttr(productIds);
             
-            return Json(new { Result = true });
+            return new NullJsonResult();
         }
 
 

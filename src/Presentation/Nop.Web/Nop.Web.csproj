@@ -49,6 +49,20 @@
     <Content Remove="%2a%2a\%2a.config" />
     <Content Remove="%2a%2a\%2a.cshtml" />
     <Content Remove="%2a%2a\%2a.json" />
+    <Content Remove="Plugins\%2a%2a" />
+    <Content Include="Areas\Admin\Views\CategoryNews\Create.cshtml" />
+    <Content Include="Areas\Admin\Views\CategoryNews\Edit.cshtml" />
+    <Content Include="Areas\Admin\Views\CategoryNews\List.cshtml" />
+    <Content Include="Areas\Admin\Views\CategoryNews\_CreateOrUpdate.cshtml" />
+    <Content Include="Areas\Admin\Views\CategoryNews\_CreateOrUpdate.Info.cshtml" />
+    <Content Include="Areas\Admin\Views\CategoryNews\_CreateOrUpdate.SEO.cshtml" />
+    <Content Include="Areas\Admin\Views\Category\CategoryProductAttributeMappingCreate.cshtml" />
+    <Content Include="Areas\Admin\Views\Category\CategoryProductAttributeMappingEdit.cshtml" />
+    <Content Include="Areas\Admin\Views\Category\_CreateOrUpdate.CategoryProductAttributes.cshtml" />
+    <Content Include="Areas\Admin\Views\Category\_CreateOrUpdate.CategoryProductAttributes.Info.cshtml" />
+    <Content Include="Areas\Admin\Views\Category\_CreateOrUpdate.CategorySpecificationAttributes.cshtml" />
+    <Content Include="Areas\Admin\Views\Category\_CreateOrUpdateCategoryProductAttributeMapping.cshtml" />
+    <Content Include="Areas\Admin\Views\Category\_CreateOrUpdateCategoryProductAttributeMapping.Info.cshtml" />
 
     <None Update="Areas\Admin\sitemap.config">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
@@ -66,6 +80,7 @@
 
   <ItemGroup>
     <Folder Include="Areas\Admin\Extensions\" />
+    <Folder Include="Plugins\" />
   </ItemGroup>
 
   <ItemGroup>
@@ -839,6 +854,12 @@
     <None Include="Views\Vendor\_VendorAttributes.cshtml" />
     <None Include="Views\_ViewImports.cshtml" />
     <None Include="Views\_ViewStart.cshtml" />
+    <None Include="wwwroot\lib\bootbox\bootbox.all.js" />
+    <None Include="wwwroot\lib\bootbox\bootbox.all.min.js" />
+    <None Include="wwwroot\lib\bootbox\bootbox.js" />
+    <None Include="wwwroot\lib\bootbox\bootbox.locales.js" />
+    <None Include="wwwroot\lib\bootbox\bootbox.locales.min.js" />
+    <None Include="wwwroot\lib\bootbox\bootbox.min.js" />
   </ItemGroup>
 
   <!-- This target execute after "Build" target.

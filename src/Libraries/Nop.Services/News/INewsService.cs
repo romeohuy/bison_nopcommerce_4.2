@@ -1,7 +1,7 @@
+﻿using Nop.Core;
+using Nop.Core.Domain.News;
 using System;
 using System.Collections.Generic;
-using Nop.Core;
-using Nop.Core.Domain.News;
 
 namespace Nop.Services.News
 {
@@ -40,9 +40,11 @@ namespace Nop.Services.News
         /// <param name="pageIndex">Page index</param>
         /// <param name="pageSize">Page size</param>
         /// <param name="showHidden">A value indicating whether to show hidden records</param>
+        /// <param name="categoryNewsId"></param>
         /// <returns>News items</returns>
         IPagedList<NewsItem> GetAllNews(int languageId = 0, int storeId = 0,
-            int pageIndex = 0, int pageSize = int.MaxValue, bool showHidden = false);
+            int pageIndex = 0, int pageSize = int.MaxValue, bool showHidden = false, int categoryNewsId = 0);
+        IList<NewsItem> GetRecentNews(int languageId = 0, int storeId = 0, int numberNews = 5, bool showHidden = false);
 
         /// <summary>
         /// Inserts a news item
@@ -55,7 +57,7 @@ namespace Nop.Services.News
         /// </summary>
         /// <param name="news">News item</param>
         void UpdateNews(NewsItem news);
-
+        
         /// <summary>
         /// Get a value indicating whether a news item is available now (availability dates)
         /// </summary>

@@ -1,0 +1,324 @@
+﻿@model CategoryNewsSearchModel
+
+@{
+    var defaultGridPageSize = adminAreaSettings.DefaultGridPageSize;
+    var gridPageSizes = adminAreaSettings.GridPageSizes;
+
+    //page title
+    ViewBag.Title = T("Admin.Catalog.CategoriesNews.Manage").Text;
+    //active menu item (system name)
+    Html.SetActiveMenuItemSystemName("Categories News");
+}
+
+<nop-antiforgery-token />
+<div class="content-header clearfix">
+    <h1 class="pull-left">
+        @T("Admin.Catalog.CategoriesNews.Manage")
+    </h1>
+    <div class="pull-right">
+        <a asp-action="Create" class="btn bg-blue">
+            <i class="fa fa-plus-square"></i>
+            @T("Admin.Common.AddNew")
+        </a>
+
+        @await Component.InvokeAsync("AdminWidget", new { widgetZone = "admin_category_list_buttons" })
+    </div>
+</div>
+
+<div class="content">
+    <div class="form-horizontal">
+        <div class="panel-group">
+
+            <div class="panel panel-default">
+                <div class="panel-body">
+                    @await Html.PartialAsync("Table", new DataTablesModel
+                        {
+                        Name = "products-grid",
+                        UrlRead = new DataUrl("ProductList", "Product", null),
+                        SearchButtonId = "search-products",
+                        Length = Model.PageSize,
+                        LengthMenu = Model.AvailablePageSizes,
+                        Filters = new List<FilterParameter>
+                            {
+                            new FilterParameter(nameof(Model.SearchCategoryName))
+                            },
+                            ColumnCollection = new List<ColumnProperty>
+                                {
+                                new ColumnProperty(nameof(CategoryNewsModel.Id))
+                                {
+                                IsMasterCheckBox = true,
+                                Render = new RenderCheckBox("checkbox_products"),
+                                ClassName =  NopColumnClassDefaults.CenterAll,
+                                Width = "50",
+                                },
+                                new ColumnProperty(nameof(CategoryNewsModel.Name))
+                                {
+                                Title = T("Admin.Catalog.Categories.Fields.Name").Text,
+                                Width = "300"
+                                },
+                                new ColumnProperty(nameof(CategoryNewsModel.Published))
+                                {
+                                Title = T("Admin.Catalog.Products.Fields.Published").Text,
+                                Width = "100",
+                                ClassName = NopColumnClassDefaults.CenterAll,
+                                Render = new RenderBoolean()
+                                },
+                                new ColumnProperty(nameof(CategoryNewsModel.DisplayOrder))
+                                {
+                                Title = T("Admin.Catalog.Products.Fields.Published").Text,
+                                Width = "100",
+                                ClassName = NopColumnClassDefaults.CenterAll,
+                                Render = new RenderBoolean()
+                                },
+                                new ColumnProperty(nameof(CategoryNewsModel.Id))
+                                {
+                                Title = T("Admin.Common.Edit").Text,
+                                Width = "100",
+                                ClassName =  NopColumnClassDefaults.Button,
+                                Render = new RenderButtonEdit(new DataUrl("Edit"))
+                                }
+                                }
+                                })
+
+                    @*<script type="text/javascript">
+                        $(document).ready(function() {
+                            $("#categories-grid").kendoGrid({
+                                dataSource: {
+                                    type: "json",
+                                    transport: {
+                                        read: {
+                                            url: "@Html.Raw(Url.Action("List", "CategoryNews"))",
+                                            type: "POST",
+                                            dataType: "json",
+                                            data: additionalData
+                                        }
+                                    },
+                                    schema: {
+                                        data: "Data",
+                                        total: "Total",
+                                        errors: "Errors"
+                                    },
+                                    error: function(e) {
+                                        display_kendoui_grid_error(e);
+                                        // Cancel the changes
+                                        this.cancelChanges();
+                                    },
+                                    pageSize: @(defaultGridPageSize),
+                                    serverPaging: true,
+                                    serverFiltering: true,
+                                    serverSorting: true
+                                },
+                                pageable: {
+                                    refresh: true,
+                                    pageSizes: [@(gridPageSizes)],
+                                    @await Html.PartialAsync("_GridPagerMessages")
+                                },
+                                editable: {
+                                    confirmation: "@T("Admin.Common.DeleteConfirmation")",
+                                    mode: "inline"
+                                },
+                                dataBound: onDataBound,
+                                scrollable: false,
+                                columns: [
+                                    {
+                                        field: "Id",
+                                        headerTemplate: "<input id='mastercheckbox' type='checkbox'/>",
+                                        headerAttributes: { style: "text-align:center" },
+                                        attributes: { style: "text-align:center" },
+                                        template: "<input type='checkbox' value='#=Id#' class='checkboxGroups'/>",
+                                        width: 50,
+                                        sortable: false
+                                    },
+                                    {
+                                        field: "Name",
+                                        title: "@T("Admin.Catalog.Categories.Fields.Name")"
+                                    }, {
+                                        field: "Published",
+                                        title: "@T("Admin.Catalog.Categories.Fields.Published")",
+                                        width: 100,
+                                        headerAttributes: { style: "text-align:center" },
+                                        attributes: { style: "text-align:center" },
+                                        template: '# if(Published) {# <i class="fa fa-check true-icon"></i> #} else {# <i class="fa fa-close false-icon"></i> #} #'
+                                    }, {
+                                        field: "DisplayOrder",
+                                        title: "@T("Admin.Catalog.Categories.Fields.DisplayOrder")",
+                                        width: 150
+                                    }, {
+                                        field: "Id",
+                                        title: "@T("Admin.Common.Edit")",
+                                        width: 100,
+                                        headerAttributes: { style: "text-align:center" },
+                                        attributes: { style: "text-align:center" },
+                                        template: '<a class="btn btn-default" href="Edit/#=Id#"><i class="fa fa-pencil"></i>@T("Admin.Common.Edit")</a>'
+                                    }
+                                ]
+                            });
+                        });
+                    </script>*@
+
+                    @*<script type="text/javascript">
+                        var selectedIds = [];
+                        $(document).ready(function() {
+                            //search button
+                            $('#search-categories').click(function() {
+                                //search
+                                var grid = $('#categories-grid').data('kendoGrid');
+                                grid.dataSource.page(1); //new search. Set page size to 1
+                                //grid.dataSource.read(); we already loaded the grid above using "page" function
+                                $('.checkboxGroups').attr('checked', false).change();
+                                selectedIds = [];
+                                return false;
+                            });
+
+                            $("#@Html.IdFor(model => model.SearchCategoryName)").keydown(function(event) {
+                                if (event.keyCode == 13) {
+                                    $("#search-categories").click();
+                                    return false;
+                                }
+                            });
+
+                            $('#mastercheckbox').click(function () {
+                                $('.checkboxGroups').attr('checked', $(this).is(':checked')).change();
+                            });
+
+                            //wire up checkboxes.
+                            $('#categories-grid').on('change', 'input[type=checkbox][id!=mastercheckbox][class=checkboxGroups]', function (e) {
+                                var $check = $(this);
+                                if ($check.is(":checked") == true) {
+                                    var checked = jQuery.inArray($check.val(), selectedIds);
+                                    if (checked == -1) {
+                                        //add id to selectedIds.
+                                        selectedIds.push($check.val());
+                                    }
+                                }
+                                else {
+                                    var checked = jQuery.inArray($check.val(), selectedIds);
+                                    if (checked > -1) {
+                                        //remove id from selectedIds.
+                                        selectedIds = $.grep(selectedIds, function (item, index) {
+                                            return item != $check.val();
+                                        });
+                                    }
+                                }
+                                updateMasterCheckbox();
+                            });
+                        });
+
+                        function additionalData() {
+                            var data = {
+                                SearchCategoryName: $('#@Html.IdFor(model => model.SearchCategoryName)').val(),
+                                SearchStoreId: $('#SearchStoreId').val()
+                            };
+                            addAntiForgeryToken(data);
+                            return data;
+                        }
+
+
+                        function onDataBound(e) {
+                            $('#categories-grid input[type=checkbox][id!=mastercheckbox][class=checkboxGroups]').each(function () {
+                                var currentId = $(this).val();
+                                var checked = jQuery.inArray(currentId, selectedIds);
+                                //set checked based on if current checkbox's value is in selectedIds.
+                                $(this).attr('checked', checked > -1);
+                            });
+
+                            updateMasterCheckbox();
+                        }
+
+                        function updateMasterCheckbox() {
+                            var numChkBoxes = $('#categories-grid input[type=checkbox][id!=mastercheckbox][class=checkboxGroups]').length;
+                            var numChkBoxesChecked = $('#categories-grid input[type=checkbox][id!=mastercheckbox][class=checkboxGroups]:checked').length;
+                            $('#mastercheckbox').attr('checked', numChkBoxes == numChkBoxesChecked && numChkBoxes > 0);
+                        }
+                    </script>*@
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@*import categories form*@
+<div id="importexcel-window" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="importexcel-window-title">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title" id="importexcel-window-title">@T("Admin.Common.ImportFromExcel")</h4>
+            </div>
+            <form asp-controller="Category" asp-action="ImportFromXlsx" method="post" enctype="multipart/form-data">
+                <div class="form-horizontal">
+                    <div class="modal-body">
+                        <ul class="common-list">
+                            <li>
+                                <em>@T("Admin.Catalog.Categories.List.ImportFromExcelTip")</em>
+                            </li>
+                            <li>
+                                <em>@T("Admin.Common.ImportFromExcel.ManyRecordsWarning")</em>
+                            </li>
+                        </ul>
+                        <div class="form-group">
+                            <div class="col-md-2">
+                                <div class="label-wrapper">
+                                    <label class="control-label">
+                                        @T("Admin.Common.ExcelFile")
+                                    </label>
+                                </div>
+                            </div>
+                            <div class="col-md-10">
+                                <input type="file" id="importexcelfile" name="importexcelfile" class="form-control" />
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="submit" class="btn btn-primary">
+                            @T("Admin.Common.ImportFromExcel")
+                        </button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+
+<form asp-controller="Category" asp-action="OverWriteAllProductAttributes" method="post" id="over-write-all-attribute">
+    <input type="hidden" id="selectedIds" name="selectedIds" value="" />
+</form>
+@await Html.PartialAsync("_AlertDialog")
+<script type="text/javascript">
+    $(document).ready(function () {
+        $('#btn-over-write-attribute').click(function (e) {
+            e.preventDefault();
+            if (selectedIds.length > 0) {
+                var ids = selectedIds.join(",");
+                $('#over-write-all-attribute #selectedIds').val(ids);
+                $('#over-write-all-attribute').submit();
+            } else {
+                $("#alert-dialog-error").html("@T("Admin.CategoriesEmpty.Alert")");
+                $('#alertModal').modal('show');
+                return false;
+            }
+        });
+    });
+</script>
+
+<form asp-controller="Category" asp-action="OverWriteAllProductSpecAttributes" method="post" id="over-write-all-spec-attribute">
+    <input type="hidden" id="selectedIds" name="selectedIds" value="" />
+</form>
+@await Html.PartialAsync("_AlertDialog")
+<script type="text/javascript">
+    $(document).ready(function () {
+        $('#btn-over-write-spec-attribute').click(function (e) {
+            e.preventDefault();
+            if (selectedIds.length > 0) {
+                var ids = selectedIds.join(",");
+                $('#over-write-all-spec-attribute #selectedIds').val(ids);
+                $('#over-write-all-spec-attribute').submit();
+            } else {
+                $("#alert-dialog-error").html("@T("Admin.CategoriesEmpty.Alert")");
+                $('#alertModal').modal('show');
+                return false;
+            }
+        });
+    });
+</script>

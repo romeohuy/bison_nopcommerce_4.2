@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 using Nop.Core.Domain.Localization;
 using Nop.Core.Domain.Seo;
@@ -17,6 +17,8 @@ namespace Nop.Core.Domain.News
         /// Gets or sets the language identifier
         /// </summary>
         public int LanguageId { get; set; }
+        
+        public int CategoryNewsId { get; set; }
 
         /// <summary>
         /// Gets or sets the news title
