@@ -12,10 +12,10 @@ namespace Nop.Web.Areas.Admin.Models.News
     {
         #region Ctor
 
-        public NewsItemSearchModel()
-        {
-            AvailableStores = new List<SelectListItem>();
-        }
+        //public NewsItemSearchModel()
+        //{
+        //    AvailableStores = new List<SelectListItem>();
+        //}
 
         #endregion
 

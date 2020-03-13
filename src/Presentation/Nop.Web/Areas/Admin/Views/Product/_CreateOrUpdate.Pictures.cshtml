@@ -117,7 +117,7 @@
                                         return;
                                     }
                                     //updateTable('#productpictures-grid');
-                                    $('#productpictures-grid').DataTable().ajax.reload();
+                                    updateTable('#productpictures-grid');
                                 },
                                 error: function (jqXHR, textStatus, errorThrown) {
                                     $("#productPictureAddAlert").click();
@@ -131,6 +131,8 @@
                         });
 
                         function reloadData() {
+                            //$('#productpictures-grid').DataTable().ajax.reload();
+                            updateTable('#productpictures-grid');
                             $("#imageFromUrl0").html("");
                             $("#@Html.IdFor(model => model.AddPictureModel.PictureUrl)").val("");
                             $("#imageFromUrl1").html("");

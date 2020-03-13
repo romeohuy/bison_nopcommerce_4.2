@@ -212,12 +212,12 @@ img {
 a img {
 	opacity: 0.99; /*firefox scale bug fix*/
 }
-strong {
+/*strong {
     font-weight: normal;
 }
 em {
     font-style: normal;
-}
+}*/
 table {
 	width: 100%;
 	border-collapse: collapse;
