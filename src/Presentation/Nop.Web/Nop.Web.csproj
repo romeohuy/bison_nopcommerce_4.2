@@ -28,14 +28,20 @@
     <Content Update="App_Data\*.json" CopyToPublishDirectory="Never" />
     <Content Update="App_Data\DataProtectionKeys\*.xml" CopyToPublishDirectory="Never" />
     <Compile Remove="%2a%2a\**" />
+    <Compile Remove="Areas\Admin\Extensions\**" />
 
     <Compile Remove="Plugins\**" />
 
     <Content Remove="%2a%2a\**" />
 
+    <Content Remove="Areas\Admin\Extensions\**" />
+
     <EmbeddedResource Remove="%2a%2a\**" />
+
+    <EmbeddedResource Remove="Areas\Admin\Extensions\**" />
     <EmbeddedResource Remove="Plugins\**" />
     <None Remove="%2a%2a\**" />
+    <None Remove="Areas\Admin\Extensions\**" />
     <None Remove="Plugins\**" />
 
     <!-- We copy the entire \Plugins and \Themes directories.
@@ -79,7 +85,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Areas\Admin\Extensions\" />
     <Folder Include="Plugins\" />
   </ItemGroup>
 
