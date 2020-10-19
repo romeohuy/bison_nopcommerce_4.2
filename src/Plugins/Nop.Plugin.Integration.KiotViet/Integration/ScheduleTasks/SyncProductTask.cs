@@ -48,96 +48,103 @@ namespace Nop.Plugin.Integration.KiotViet.Integration.ScheduleTasks
 
         public void Execute()
         {
-            var productAttributes = _productAttributeService.GetAllProductAttributesNoCache().Where(_ => _.KiotVietName != null && _.KiotVietName != string.Empty).ToList();
-            //_logger.InsertLog(LogLevel.Information, "Start to sync data KiotViet to Bison nopcommerce.");
-            var kiotVietCategory = _categoryService.GetAllCategories("KiotViet", showHidden: true).FirstOrDefault();
-            if (kiotVietCategory == null) return;
-
-            var sourceProductGroups = _apiConsumer.GetProducts().GroupBy(_ => _.sku);
-            foreach (var group in sourceProductGroups)
+            try
             {
-                // RST429|BLACK-L
-                var sku = group.Key;
-                var sourceProducts = group.ToList();
-                var sourceProduct = sourceProducts.First();
-                var basePrice = sourceProducts.Min(_ => _.basePrice);
+                var productAttributes = _productAttributeService.GetAllProductAttributesNoCache().Where(_ => _.KiotVietName != null && _.KiotVietName != string.Empty).ToList();
+                //_logger.InsertLog(LogLevel.Information, "Start to sync data KiotViet to Bison nopcommerce.");
+                var kiotVietCategory = _categoryService.GetAllCategories("KiotViet", showHidden: true).FirstOrDefault();
+                if (kiotVietCategory == null) return;
 
-                var product = _productService.GetProductBySku(sku);
-                if (product == null) // create new product
+                var sourceProductGroups = _apiConsumer.GetProducts().GroupBy(_ => _.sku);
+                foreach (var group in sourceProductGroups)
                 {
-                    product = KiotVietHelper.MapNewProduct(sourceProduct);
-                    product.Price = basePrice;
-                    product.StockQuantity = (int)sourceProducts.SelectMany(_ => _.inventories).Sum(_ => _.onHand);
+                    // RST429|BLACK-L
+                    var sku = group.Key;
+                    var sourceProducts = group.ToList();
+                    var sourceProduct = sourceProducts.First();
+                    var basePrice = sourceProducts.Min(_ => _.basePrice);
 
-                    _productService.InsertProduct(product);
-                    if (product.Id <= 0) continue;
-
-                    var parentSeachEngineName = _urlRecordService.ValidateSeName(product,string.Empty, product.Name, true);
-                    _urlRecordService.SaveSlug(product, parentSeachEngineName, 0);
-                    SaveCategoryMappings(product.Id, kiotVietCategory.Id);
-
-                    foreach (var variant in sourceProducts)
+                    var product = _productService.GetProductBySku(sku);
+                    if (product == null) // create new product
                     {
-                        //MapProductAttributes("Size", variant, "Size", product, true, basePrice);
-                        //MapProductAttributes("Colour", variant, "Color", product);
+                        product = KiotVietHelper.MapNewProduct(sourceProduct);
+                        product.Price = basePrice;
+                        product.StockQuantity = (int)sourceProducts.SelectMany(_ => _.inventories).Sum(_ => _.onHand);
 
+                        _productService.InsertProduct(product);
+                        if (product.Id <= 0) continue;
+
+                        var parentSeachEngineName = _urlRecordService.ValidateSeName(product, string.Empty, product.Name, true);
+                        _urlRecordService.SaveSlug(product, parentSeachEngineName, 0);
+                        SaveCategoryMappings(product.Id, kiotVietCategory.Id);
+
+                        foreach (var variant in sourceProducts)
+                        {
+                            //MapProductAttributes("Size", variant, "Size", product, true, basePrice);
+                            //MapProductAttributes("Colour", variant, "Color", product);
+
+                            foreach (var productAttribute in productAttributes)
+                            {
+                                MapProductAttributes(productAttribute.KiotVietName, variant, productAttribute.Name, product, productAttribute.AdjustPrice, basePrice);
+                            }
+                        }
+
+
+                        if (sourceProduct.hasVariants)
+                        {
+                            //Combine Attributes
+                            CombineProductAttributes(product, sourceProducts);
+                        }
+                    }
+                    else // update to existing product
+                    {
+
+                        KiotVietHelper.MergeProduct(sourceProduct, product);
+                        product.StockQuantity = (int)sourceProducts.SelectMany(_ => _.inventories).Sum(_ => _.onHand);
+                        product.Price = basePrice;
+
+                        var attMappings = _productAttributeService.GetProductAttributeMappingsByProductId(product.Id);
+                        //var sizeMappings = attMappings.Where(_ => _.ProductAttribute.Name.Equals("Size", StringComparison.InvariantCultureIgnoreCase)).ToList();
+                        //var colorMappings = attMappings.Where(_ => _.ProductAttribute.Name.Equals("Color", StringComparison.InvariantCultureIgnoreCase)).ToList();
+                        //var madeInMappings = attMappings.Where(_ => _.ProductAttribute.Name.Equals("Made in", StringComparison.InvariantCultureIgnoreCase)).ToList();
+
+                        List<ProductAttributeMapping> attributeMappings = new List<ProductAttributeMapping>();
                         foreach (var productAttribute in productAttributes)
                         {
-                            MapProductAttributes(productAttribute.KiotVietName, variant, productAttribute.Name, product, productAttribute.AdjustPrice, basePrice);
+                            var attributeMapping = attMappings.Where(_ => _.ProductAttribute.Name.Equals(productAttribute.Name, StringComparison.InvariantCultureIgnoreCase)).ToList();
+                            attributeMappings.AddRange(attributeMapping);
+                        }
+
+                        //foreach (var mapping in attributeMappings)
+                        //{
+                        //    _productAttributeService.DeleteProductAttributeMapping(mapping);
+                        //}
+
+                        foreach (var variant in sourceProducts)
+                        {
+                            //MapProductAttributes("Size", variant, "Size", product, true, basePrice);
+                            // MapProductAttributes("Colour", variant, "Color", product);
+                            //foreach (var productAttribute in productAttributes.Where(_ => attributeMappings.All(a => a.ProductAttribute.Name != _.Name)))
+                            foreach (var productAttribute in productAttributes)
+                            {
+                                MapProductAttributes(productAttribute.KiotVietName, variant, productAttribute.Name, product, productAttribute.AdjustPrice, basePrice);
+                            }
+                        }
+
+                        _productService.UpdateProduct(product);
+
+                        if (sourceProduct.hasVariants)
+                        {
+                            //Combine Attributes
+                            CombineProductAttributes(product, sourceProducts);
                         }
                     }
 
-
-                    if (sourceProduct.hasVariants)
-                    {
-                        //Combine Attributes
-                        CombineProductAttributes(product, sourceProducts);
-                    }
                 }
-                else // update to existing product
-                {
-
-                    KiotVietHelper.MergeProduct(sourceProduct, product);
-                    product.StockQuantity = (int)sourceProducts.SelectMany(_ => _.inventories).Sum(_ => _.onHand);
-                    product.Price = basePrice;
-
-                    var attMappings = _productAttributeService.GetProductAttributeMappingsByProductId(product.Id);
-                    //var sizeMappings = attMappings.Where(_ => _.ProductAttribute.Name.Equals("Size", StringComparison.InvariantCultureIgnoreCase)).ToList();
-                    //var colorMappings = attMappings.Where(_ => _.ProductAttribute.Name.Equals("Color", StringComparison.InvariantCultureIgnoreCase)).ToList();
-                    //var madeInMappings = attMappings.Where(_ => _.ProductAttribute.Name.Equals("Made in", StringComparison.InvariantCultureIgnoreCase)).ToList();
-
-                    List<ProductAttributeMapping> attributeMappings = new List<ProductAttributeMapping>();
-                    foreach (var productAttribute in productAttributes)
-                    {
-                        var attributeMapping = attMappings.Where(_ => _.ProductAttribute.Name.Equals(productAttribute.Name, StringComparison.InvariantCultureIgnoreCase)).ToList();
-                        attributeMappings.AddRange(attributeMapping);
-                    }
-
-                    //foreach (var mapping in attributeMappings)
-                    //{
-                    //    _productAttributeService.DeleteProductAttributeMapping(mapping);
-                    //}
-
-                    foreach (var variant in sourceProducts)
-                    {
-                        //MapProductAttributes("Size", variant, "Size", product, true, basePrice);
-                        // MapProductAttributes("Colour", variant, "Color", product);
-                        //foreach (var productAttribute in productAttributes.Where(_ => attributeMappings.All(a => a.ProductAttribute.Name != _.Name)))
-                        foreach (var productAttribute in productAttributes)
-                        {
-                            MapProductAttributes(productAttribute.KiotVietName, variant, productAttribute.Name, product, productAttribute.AdjustPrice, basePrice);
-                        }
-                    }
-
-                    _productService.UpdateProduct(product);
-
-                    if (sourceProduct.hasVariants)
-                    {
-                        //Combine Attributes
-                        CombineProductAttributes(product, sourceProducts);
-                    }
-                }
-
+            }
+            catch (TimeoutException)
+            {
+                //ignore
             }
         }
 
