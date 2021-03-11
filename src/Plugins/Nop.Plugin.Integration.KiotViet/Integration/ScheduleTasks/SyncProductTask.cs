@@ -144,12 +144,17 @@ namespace Nop.Plugin.Integration.KiotViet.Integration.ScheduleTasks
                     }
 
                 }
+
+                //Delete product not exist in kiotViet
+                var kiotVietSkus = sourceProductGroups.Select(_ => _.Key).Distinct().ToList();
+                _productService.DeleteProductsNotInKiotViet(kiotVietSkus);
             }
             catch (TimeoutException)
             {
                 //ignore
             }
         }
+
 
         private void CombineProductAttributes(Product product, List<KVProduct> sourceProducts)
         {

@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using Nop.Core;
+﻿using Nop.Core;
 using Nop.Core.Caching;
 using Nop.Core.Data;
 using Nop.Core.Data.Extensions;
@@ -21,6 +18,9 @@ using Nop.Services.Messages;
 using Nop.Services.Security;
 using Nop.Services.Shipping.Date;
 using Nop.Services.Stores;
+using System;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace Nop.Services.Catalog
 {
@@ -280,7 +280,7 @@ namespace Nop.Services.Catalog
 
         public List<int> GetAllProductIds()
         {
-            return _productRepository.Table.Select(_=>_.Id).ToList();
+            return _productRepository.Table.Select(_ => _.Id).ToList();
         }
 
         public List<int> GetAllProductIdsByCategoryId(int categoryId)
@@ -2308,7 +2308,7 @@ namespace Nop.Services.Catalog
             var commaSeparatedProductIds = productIds == null ? "" : string.Join(",", productIds);
             var pProductIds = _dataProvider.GetStringParameter("ProductIds", commaSeparatedProductIds);
             var pIsShow = _dataProvider.GetBooleanParameter("IsShow", isShow);
-            _dbContext.ExecuteSqlCommand("EXEC [spShowOrHideStock] @ProductIds, @IsShow", false, 600, pProductIds,  pIsShow);
+            _dbContext.ExecuteSqlCommand("EXEC [spShowOrHideStock] @ProductIds, @IsShow", false, 600, pProductIds, pIsShow);
         }
 
         public void ShowOrHidePrice(int[] productIds, bool isShow)
@@ -2326,6 +2326,13 @@ namespace Nop.Services.Catalog
         {
             _dbContext.ExecuteSqlCommand("UPDATE Product SET DisplayStockQuantity = 1");
         }
+
+        public void DeleteProductsNotInKiotViet(List<string> kiotVietSkus)
+        {
+            var productsNeedDelete = _productRepository.Table.Where(_ => kiotVietSkus.Contains(_.Sku) == false);
+            _productRepository.Delete(productsNeedDelete);
+        }
+
         #endregion
 
         #endregion

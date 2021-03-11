@@ -14,7 +14,21 @@ namespace Nop.Plugin.Integration.KiotViet.Integration.KiotViet
     {
         public static string GetSku(string value)
         {
-            return value.Contains("|") ? value.Split('|').First() : value;
+            if (value.Contains("|"))
+            {
+                return value.Split('|').First();
+            }
+
+            if (value.Contains("/"))
+            {
+                var arr = value.Split('/');
+                if (arr.Length == 2)
+                {
+                    return arr.First();
+                }
+            }
+
+            return value;
         }
 
         public static string GetName(string value)
@@ -26,12 +40,12 @@ namespace Nop.Plugin.Integration.KiotViet.Integration.KiotViet
         {
             if (kvProduct.fullName.IsNotNullOrEmpty())
             {
-                product.Name = kvProduct.fullName.Contains("|") ? kvProduct.fullName.Split('|').FirstOrDefault() : kvProduct.fullName;
+                product.Name = GetName(kvProduct.name);
             }
 
             if (kvProduct.code.IsNotNullOrEmpty())
             {
-                product.Sku = kvProduct.code.Contains("|") ? kvProduct.code.Split('|').First() : kvProduct.code;
+                product.Sku = GetSku(kvProduct.code);
             }
             product.Price = kvProduct.basePrice;
             product.UpdatedOnUtc = DateTime.UtcNow;
