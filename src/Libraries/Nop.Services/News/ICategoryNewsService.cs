@@ -11,7 +11,7 @@ namespace Nop.Services.News
 
         CategoryNews GetCategoryNewsById(int newsId);
 
-        IList<CategoryNews> GetAllCategoryNews(int languageId = 0, bool showHidden = false);
+        IList<CategoryNews> GetAllCategoryNews(string searchCategoryName = null, int languageId = 0, bool showHidden = false);
 
         void InsertCategoryNews(CategoryNews cateNews);
 

@@ -1,19 +1,18 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Nop.Core;
+using Nop.Core.Domain.News;
 using Nop.Services.Localization;
 using Nop.Services.Logging;
+using Nop.Services.Messages;
 using Nop.Services.News;
 using Nop.Services.Security;
 using Nop.Services.Seo;
+using Nop.Web.Areas.Admin.Factories;
+using Nop.Web.Areas.Admin.Infrastructure.Mapper.Extensions;
 using Nop.Web.Areas.Admin.Models.News;
 using Nop.Web.Framework.Mvc.Filters;
 using System;
-using System.Linq;
-using Nop.Core.Domain.News;
-using Nop.Services.Messages;
-using Nop.Web.Areas.Admin.Infrastructure.Mapper.Extensions;
-using Nop.Web.Framework.Models.Extensions;
 
 namespace Nop.Web.Areas.Admin.Controllers
 {
@@ -29,6 +28,7 @@ namespace Nop.Web.Areas.Admin.Controllers
         private readonly ICustomerActivityService _customerActivityService;
         private readonly INotificationService _notificationService;
         private readonly IWorkContext _workContext;
+        private readonly ICategoryNewsModelFactory _categoryNewsModelFactory;
         #endregion
 
         #region Ctor
@@ -39,7 +39,7 @@ namespace Nop.Web.Areas.Admin.Controllers
             IPermissionService permissionService,
             IUrlRecordService urlRecordService,
             ICustomerActivityService customerActivityService, IWorkContext workContext,
-            INotificationService notificationService)
+            INotificationService notificationService, ICategoryNewsModelFactory categoryNewsModelFactory)
         {
             _categoryNewsService = categoryNewsService;
             _languageService = languageService;
@@ -49,6 +49,7 @@ namespace Nop.Web.Areas.Admin.Controllers
             _customerActivityService = customerActivityService;
             _workContext = workContext;
             _notificationService = notificationService;
+            _categoryNewsModelFactory = categoryNewsModelFactory;
         }
 
         #endregion
@@ -81,7 +82,8 @@ namespace Nop.Web.Areas.Admin.Controllers
         {
             if (!_permissionService.Authorize(StandardPermissionProvider.ManageNews))
                 return AccessDeniedView();
-            return View();
+            var model = _categoryNewsModelFactory.PrepareCategoryNewsSearchModel(new CategoryNewsSearchModel());
+            return View(model);
         }
 
         [HttpPost]
@@ -89,9 +91,8 @@ namespace Nop.Web.Areas.Admin.Controllers
         {
             if (!_permissionService.Authorize(StandardPermissionProvider.ManageNews))
                 return AccessDeniedDataTablesJson();
-            
-            var categoryNewsList = _categoryNewsService.GetAllCategoryNews(_workContext.WorkingLanguage.Id, true).Select(cn => cn.ToModel<CategoryNewsModel>()).ToList();
-            var model = new CategoryNewsListModel().PrepareToGridNoPaging(searchModel,categoryNewsList);
+
+            var model = _categoryNewsModelFactory.PrepareCategoryNewsListModel(searchModel);
 
             return Json(model);
         }
@@ -127,7 +128,7 @@ namespace Nop.Web.Areas.Admin.Controllers
                 _customerActivityService.InsertActivity("AddNewCategoryNews", _localizationService.GetResource("ActivityLog.AddNewCategoryNews"), categoryNews);
 
                 //search engine name
-                var seName = _urlRecordService.ValidateSeName(categoryNews,model.SeName, model.Name, true);
+                var seName = _urlRecordService.ValidateSeName(categoryNews, model.SeName, model.Name, true);
                 _urlRecordService.SaveSlug(categoryNews, seName, categoryNews.LanguageId);
 
                 _notificationService.SuccessNotification(_localizationService.GetResource("Admin.ContentManagement.CategoryNews.Added"));
@@ -158,7 +159,7 @@ namespace Nop.Web.Areas.Admin.Controllers
                 return RedirectToAction("List");
 
             var model = categoryNews.ToModel<CategoryNewsModel>();
-            model.SeName = _urlRecordService.GetSeName(categoryNews,model.LanguageId);
+            model.SeName = _urlRecordService.GetSeName(categoryNews, model.LanguageId);
             //languages
             PrepareLanguagesModel(model);
             return View(model);
@@ -185,10 +186,10 @@ namespace Nop.Web.Areas.Admin.Controllers
                 _customerActivityService.InsertActivity("EditCategoryNewsNews", _localizationService.GetResource("ActivityLog.EditCategoryNews"), categoryNews);
 
                 //search engine name
-                var seName = _urlRecordService.ValidateSeName(categoryNews,model.SeName, model.Name, true);
+                var seName = _urlRecordService.ValidateSeName(categoryNews, model.SeName, model.Name, true);
                 _urlRecordService.SaveSlug(categoryNews, seName, categoryNews.LanguageId);
 
-               _notificationService.SuccessNotification(_localizationService.GetResource("Admin.ContentManagement.CategoryNews.Updated"));
+                _notificationService.SuccessNotification(_localizationService.GetResource("Admin.ContentManagement.CategoryNews.Updated"));
 
                 if (continueEditing)
                 {

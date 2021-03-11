@@ -1,5 +1,6 @@
 ﻿using Nop.Core.Data;
 using Nop.Core.Domain.News;
+using Nop.Core.Extensions;
 using Nop.Services.Events;
 using System;
 using System.Collections.Generic;
@@ -31,12 +32,17 @@ namespace Nop.Services.News
             return _cateNewsRepository.GetById(cateNewsId);
         }
 
-        public IList<CategoryNews> GetAllCategoryNews(int languageId = 0, bool showHidden = false)
+        public IList<CategoryNews> GetAllCategoryNews(string searchCategoryName = null, int languageId = 0, bool showHidden = false)
         {
             var query = _cateNewsRepository.Table;
             if (showHidden)
             {
                 return query.ToList();
+            }
+
+            if (searchCategoryName.IsNotNullOrEmpty())
+            {
+                query = query.Where(_ => _.Name.Contains(searchCategoryName));
             }
             return query.Where(_ => _.Published).ToList();
         }
