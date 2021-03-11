@@ -221,7 +221,7 @@ namespace Nop.Plugin.Integration.KiotViet.Integration.ScheduleTasks
 
             var firstInventory = kvProduct.inventories.FirstOrDefault();
             var quantity = 0;
-            if (firstInventory != null) quantity = firstInventory.onHand.ToInt();
+            if (firstInventory != null) quantity = Convert.ToInt32(firstInventory.onHand);
 
             if (existingAttributeMapping != null)
             {
