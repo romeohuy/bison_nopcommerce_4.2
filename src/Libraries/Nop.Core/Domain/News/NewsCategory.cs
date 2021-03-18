@@ -4,7 +4,7 @@ using System;
 
 namespace Nop.Core.Domain.News
 {
-    public class CategoryNews : BaseEntity, ISlugSupported
+    public class NewsCategory : BaseEntity, ISlugSupported
     {
         public int LanguageId { get; set; }
         /// <summary>

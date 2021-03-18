@@ -12,22 +12,22 @@ namespace Nop.Web.Areas.Admin.Factories
     /// <summary>
     /// Represents the category model factory implementation
     /// </summary>
-    public partial class CategoryNewsModelFactory : ICategoryNewsModelFactory
+    public partial class NewsCategoryModelFactory : INewsCategoryModelFactory
     {
         #region Fields
 
-        private readonly ICategoryNewsService _categoryNewsService;
+        private readonly INewsCategoryService _newsCategoryService;
         private readonly IUrlRecordService _urlRecordService;
 
         #endregion
 
         #region Ctor
 
-        public CategoryNewsModelFactory(
-            ICategoryNewsService categoryNewsService,
+        public NewsCategoryModelFactory(
+            INewsCategoryService newsCategoryService,
             IUrlRecordService urlRecordService)
         {
-            _categoryNewsService = categoryNewsService;
+            _newsCategoryService = newsCategoryService;
             _urlRecordService = urlRecordService;
         }
 
@@ -35,7 +35,7 @@ namespace Nop.Web.Areas.Admin.Factories
 
         #region Methods
 
-        public virtual CategoryNewsSearchModel PrepareCategoryNewsSearchModel(CategoryNewsSearchModel searchModel)
+        public virtual NewsCategorySearchModel PrepareNewsCategorySearchModel(NewsCategorySearchModel searchModel)
         {
             if (searchModel == null)
                 throw new ArgumentNullException(nameof(searchModel));
@@ -45,38 +45,41 @@ namespace Nop.Web.Areas.Admin.Factories
             return searchModel;
         }
 
-        public CategoryNewsListModel PrepareCategoryNewsListModel(CategoryNewsSearchModel searchModel)
+        public NewsCategoryListModel PrepareNewsCategoryListModel(NewsCategorySearchModel searchModel)
         {
             if (searchModel == null)
                 throw new ArgumentNullException(nameof(searchModel));
 
             //get categories
-            var allCategoryNews = _categoryNewsService.GetAllCategoryNews(searchModel.SearchCategoryName);
+            var newsCategories = _newsCategoryService.GetAllNewsCategories(searchModel.SearchCategoryName);
             //prepare grid model
-            var model = new CategoryNewsListModel().PrepareToGridNoPaging(searchModel, allCategoryNews.Select(x =>
+            var model = new NewsCategoryListModel().PrepareToGrid(searchModel, newsCategories, () =>
             {
-                var categoryNewsModel = x.ToModel<CategoryNewsModel>();
-                return categoryNewsModel;
-            }).ToList());
+                return newsCategories.Select(x =>
+                {
+                    var newsCategoryModel = x.ToModel<NewsCategoryModel>();
+                    return newsCategoryModel;
+                });
+            });
 
             return model;
         }
 
-        public CategoryNewsModel PrepareCategoryNewsModel(CategoryNewsModel model, CategoryNews category, bool excludeProperties = false)
+        public NewsCategoryModel PrepareNewsCategoryModel(NewsCategoryModel model, NewsCategory newsCategory, bool excludeProperties = false)
         {
-            if (category != null)
+            if (newsCategory != null)
             {
                 //fill in model values from the entity
                 if (model == null)
                 {
-                    model = category.ToModel<CategoryNewsModel>();
-                    model.SeName = _urlRecordService.GetSeName(category, 0, true, false);
+                    model = newsCategory.ToModel<NewsCategoryModel>();
+                    model.SeName = _urlRecordService.GetSeName(newsCategory, 0, true, false);
                 }
 
             }
 
             //set default values for the new model
-            if (category == null)
+            if (newsCategory == null)
             {
                 model.Published = true;
                 model.IncludeInTopMenu = true;

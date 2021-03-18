@@ -1,6 +1,6 @@
 {
   "DataProvider": "sqlserver",
-  "DataConnectionString": "Data Source=localhost;Initial Catalog=movetek_uat_new;Integrated Security=False;Persist Security Info=False;User ID=sa;Password=P@$$w0rdAdmin",
-  //"DataConnectionString": "Data Source=45.122.222.224;Initial Catalog=movetek_uat_new;Integrated Security=False;Persist Security Info=False;User ID=sa;Password=P@$$w0rdAdmin",
+  //"DataConnectionString": "Data Source=localhost;Initial Catalog=movetek_uat_new;Integrated Security=False;Persist Security Info=False;User ID=sa;Password=P@$$w0rdAdmin",
+  "DataConnectionString": "Data Source=45.122.222.224;Initial Catalog=movetek_uat_new;Integrated Security=False;Persist Security Info=False;User ID=sa;Password=P@$$w0rdAdmin",
   "RawDataSettings": {}
 }

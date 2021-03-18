@@ -1,6 +1,4 @@
-﻿using System;
-using System.Linq;
-using Nop.Core;
+﻿using Nop.Core;
 using Nop.Core.Caching;
 using Nop.Core.Domain.Customers;
 using Nop.Core.Domain.Media;
@@ -12,8 +10,14 @@ using Nop.Services.Helpers;
 using Nop.Services.Media;
 using Nop.Services.News;
 using Nop.Services.Seo;
+using Nop.Web.Areas.Admin.Models.News;
 using Nop.Web.Infrastructure.Cache;
 using Nop.Web.Models.News;
+using System;
+using System.Linq;
+using NewsCommentModel = Nop.Web.Models.News.NewsCommentModel;
+using NewsItemListModel = Nop.Web.Models.News.NewsItemListModel;
+using NewsItemModel = Nop.Web.Models.News.NewsItemModel;
 
 namespace Nop.Web.Factories
 {
@@ -30,6 +34,7 @@ namespace Nop.Web.Factories
         private readonly IDateTimeHelper _dateTimeHelper;
         private readonly IGenericAttributeService _genericAttributeService;
         private readonly INewsService _newsService;
+        private readonly INewsCategoryService _newsCategoryService;
         private readonly IPictureService _pictureService;
         private readonly IStaticCacheManager _cacheManager;
         private readonly IStoreContext _storeContext;
@@ -54,7 +59,7 @@ namespace Nop.Web.Factories
             IUrlRecordService urlRecordService,
             IWorkContext workContext,
             MediaSettings mediaSettings,
-            NewsSettings newsSettings)
+            NewsSettings newsSettings, INewsCategoryService newsCategoryService)
         {
             _captchaSettings = captchaSettings;
             _customerSettings = customerSettings;
@@ -69,6 +74,7 @@ namespace Nop.Web.Factories
             _workContext = workContext;
             _mediaSettings = mediaSettings;
             _newsSettings = newsSettings;
+            _newsCategoryService = newsCategoryService;
         }
 
         #endregion
@@ -202,7 +208,7 @@ namespace Nop.Web.Factories
             if (command.PageNumber <= 0) command.PageNumber = 1;
 
             var newsItems = _newsService.GetAllNews(_workContext.WorkingLanguage.Id, _storeContext.CurrentStore.Id,
-                command.PageNumber - 1, command.PageSize);
+                command.PageNumber - 1, command.PageSize, newsCategoryId: command.NewsCategoryId);
             model.PagingFilteringContext.LoadPagedList(newsItems);
 
             model.NewsItems = newsItems
@@ -213,6 +219,22 @@ namespace Nop.Web.Factories
                     return newsModel;
                 })
                 .ToList();
+
+            var newsCategories = _newsCategoryService.GetAllNewsCategories(languageId: _workContext.WorkingLanguage.Id);
+            model.NewsCategoryModels = newsCategories.Select(x =>
+            {
+                var newsCategoryModel = new NewsCategoryModel
+                {
+                    Id = x.Id,
+                    Name = x.Name,
+                    Description = x.Description,
+                    MetaDescription = x.MetaDescription,
+                    SeName = _urlRecordService.GetSeName(x)
+                };
+                return newsCategoryModel;
+            }).ToList();
+
+            model.CurrentCategoryId = command.NewsCategoryId;
 
             return model;
         }

@@ -16,11 +16,11 @@ using System;
 
 namespace Nop.Web.Areas.Admin.Controllers
 {
-    public class CategoryNewsController : BaseAdminController
+    public class NewsCategoryController : BaseAdminController
     {
         #region Fields
 
-        private readonly ICategoryNewsService _categoryNewsService;
+        private readonly INewsCategoryService _newsCategoryService;
         private readonly ILanguageService _languageService;
         private readonly ILocalizationService _localizationService;
         private readonly IPermissionService _permissionService;
@@ -28,20 +28,20 @@ namespace Nop.Web.Areas.Admin.Controllers
         private readonly ICustomerActivityService _customerActivityService;
         private readonly INotificationService _notificationService;
         private readonly IWorkContext _workContext;
-        private readonly ICategoryNewsModelFactory _categoryNewsModelFactory;
+        private readonly INewsCategoryModelFactory _newsCategoryModelFactory;
         #endregion
 
         #region Ctor
 
-        public CategoryNewsController(ICategoryNewsService categoryNewsService,
+        public NewsCategoryController(INewsCategoryService newsCategoryService,
             ILanguageService languageService,
             ILocalizationService localizationService,
             IPermissionService permissionService,
             IUrlRecordService urlRecordService,
             ICustomerActivityService customerActivityService, IWorkContext workContext,
-            INotificationService notificationService, ICategoryNewsModelFactory categoryNewsModelFactory)
+            INotificationService notificationService, INewsCategoryModelFactory newsCategoryModelFactory)
         {
-            _categoryNewsService = categoryNewsService;
+            _newsCategoryService = newsCategoryService;
             _languageService = languageService;
             _localizationService = localizationService;
             _permissionService = permissionService;
@@ -49,14 +49,14 @@ namespace Nop.Web.Areas.Admin.Controllers
             _customerActivityService = customerActivityService;
             _workContext = workContext;
             _notificationService = notificationService;
-            _categoryNewsModelFactory = categoryNewsModelFactory;
+            _newsCategoryModelFactory = newsCategoryModelFactory;
         }
 
         #endregion
 
         #region Utilities
 
-        protected virtual void PrepareLanguagesModel(CategoryNewsModel model)
+        protected virtual void PrepareLanguagesModel(NewsCategoryModel model)
         {
             if (model == null)
                 throw new ArgumentNullException(nameof(model));
@@ -82,17 +82,17 @@ namespace Nop.Web.Areas.Admin.Controllers
         {
             if (!_permissionService.Authorize(StandardPermissionProvider.ManageNews))
                 return AccessDeniedView();
-            var model = _categoryNewsModelFactory.PrepareCategoryNewsSearchModel(new CategoryNewsSearchModel());
+            var model = _newsCategoryModelFactory.PrepareNewsCategorySearchModel(new NewsCategorySearchModel());
             return View(model);
         }
 
         [HttpPost]
-        public virtual IActionResult List(CategoryNewsSearchModel searchModel)
+        public virtual IActionResult List(NewsCategorySearchModel searchModel)
         {
             if (!_permissionService.Authorize(StandardPermissionProvider.ManageNews))
                 return AccessDeniedDataTablesJson();
 
-            var model = _categoryNewsModelFactory.PrepareCategoryNewsListModel(searchModel);
+            var model = _newsCategoryModelFactory.PrepareNewsCategoryListModel(searchModel);
 
             return Json(model);
         }
@@ -102,7 +102,7 @@ namespace Nop.Web.Areas.Admin.Controllers
             if (!_permissionService.Authorize(StandardPermissionProvider.ManageNews))
                 return AccessDeniedView();
 
-            var model = new CategoryNewsModel();
+            var model = new NewsCategoryModel();
             //languages
             PrepareLanguagesModel(model);
 
@@ -112,33 +112,33 @@ namespace Nop.Web.Areas.Admin.Controllers
         }
 
         [HttpPost, ParameterBasedOnFormName("save-continue", "continueEditing")]
-        public virtual IActionResult Create(CategoryNewsModel model, bool continueEditing)
+        public virtual IActionResult Create(NewsCategoryModel model, bool continueEditing)
         {
             if (!_permissionService.Authorize(StandardPermissionProvider.ManageNews))
                 return AccessDeniedView();
 
             if (ModelState.IsValid)
             {
-                var categoryNews = model.ToEntity<CategoryNews>();
-                categoryNews.UpdatedOnUtc = DateTime.UtcNow;
-                categoryNews.CreatedOnUtc = DateTime.UtcNow;
-                _categoryNewsService.InsertCategoryNews(categoryNews);
+                var newsCategory = model.ToEntity<NewsCategory>();
+                newsCategory.UpdatedOnUtc = DateTime.UtcNow;
+                newsCategory.CreatedOnUtc = DateTime.UtcNow;
+                _newsCategoryService.Insert(newsCategory);
 
                 //activity log
-                _customerActivityService.InsertActivity("AddNewCategoryNews", _localizationService.GetResource("ActivityLog.AddNewCategoryNews"), categoryNews);
+                _customerActivityService.InsertActivity("AddNewNewsCategory", _localizationService.GetResource("ActivityLog.AddNewNewsCategory"), newsCategory);
 
                 //search engine name
-                var seName = _urlRecordService.ValidateSeName(categoryNews, model.SeName, model.Name, true);
-                _urlRecordService.SaveSlug(categoryNews, seName, categoryNews.LanguageId);
+                var seName = _urlRecordService.ValidateSeName(newsCategory, model.SeName, model.Name, true);
+                _urlRecordService.SaveSlug(newsCategory, seName, newsCategory.LanguageId);
 
-                _notificationService.SuccessNotification(_localizationService.GetResource("Admin.ContentManagement.CategoryNews.Added"));
+                _notificationService.SuccessNotification(_localizationService.GetResource("Admin.ContentManagement.NewsCategory.Added"));
 
                 if (continueEditing)
                 {
                     //selected tab
                     SaveSelectedTabName();
 
-                    return RedirectToAction("Edit", new { id = categoryNews.Id });
+                    return RedirectToAction("Edit", new { id = newsCategory.Id });
                 }
                 return RedirectToAction("List");
             }
@@ -153,50 +153,50 @@ namespace Nop.Web.Areas.Admin.Controllers
             if (!_permissionService.Authorize(StandardPermissionProvider.ManageNews))
                 return AccessDeniedView();
 
-            var categoryNews = _categoryNewsService.GetCategoryNewsById(id);
-            if (categoryNews == null)
+            var newsCategory = _newsCategoryService.GetNewsCategoryById(id);
+            if (newsCategory == null)
                 //No news item found with the specified id
                 return RedirectToAction("List");
 
-            var model = categoryNews.ToModel<CategoryNewsModel>();
-            model.SeName = _urlRecordService.GetSeName(categoryNews, model.LanguageId);
+            var model = newsCategory.ToModel<NewsCategoryModel>();
+            model.SeName = _urlRecordService.GetSeName(newsCategory, model.LanguageId);
             //languages
             PrepareLanguagesModel(model);
             return View(model);
         }
 
         [HttpPost, ParameterBasedOnFormName("save-continue", "continueEditing")]
-        public virtual IActionResult Edit(CategoryNewsModel model, bool continueEditing)
+        public virtual IActionResult Edit(NewsCategoryModel model, bool continueEditing)
         {
             if (!_permissionService.Authorize(StandardPermissionProvider.ManageNews))
                 return AccessDeniedView();
 
-            var categoryNews = _categoryNewsService.GetCategoryNewsById(model.Id);
-            if (categoryNews == null)
+            var newsCategory = _newsCategoryService.GetNewsCategoryById(model.Id);
+            if (newsCategory == null)
                 //No news item found with the specified id
                 return RedirectToAction("List");
 
             if (ModelState.IsValid)
             {
-                categoryNews = model.ToEntity(categoryNews);
-                categoryNews.UpdatedOnUtc = DateTime.UtcNow;
-                _categoryNewsService.UpdateCategoryNews(categoryNews);
+                newsCategory = model.ToEntity(newsCategory);
+                newsCategory.UpdatedOnUtc = DateTime.UtcNow;
+                _newsCategoryService.Update(newsCategory);
 
                 //activity log
-                _customerActivityService.InsertActivity("EditCategoryNewsNews", _localizationService.GetResource("ActivityLog.EditCategoryNews"), categoryNews);
+                _customerActivityService.InsertActivity("EditNewsCategory", _localizationService.GetResource("ActivityLog.EditNewsCategory"), newsCategory);
 
                 //search engine name
-                var seName = _urlRecordService.ValidateSeName(categoryNews, model.SeName, model.Name, true);
-                _urlRecordService.SaveSlug(categoryNews, seName, categoryNews.LanguageId);
+                var seName = _urlRecordService.ValidateSeName(newsCategory, model.SeName, model.Name, true);
+                _urlRecordService.SaveSlug(newsCategory, seName, newsCategory.LanguageId);
 
-                _notificationService.SuccessNotification(_localizationService.GetResource("Admin.ContentManagement.CategoryNews.Updated"));
+                _notificationService.SuccessNotification(_localizationService.GetResource("Admin.ContentManagement.NewsCategory.Updated"));
 
                 if (continueEditing)
                 {
                     //selected tab
                     SaveSelectedTabName();
 
-                    return RedirectToAction("Edit", new { id = categoryNews.Id });
+                    return RedirectToAction("Edit", new { id = newsCategory.Id });
                 }
                 return RedirectToAction("List");
             }
@@ -212,17 +212,17 @@ namespace Nop.Web.Areas.Admin.Controllers
             if (!_permissionService.Authorize(StandardPermissionProvider.ManageNews))
                 return AccessDeniedView();
 
-            var newsItem = _categoryNewsService.GetCategoryNewsById(id);
+            var newsItem = _newsCategoryService.GetNewsCategoryById(id);
             if (newsItem == null)
                 //No news item found with the specified id
                 return RedirectToAction("List");
 
-            _categoryNewsService.DeleteCategoryNews(newsItem);
+            _newsCategoryService.DeleteNewsCategory(newsItem);
 
             //activity log
-            _customerActivityService.InsertActivity("DeleteCategoryNews", _localizationService.GetResource("ActivityLog.DeleteCategoryNews"), newsItem);
+            _customerActivityService.InsertActivity("DeleteNewsCategory", _localizationService.GetResource("ActivityLog.DeleteNewsCategory"), newsItem);
 
-            _notificationService.SuccessNotification(_localizationService.GetResource("Admin.ContentManagement.CategoryNews.Deleted"));
+            _notificationService.SuccessNotification(_localizationService.GetResource("Admin.ContentManagement.NewsCategory.Deleted"));
             return RedirectToAction("List");
         }
 

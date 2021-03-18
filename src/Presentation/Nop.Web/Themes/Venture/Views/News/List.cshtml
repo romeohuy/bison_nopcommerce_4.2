@@ -7,6 +7,33 @@
     //page class
     Html.AppendPageCssClassParts("html-news-list-page");
 }
+@section left{
+    @if (Model.NewsCategoryModels.Count > 0)
+    {
+        <div class="block block-category-navigation">
+            <div class="title">
+                <strong>@T("Categories")</strong>
+            </div>
+            <div class="listbox">
+                <ul class="list">
+                    @foreach (var category in Model.NewsCategoryModels)
+                    {
+
+                        var active = category.Id == Model.CurrentCategoryId;
+                        var liClass = active ? "active" : "inactive";
+                        <li class="@liClass">
+
+                            <a href="@Url.Action("List", "News", new { newsCategoryId = category.Id })">
+                                @category.Name
+                            </a>
+                        </li>
+                    }
+                </ul>
+            </div>
+        </div>
+    }
+}
+
 <div class="page news-list-page">
     <div class="page-title">
         <a href="@Url.RouteUrl("NewsRSS", new { languageId = Model.WorkingLanguageId })" class="link-rss" title="@T("News.RSS.Hint")">@T("News.RSS")</a>

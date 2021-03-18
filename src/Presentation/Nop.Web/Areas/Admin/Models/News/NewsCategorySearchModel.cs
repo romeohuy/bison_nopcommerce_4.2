@@ -1,14 +1,12 @@
-﻿using System.Collections.Generic;
-using Microsoft.AspNetCore.Mvc.Rendering;
+﻿using Nop.Web.Framework.Models;
 using Nop.Web.Framework.Mvc.ModelBinding;
-using Nop.Web.Framework.Models;
 
 namespace Nop.Web.Areas.Admin.Models.News
 {
     /// <summary>
     /// Represents a news item search model
     /// </summary>
-    public partial class CategoryNewsSearchModel : BaseSearchModel
+    public partial class NewsCategorySearchModel : BaseSearchModel
     {
         #region Ctor
 
@@ -21,7 +19,7 @@ namespace Nop.Web.Areas.Admin.Models.News
 
         #region Properties
 
-        [NopResourceDisplayName("Admin.ContentManagement.News.CategoryNews.List.SearchCategoryName")]
+        [NopResourceDisplayName("Admin.ContentManagement.News.NewsCategory.List.SearchCategoryName")]
         public string SearchCategoryName { get; set; }
 
         #endregion

@@ -101,15 +101,15 @@ namespace Nop.Services.News
         /// <param name="pageIndex">Page index</param>
         /// <param name="pageSize">Page size</param>
         /// <param name="showHidden">A value indicating whether to show hidden records</param>
-        /// <param name="categoryNewsId"></param>
+        /// <param name="newsCategoryId"></param>
         /// <returns>News items</returns>
         public virtual IPagedList<NewsItem> GetAllNews(int languageId = 0, int storeId = 0,
-            int pageIndex = 0, int pageSize = int.MaxValue, bool showHidden = false, int categoryNewsId = 0)
+            int pageIndex = 0, int pageSize = int.MaxValue, bool showHidden = false, int newsCategoryId = 0)
         {
             var query = _newsItemRepository.Table;
-            if (categoryNewsId > 0)
+            if (newsCategoryId > 0)
             {
-                query = query.Where(n => n.CategoryNewsId == categoryNewsId);
+                query = query.Where(n => n.NewsCategoryId == newsCategoryId);
             }
             if (languageId > 0)
                 query = query.Where(n => languageId == n.LanguageId);
@@ -306,7 +306,7 @@ namespace Nop.Services.News
                 if (comment != null)
                     sortedComments.Add(comment);
             }
-            
+
             return sortedComments;
         }
 

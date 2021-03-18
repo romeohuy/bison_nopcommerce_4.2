@@ -31,6 +31,7 @@ namespace Nop.Web.Areas.Admin.Factories
         private readonly ILanguageService _languageService;
         private readonly ILocalizationService _localizationService;
         private readonly INewsService _newsService;
+        private readonly INewsCategoryService _newsCategoryService;
         private readonly IStoreMappingSupportedModelFactory _storeMappingSupportedModelFactory;
         private readonly IStoreService _storeService;
         private readonly IUrlRecordService _urlRecordService;
@@ -47,7 +48,7 @@ namespace Nop.Web.Areas.Admin.Factories
             INewsService newsService,
             IStoreMappingSupportedModelFactory storeMappingSupportedModelFactory,
             IStoreService storeService,
-            IUrlRecordService urlRecordService)
+            IUrlRecordService urlRecordService, INewsCategoryService newsCategoryService)
         {
             _catalogSettings = catalogSettings;
             _baseAdminModelFactory = baseAdminModelFactory;
@@ -58,6 +59,7 @@ namespace Nop.Web.Areas.Admin.Factories
             _storeMappingSupportedModelFactory = storeMappingSupportedModelFactory;
             _storeService = storeService;
             _urlRecordService = urlRecordService;
+            _newsCategoryService = newsCategoryService;
         }
 
         #endregion
@@ -185,6 +187,8 @@ namespace Nop.Web.Areas.Admin.Factories
             //prepare available stores
             _storeMappingSupportedModelFactory.PrepareModelStores(model, newsItem, excludeProperties);
 
+            var NewsCategory = _newsCategoryService.GetAllNewsCategories();
+            model.AvailableCategories = NewsCategory.Select(x => new SelectListItem(x.Name, x.Id.ToString())).ToList();
             return model;
         }
 

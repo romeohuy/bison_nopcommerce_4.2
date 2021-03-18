@@ -1,9 +1,9 @@
-﻿using System;
+﻿using Microsoft.AspNetCore.Mvc.Rendering;
+using Nop.Web.Framework.Models;
+using Nop.Web.Framework.Mvc.ModelBinding;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
-using Microsoft.AspNetCore.Mvc.Rendering;
-using Nop.Web.Framework.Mvc.ModelBinding;
-using Nop.Web.Framework.Models;
 
 namespace Nop.Web.Areas.Admin.Models.News
 {
@@ -27,7 +27,8 @@ namespace Nop.Web.Areas.Admin.Models.News
         #region Properties
         [NopResourceDisplayName("Admin.ContentManagement.News.NewsItems.Fields.Category")]
         public IList<SelectListItem> AvailableCategories { get; set; }
-        public int CategoryNewsId { get; set; }
+        [NopResourceDisplayName("Admin.ContentManagement.News.NewsItems.Fields.NewsCategoryId")]
+        public int NewsCategoryId { get; set; }
         [NopResourceDisplayName("Admin.ContentManagement.News.NewsItems.Fields.Language")]
         public int LanguageId { get; set; }
 
@@ -44,7 +45,7 @@ namespace Nop.Web.Areas.Admin.Models.News
 
         [NopResourceDisplayName("Admin.ContentManagement.News.NewsItems.Fields.Title")]
         public string Title { get; set; }
-        
+
         [UIHint("Picture")]
         [NopResourceDisplayName("Admin.ContentManagement.News.NewsItems.Fields.Picture")]
         public int PictureId { get; set; }

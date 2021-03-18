@@ -1,6 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using Nop.Core;
 using Nop.Core.Domain.Customers;
 using Nop.Core.Domain.Localization;
@@ -21,8 +19,9 @@ using Nop.Web.Framework.Controllers;
 using Nop.Web.Framework.Mvc;
 using Nop.Web.Framework.Mvc.Filters;
 using Nop.Web.Framework.Security;
-using Nop.Web.Framework.Security.Captcha;
 using Nop.Web.Models.News;
+using System;
+using System.Collections.Generic;
 
 namespace Nop.Web.Controllers
 {
@@ -88,11 +87,11 @@ namespace Nop.Web.Controllers
 
         #region Methods
 
-        public virtual IActionResult List(NewsPagingFilteringModel command)
+        public virtual IActionResult List(NewsPagingFilteringModel command, int? newsCategoryId = null)
         {
             if (!_newsSettings.Enabled)
                 return RedirectToRoute("Homepage");
-
+            command.NewsCategoryId = newsCategoryId ?? 0;
             var model = _newsModelFactory.PrepareNewsItemListModel(command);
             return View(model);
         }

@@ -1,16 +1,16 @@
-﻿@model CategoryNewsSearchModel
+﻿@model NewsCategorySearchModel
 
 @{
     //page title
-    ViewBag.Title = T("Admin.Catalog.CategoriesNews.Manage").Text;
+    ViewBag.Title = T("Admin.Catalog.NewsCategory.Manage").Text;
     //active menu item (system name)
-    Html.SetActiveMenuItemSystemName("Categories News");
+    Html.SetActiveMenuItemSystemName("News Category");
 }
 
 <nop-antiforgery-token />
 <div class="content-header clearfix">
     <h1 class="pull-left">
-        @T("Admin.Catalog.CategoriesNews.Manage")
+        @T("Admin.Catalog.NewsCategory.Manage")
     </h1>
     <div class="pull-right">
         <a asp-action="Create" class="btn bg-blue">
@@ -31,7 +31,7 @@
                     @await Html.PartialAsync("Table", new DataTablesModel
                     {
                         Name = "categories-news-grid",
-                        UrlRead = new DataUrl("List", "CategoryNews", null),
+                        UrlRead = new DataUrl("List", "NewsCategory", null),
                         SearchButtonId = "search-categories-news",
                         Length = Model.PageSize,
                         LengthMenu = Model.AvailablePageSizes,
@@ -41,31 +41,31 @@
                         },
                         ColumnCollection = new List<ColumnProperty>
                         {
-                            new ColumnProperty(nameof(CategoryNewsModel.Id))
+                            new ColumnProperty(nameof(NewsCategoryModel.Id))
                             {
                                 IsMasterCheckBox = true,
                                 Render = new RenderCheckBox("checkbox_products"),
                                 ClassName =  NopColumnClassDefaults.CenterAll,
                                 Width = "50",
                             },
-                            new ColumnProperty(nameof(CategoryNewsModel.Breadcrumb))
+                            new ColumnProperty(nameof(NewsCategoryModel.Name))
                             {
                                 Title = T("Admin.Catalog.Categories.Fields.Name").Text
                             },
-                            new ColumnProperty(nameof(CategoryNewsModel.Published))
+                            new ColumnProperty(nameof(NewsCategoryModel.Published))
                             {
                                 Title = T("Admin.Catalog.Categories.Fields.Published").Text,
                                 Width = "100",
                                 ClassName = NopColumnClassDefaults.CenterAll,
                                 Render = new RenderBoolean()
                             },
-                            new ColumnProperty(nameof(CategoryNewsModel.DisplayOrder))
+                            new ColumnProperty(nameof(NewsCategoryModel.DisplayOrder))
                             {
                                 Title = T("Admin.Catalog.Categories.Fields.DisplayOrder").Text,
                                 Width = "150",
                                 ClassName =  NopColumnClassDefaults.CenterAll
                             },
-                            new ColumnProperty(nameof(CategoryNewsModel.Id))
+                            new ColumnProperty(nameof(NewsCategoryModel.Id))
                             {
                                 Title = T("Admin.Common.Edit").Text,
                                 Width = "100",

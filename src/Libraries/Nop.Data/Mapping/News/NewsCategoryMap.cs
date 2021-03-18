@@ -7,14 +7,14 @@ namespace Nop.Data.Mapping.News
     /// <summary>
     /// Mapping class
     /// </summary>
-    public partial class CategoryNewsMap : NopEntityTypeConfiguration<CategoryNews>
+    public partial class NewsCategoryMap : NopEntityTypeConfiguration<NewsCategory>
     {
         /// <summary>
         /// Ctor
         /// </summary>
-        public override void Configure(EntityTypeBuilder<CategoryNews> builder)
+        public override void Configure(EntityTypeBuilder<NewsCategory> builder)
         {
-            builder.ToTable("CategoryNews");
+            builder.ToTable("NewsCategory");
             builder.HasKey(ni => ni.Id);
             builder.Property(ni => ni.Name).IsRequired();
             builder.Property(ni => ni.MetaKeywords).HasMaxLength(400);
