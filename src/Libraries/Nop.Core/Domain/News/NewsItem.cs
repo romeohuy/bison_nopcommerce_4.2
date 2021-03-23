@@ -17,6 +17,7 @@ namespace Nop.Core.Domain.News
         /// Gets or sets the language identifier
         /// </summary>
         public int LanguageId { get; set; }
+        public int PictureId { get; set; }
 
         public int NewsCategoryId { get; set; }
 

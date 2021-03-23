@@ -170,6 +170,7 @@ namespace Nop.Web.Areas.Admin.Factories
                     model.SeName = _urlRecordService.GetSeName(newsItem, newsItem.LanguageId, true, false);
                 }
 
+                model.PictureId = newsItem.PictureId;
                 model.StartDateUtc = newsItem.StartDateUtc;
                 model.EndDateUtc = newsItem.EndDateUtc;
             }
@@ -180,7 +181,6 @@ namespace Nop.Web.Areas.Admin.Factories
                 model.Published = true;
                 model.AllowComments = true;
             }
-
             //prepare available languages
             _baseAdminModelFactory.PrepareLanguages(model.AvailableLanguages, false);
 

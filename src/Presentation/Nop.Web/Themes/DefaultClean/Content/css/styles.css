@@ -4246,6 +4246,7 @@ label, label + * {
 	padding: 0 10px;
 	line-height: 22px;
 }
+
 .blog-page .tags, 
 .blogpost-page .tags {
 	margin: 0 0 15px;

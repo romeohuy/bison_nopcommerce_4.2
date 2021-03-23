@@ -7375,6 +7375,37 @@ td.ui-datepicker-week-end {
     text-transform: none;
     text-align: left;
 }
+
+
+
+.news-body .post-picture {
+    display: block;
+    position: relative;
+    z-index: 0;
+    overflow: hidden;
+}
+
+.news-body .post-picture:before {
+    content: "";
+    display: block;
+    padding-top: 50%;
+}
+
+.post-picture a {
+    display: block;
+    font-size: 0;
+}
+
+.news-body .post-picture img {
+    position: absolute;
+    top: 0;
+    right: 0;
+    left: 0;
+    width: 100%;
+    max-width: 100%;
+    margin: auto;
+}
+
 .news-item .news-title,
 .blog-posts .post-title {
     display: block;

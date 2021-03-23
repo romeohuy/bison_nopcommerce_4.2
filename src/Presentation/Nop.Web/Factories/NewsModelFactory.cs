@@ -142,7 +142,10 @@ namespace Nop.Web.Factories
             var storeId = _newsSettings.ShowNewsCommentsPerStore ? _storeContext.CurrentStore.Id : 0;
             var cacheKey = string.Format(NopModelCacheDefaults.NewsCommentsNumberKey, newsItem.Id, storeId, true);
             model.NumberOfComments = _cacheManager.Get(cacheKey, () => _newsService.GetNewsCommentsCount(newsItem, storeId, true));
-
+            if (newsItem.PictureId > 0)
+            {
+                model.ImageUrl = _pictureService.GetPictureUrl(newsItem.PictureId);
+            }
             if (prepareComments)
             {
                 var newsComments = newsItem.NewsComments.Where(comment => comment.IsApproved);
