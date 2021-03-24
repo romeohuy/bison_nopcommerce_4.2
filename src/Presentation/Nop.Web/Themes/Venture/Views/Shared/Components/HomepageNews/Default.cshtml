@@ -9,7 +9,7 @@
             @foreach (var item in Model.NewsItems)
             {
                 <div class="news-item">
-                    
+
                     <div class="news-head">
                         <span class="news-date">
                             <span class="day">@item.CreatedOn.Day.ToString("00")</span>
@@ -21,12 +21,10 @@
                         </div>
                     </div>
                     <div class="post-picture">
-                        <a href="@Url.RouteUrl("NewsItem", new {SeName = item.SeName})">
-                            <img src="@item.ImageUrl" alt="@item.Title" title="@item.Title"/>
-                        </a>
+                        <img src="@item.ImageUrl" alt="@item.Title" title="@item.Title" />
                     </div>
-
                     <div class="news-body">
+
                         <a class="news-title" href="@Url.RouteUrl("NewsItem", new {SeName = item.SeName})">@item.Title</a>
                         <div class="news-text">
                             @Html.Raw(item.Short)

@@ -1,4 +1,5 @@
 ﻿@model NewsItemModel
+@inject Nop.Core.IWebHelper webHelper
 @{
     Layout = "_ColumnsOne";
 
@@ -7,6 +8,14 @@
     //meta
     Html.AddMetaDescriptionParts(Model.MetaDescription);
     Html.AddMetaKeywordParts(Model.MetaKeywords);
+
+    Html.AddHeadCustomParts("<meta property=\"og:type\" content=\"news\" />");
+    Html.AddHeadCustomParts("<meta property=\"og:title\" content=\"" + Html.Encode(Model.Title) + "\" />");
+    Html.AddHeadCustomParts("<meta property=\"og:description\" content=\"" + Html.Encode(Nop.Core.Html.HtmlHelper.StripTags(Model.MetaDescription)) + "\" />");
+    Html.AddHeadCustomParts("<meta property=\"og:image\" content=\"" + Model.ImageUrl + "\" />");
+    Html.AddHeadCustomParts("<meta property=\"og:image:url\" content=\"" + Model.ImageUrl + "\" />");
+    Html.AddHeadCustomParts("<meta property=\"og:url\" content=\"" + webHelper.GetThisPageUrl(false) + "\" />");
+
     //page class
     Html.AppendPageCssClassParts("html-news-item-page");
 }
