@@ -25,6 +25,9 @@ namespace Nop.Web.Areas.Admin.Models.Catalog
         [NopResourceDisplayName("Admin.Catalog.Attributes.ProductAttributes.Fields.Name")]
         public string Name { get; set; }
 
+        [NopResourceDisplayName("Admin.Catalog.Attributes.ProductAttributes.Fields.KiotVietName")]
+        public string KiotVietName { get; set; }
+
         [NopResourceDisplayName("Admin.Catalog.Attributes.ProductAttributes.Fields.Description")]
         public string Description {get;set;}
 
